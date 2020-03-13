@@ -15,3 +15,11 @@ The objective of this challenge is to train a model from **images** that can:
 ## Dataset
 - [Kaggle Page](https://www.kaggle.com/c/plant-pathology-2020-fgvc7/data)
 - [Download link](https://www.kaggle.com/c/18648/download-all)
+
+---
+
+# Model idea
+The backbones we are looking forward to explore are:
+- Efficient Net
+- Inception Net
+- ResNet
