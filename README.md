@@ -1,2 +1,2 @@
-# CVPR20_FGVC_PlantPatho
-CVPR20_FGVC_PlantPatho
+# CVPR 2020 - FGVC
+## Plant Pathology
