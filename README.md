@@ -1,2 +1,2 @@
-# CVPR 2020 - FGVC
-## Plant Pathology
+# CVPR 2020 - FGVC ( Plant Pathology )
+
