@@ -15,6 +15,8 @@ The objective of this challenge is to train a model from **images** that can:
 ## Dataset
 - [Kaggle Page](https://www.kaggle.com/c/plant-pathology-2020-fgvc7/data)
 - [Download link](https://www.kaggle.com/c/18648/download-all)
+- [Supplementary Data for TL](https://www.kaggle.com/c/plant-pathology-2020-fgvc7/discussion/135065)
+    - [Alt kaggle link](https://www.kaggle.com/xhlulu/leafsnap-dataset)
 
 ---
 
@@ -23,3 +25,9 @@ The backbones we are looking forward to explore are:
 - Efficient Net
 - Inception Net
 - ResNet
+
+# EDA
+- https://www.kaggle.com/tarunpaparaju/plant-pathology-2020-eda-models
+    - ( Amazing "Parallel categories plot of targets", Distribution of red channel values", EfficientNet NoisyStudent Prediction (great images) )
+- https://www.kaggle.com/pestipeti/eda-plant-pathology-2020
+- [Google Sheet - Submitted approaches](https://docs.google.com/spreadsheets/d/1VVi2HST5m4LFaSr-GBiUgQdsM6oA8O-mfq3UFKyqZU8/edit?usp=sharing)
