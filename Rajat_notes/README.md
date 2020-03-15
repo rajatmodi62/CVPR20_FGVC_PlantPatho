@@ -26,3 +26,11 @@ policy and the probability values in the sampling process. Have to check if the 
 only better performance on val, or do we need to keep some notion of perceptual loss.  
 
 [2] EfficientNet
+https://arxiv.org/pdf/1805.09501v3.pdf
+https://arxiv.org/pdf/1905.11946v3.pdf
+https://arxiv.org/pdf/1906.06423v2.pdf
+https://arxiv.org/pdf/2001.06268v1.pdf
+https://arxiv.org/pdf/1901.00392v2.pdf
+https://arxiv.org/pdf/1901.09891v2.pdf
+https://arxiv.org/pdf/1911.10688v2.pdf
+https://arxiv.org/pdf/1912.11370v1.pdf
