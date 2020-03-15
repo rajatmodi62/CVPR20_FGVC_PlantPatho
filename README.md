@@ -57,3 +57,10 @@ The backbones we are looking forward to explore are:
 - Train.py framework for quick testing
 - Cross fold validation
 - Stratified K fold validation
+
+---
+
+## Lib dependency
+```bash
+pip install --user torch torchvision catalyst
+```
