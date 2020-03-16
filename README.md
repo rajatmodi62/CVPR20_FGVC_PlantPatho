@@ -58,9 +58,12 @@ The backbones we are looking forward to explore are:
 - Cross fold validation
 - Stratified K fold validation
 
+## Pretrained Model Weights ( GDrive links )
+- [Efficientnet B7](https://drive.google.com/drive/folders/1yza0tPWpx0t6qh6Pfqq_aZ_FrJ0RqCgc?usp=sharing)
+
 ---
 
 ## Lib dependency
 ```bash
-pip install --user torch torchvision catalyst
+pip install --user torch torchvision catalyst albumentations
 ```

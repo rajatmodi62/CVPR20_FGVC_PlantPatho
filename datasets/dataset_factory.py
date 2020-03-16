@@ -1,1 +1,2 @@
-#fdsafad
+class Data_loader:
+    

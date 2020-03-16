@@ -1,0 +1,1 @@
+[EfficientNet Implementation](https://github.com/lukemelas/EfficientNet-PyTorch/blob/master/efficientnet_pytorch/model.py)
