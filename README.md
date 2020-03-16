@@ -65,5 +65,5 @@ The backbones we are looking forward to explore are:
 
 ## Lib dependency
 ```bash
-pip install --user torch torchvision catalyst albumentations
+pip install --user torch torchvision catalyst albumentations pandas scikit-image
 ```

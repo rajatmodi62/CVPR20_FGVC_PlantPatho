@@ -15,6 +15,7 @@ class Transformer:
         self.augmentation_pipeline = Compose(
             [
                 Resize(height, width, p=1.0),
+                # Normalize(),
                 OneOf(
                     [
                         HorizontalFlip(),
@@ -28,10 +29,8 @@ class Transformer:
         )
 
     def get_augmented(self, original_image):
-        augmented = self.augmentation_pipeline()(
-            {
-                "image": original_image
-            }
+        augmented = self.augmentation_pipeline(
+            image=original_image
         )
         image = augmented["image"]
         return image
