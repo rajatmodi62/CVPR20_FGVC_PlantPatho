@@ -1,1 +1,2 @@
-[EfficientNet Implementation](https://github.com/lukemelas/EfficientNet-PyTorch/blob/master/efficientnet_pytorch/model.py)
+- [EfficientNet Implementation](https://github.com/lukemelas/EfficientNet-PyTorch/blob/master/efficientnet_pytorch/model.py)
+- [Hackers guides to NN](http://karpathy.github.io/neuralnets/)
