@@ -4,3 +4,4 @@
 ## Important stack links
 - [Replacing a layer in pretrained model](https://stackoverflow.com/questions/44913720/requires-grad-relation-to-leaf-nodes)
 - [Autograd](https://towardsdatascience.com/pytorch-autograd-understanding-the-heart-of-pytorchs-magic-2686cd94ec95)
+- [The use of args in **.backward()**](https://stackoverflow.com/questions/43451125/pytorch-what-are-the-gradient-arguments)
