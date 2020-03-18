@@ -10,7 +10,7 @@ from albumentations import (
 from albumentations.pytorch import ToTensor
 
 
-class Transformer:
+class TransformerFactory:
     def __init__(self, height=2048, width=1365, pipe_type="default"):
         self.height = height
         self.width = width

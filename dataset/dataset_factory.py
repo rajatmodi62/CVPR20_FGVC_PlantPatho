@@ -4,7 +4,7 @@ from os import path
 from dataset.fgvc7_dataset import FGVC7_Dataset
 
 
-class Dataset:
+class DatasetFactory:
     def __init__(self, org_data_dir):
         self.FOLDS = 5
         self.org_data_dir = org_data_dir

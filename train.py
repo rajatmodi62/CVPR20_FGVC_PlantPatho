@@ -1,16 +1,11 @@
-from transformers.transformer_factory import Transformer
-from dataset.dataset_factory import Dataset
+from transformers.transformer_factory import TransformerFactory
+from dataset.dataset_factory import DatasetFactory
+from optimisers.optimiser_factory import OptimiserFactory
 from torch.utils.data import DataLoader
 
-image_transformer = Transformer(pipe_type="image")
-dataset = Dataset('data')
-
-train_data = dataset.get_dataset(
-    "train",
-    "fgvc7",
-    image_transformer,
-    1
-)
+image_transformer = TransformerFactory(pipe_type="image")
+optimiser = OptimiserFactory()
+dataset = DatasetFactory('./data')
 
 for i in range(5):
     print( "fold: ", str(i) )
@@ -38,4 +33,4 @@ print( len(test_data) )
 # for batch_ndx, sample in enumerate(DataLoader(train_data)):
 #     print(sample.size())
 
-print( train_data[1] )
+optim = optimiser.get_optimiser("RMSprop")
