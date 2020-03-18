@@ -63,6 +63,19 @@ The backbones we are looking forward to explore are:
 
 ---
 
+## Plans
+- [x] Dataloaders 
+    - [x] Stratified k fold
+- [ ] Models
+    - [ ] Efficientnet B7
+- [ ] Loss
+    - [ ] Focal loss
+    - [ ] Mean ROC AUC loss ( Kaggle )
+- [ ] Optimizer
+    - [ ] RMS prop with Efficient net params
+
+---
+
 ## Lib dependency
 ```bash
 pip install --user torch torchvision catalyst albumentations pandas scikit-image tqdm scikit-learn
