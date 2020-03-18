@@ -76,6 +76,25 @@ The backbones we are looking forward to explore are:
 
 ---
 
+## Directory structure
+```
+.
+|-- config
+|-- data
+|   `-- fgvc7
+|       `-- images
+|-- dataset
+|-- docs
+|-- losses
+|-- models
+|-- optimisers
+|-- pretrained_weights
+|-- schedulers
+`-- transformers
+```
+
+---
+
 ## Lib dependency
 ```bash
 pip install --user torch torchvision catalyst albumentations pandas scikit-image tqdm scikit-learn
