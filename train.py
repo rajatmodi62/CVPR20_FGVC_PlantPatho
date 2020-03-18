@@ -37,3 +37,5 @@ print( len(test_data) )
 
 # for batch_ndx, sample in enumerate(DataLoader(train_data)):
 #     print(sample.size())
+
+print( train_data[1] )

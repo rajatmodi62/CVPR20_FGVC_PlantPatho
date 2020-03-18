@@ -47,9 +47,9 @@ class FGVC7_Dataset(Dataset):
         image_name = str(self.data_frame.iloc[idx, 0]) + ".jpg"
         image_path = path.join(self.image_dir, image_name)
         image = io.imread(image_path)
-        label = torch.ones((1, 4))
 
         if self.mode != "test":
-            return self.transformer.get_augmented(image)
-        else:
+            label = torch.tensor(self.data_frame.iloc[idx, 1:].to_numpy(dtype=float))
             return self.transformer.get_augmented(image), label
+        else:
+            return self.transformer.get_augmented(image)
