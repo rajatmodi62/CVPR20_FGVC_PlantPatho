@@ -5,6 +5,10 @@ from models.model_factory import ModelFactory
 from losses.loss_factory import LossFactory
 from torch.utils.data import DataLoader
 from utils.config_parser import (get_config_data)
+from progress.bar import ChargingBar
+from utils.check_gpu import is_gpu_available
+
+is_gpu_available()
 
 config = get_config_data('./config/experiment_1.yml')
 
@@ -49,17 +53,22 @@ dataset = dataset_factory.get_dataset(
     image_transformer,
     config['dataset']['fold']
 )
+
 model = model_factory.get_model(
     config['model']['name']
 )
+
 optimiser = optimiser_factory.get_optimiser(
     config['optimiser'], model.parameters(), config['hyper_params'])
+
 loss_function = loss_factory.get_loss_function(
     config['loss_function']
 )
 
 # loop
+bar = ChargingBar('Iteration', max=config["iteration"])
 for i in range(config["iteration"]):
+    bar.next()
     for batch_ndx, sample in enumerate(DataLoader(dataset, batch_size=1)):
         input = sample[0]
         target = sample[1]
@@ -75,5 +84,6 @@ for i in range(config["iteration"]):
 
         # update
         optimiser.step()
+bar.finish()
 
 # ============================================================================

@@ -66,13 +66,14 @@ The backbones we are looking forward to explore are:
 ## Plans
 - [x] Dataloaders 
     - [x] Stratified k fold
-- [ ] Models
-    - [ ] Efficientnet B7
+- [x] Models
+    - [x] Efficientnet B7
 - [ ] Loss
+    - [x] Cross Entropy Loss
     - [ ] Focal loss
     - [ ] Mean ROC AUC loss ( Kaggle )
-- [ ] Optimizer
-    - [ ] RMS prop with Efficient net params
+- [x] Optimizer
+    - [x] RMS prop with Efficient net params
 
 ---
 
