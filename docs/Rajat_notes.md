@@ -1,5 +1,8 @@
 # CVPR 2020 - FGVC ( Plant Pathology )
+Stuff that i need to read 
 
+- Preprocessing Pipeline- Autoaugment, RandAugment 
+- Modelling- EfficientNet, Noisy Training of EfficientNet, Fixing train-test time resolution problem 
 
 # Models to checkout
 
@@ -10,22 +13,14 @@
 
 # Some stuff from the past competitions
 
+iMaterialist Challenge on Product Recognition
 
-# My own ideas
-[1] The prediction of confidence intervals will always be relative. Will using dynamic
-binarization in multi class setting hold any value? Or, is it limited to Semantic segmentation.
+https://www.kaggle.com/c/imaterialist-product-2019/discussion/94536
 
+Before reading this, please complete autoaugment, and Destruction/Construction learning (http://ylbai.me/DCL_cvpr19.pdf) paper.
 
-# Stuff I need to read
-I  have only read abstract and seen figures right now.
+# Paper List
 
-[1] AutoAugment
-
-Leverages reinforcement learning for optimal policy finding. Search space consists of a
-policy and the probability values in the sampling process. Have to check if the goal is
-only better performance on val, or do we need to keep some notion of perceptual loss.  
-
-[2] EfficientNet
 https://arxiv.org/pdf/1805.09501v3.pdf
 https://arxiv.org/pdf/1905.11946v3.pdf
 https://arxiv.org/pdf/1906.06423v2.pdf
@@ -34,3 +29,5 @@ https://arxiv.org/pdf/1901.00392v2.pdf
 https://arxiv.org/pdf/1901.09891v2.pdf
 https://arxiv.org/pdf/1911.10688v2.pdf
 https://arxiv.org/pdf/1912.11370v1.pdf
+
+
