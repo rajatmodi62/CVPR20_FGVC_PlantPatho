@@ -2,7 +2,9 @@
 Stuff that i need to read 
 
 - Preprocessing Pipeline- Autoaugment, RandAugment 
-- Modelling- EfficientNet, Noisy Training of EfficientNet, Fixing train-test time resolution problem 
+- Modelling- EfficientNet, Noisy Training of EfficientNet, Fixing train-test time resolution problem, SeResNext, InceptionNext.
+
+- Loss functions - Class balanced focal loss in S/E Networks
 
 # Models to checkout
 
@@ -13,11 +15,19 @@ Stuff that i need to read
 
 # Some stuff from the past competitions
 
-iMaterialist Challenge on Product Recognition
+1. iMaterialist Challenge on Product Recognition
+  - https://www.kaggle.com/c/imaterialist-product-2019/discussion/94536
+  - Before reading this, please complete autoaugment, and Destruction/Construction learning (http://ylbai.me/DCL_cvpr19.pdf) paper.
 
-https://www.kaggle.com/c/imaterialist-product-2019/discussion/94536
+2. Old Winner Approaches from Last Year Competition
+  - https://drive.google.com/file/d/1T8XABp6ayFTRpwbEYPFYICfIRXrD1fJB/view
+  - Resolution paper again used.
 
-Before reading this, please complete autoaugment, and Destruction/Construction learning (http://ylbai.me/DCL_cvpr19.pdf) paper.
+# Past Relevant Competitions
+1. https://www.kaggle.com/c/recursion-cellular-image-classification/data
+2. https://www.kaggle.com/c/aptos2019-blindness-detection/data
+3. https://www.kaggle.com/c/humpback-whale-identification/data
+
 
 # Paper List
 
