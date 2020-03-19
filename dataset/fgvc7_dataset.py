@@ -3,7 +3,7 @@ import pandas as pd
 from skimage import io
 from os import path
 from torch.utils.data import Dataset
-from transformers.transformer_factory import Transformer
+from transformers.transformer_factory import TransformerFactory
 from dataset.utils import (fold_creator)
 
 NUMBER_OF_FOLDS = 5
@@ -11,7 +11,7 @@ DATASET_NAME = 'fgvc7'
 
 
 class FGVC7_Dataset(Dataset):
-    def __init__(self, mode, dataset_path, transformer=Transformer("default"), fold_number=None):
+    def __init__(self, mode, dataset_path, transformer=TransformerFactory(pipe_type="default"), fold_number=None):
         self.mode = mode
         self.transformer = transformer
         self.dataset_path = dataset_path
@@ -49,7 +49,8 @@ class FGVC7_Dataset(Dataset):
         image = io.imread(image_path)
 
         if self.mode != "test":
-            label = torch.tensor(self.data_frame.iloc[idx, 1:].to_numpy(dtype=float))
+            label = torch.tensor(
+                self.data_frame.iloc[idx, 1:].to_numpy(dtype=float))
             return self.transformer.get_augmented(image), label
         else:
             return self.transformer.get_augmented(image)
