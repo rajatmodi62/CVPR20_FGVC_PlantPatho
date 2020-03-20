@@ -1,3 +1,4 @@
+import torch
 from transformers.transformer_factory import TransformerFactory
 from dataset.dataset_factory import DatasetFactory
 from optimisers.optimiser_factory import OptimiserFactory
@@ -6,9 +7,9 @@ from losses.loss_factory import LossFactory
 from torch.utils.data import DataLoader
 from utils.config_parser import (get_config_data)
 from progress.bar import ChargingBar
-from utils.check_gpu import is_gpu_available
+from utils.check_gpu import get_training_device
 
-is_gpu_available()
+device = get_training_device()
 
 config = get_config_data('./config/experiment_1.yml')
 
@@ -56,7 +57,7 @@ dataset = dataset_factory.get_dataset(
 
 model = model_factory.get_model(
     config['model']['name']
-)
+).to(device)
 
 optimiser = optimiser_factory.get_optimiser(
     config['optimiser'], model.parameters(), config['hyper_params'])
@@ -74,11 +75,11 @@ for i in range(config["iteration"]):
         target = sample[1]
 
         # forward pass
-        output = model.forward(input)
-        
+        output = model.forward(input.to(device))
+
         # loss calculation
         loss = loss_function(output,  target)
-        
+
         # backward pass
         loss.backward()
 

@@ -100,3 +100,9 @@ The backbones we are looking forward to explore are:
 ```bash
 pip install --user torch torchvision catalyst albumentations pandas scikit-image tqdm scikit-learn pyyaml
 ```
+
+## Utility commands
+This command will monitor GPU status and keep updating the terminal every 0.5 seconds  
+```bash
+watch -n0.5 nvidia-smi
+```
