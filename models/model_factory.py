@@ -11,5 +11,6 @@ class ModelFactory():
             print("[ Model Efficientnet B7 loaded! ]")
             model = EfficientNet.from_pretrained()
         if model_name == 'densenet-161':
+            print("[ Model Densenet 161 loaded! ]")
             model = models.densenet161(pretrained=True)
         return model

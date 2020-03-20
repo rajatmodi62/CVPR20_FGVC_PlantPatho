@@ -6,7 +6,7 @@ dataset:
   fold: 0
 iteration: 100
 model: 
-  name: densenet-161
+  name: efficientnet-b7
 optimiser: RMSprop
 hyper_params:
   decay: 0.9
