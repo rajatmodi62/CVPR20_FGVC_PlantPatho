@@ -1,4 +1,5 @@
 from models.efficientnet import EfficientNet
+import torchvision.models as models
 
 class ModelFactory():
     def __init__(self):
@@ -9,4 +10,6 @@ class ModelFactory():
         if model_name == 'efficientnet-b7':
             print("[ Model Efficientnet B7 loaded! ]")
             model = EfficientNet.from_pretrained()
+        if model_name == 'densenet-161':
+            model = models.densenet161(pretrained=True)
         return model

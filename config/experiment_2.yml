@@ -1,0 +1,18 @@
+experiment_name: exp1
+dataset: 
+  name: fgvc7
+  has_additional_files: True
+  additional_files_path: images
+  fold: 0
+iteration: 100
+model: 
+  name: densenet-161
+optimiser: RMSprop
+hyper_params:
+  decay: 0.9
+  momentum: 0.9
+  batch_norm_momentum:  0.99
+  weight_decay: 0.00001
+  learning_rate: 0.256
+  centered: False
+loss_function: 'cross-entropy-loss'
