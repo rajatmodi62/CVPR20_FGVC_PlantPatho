@@ -11,39 +11,17 @@ from utils.check_gpu import get_training_device
 
 device = get_training_device()
 
-config = get_config_data('./config/experiment_1.yml')
+config = get_config_data('./config/experiment_2.yml')
 
-image_transformer = TransformerFactory(pipe_type="image")
+image_transformer = TransformerFactory(
+    pipe_type="image",
+    height=100,
+    width=100
+)
 optimiser_factory = OptimiserFactory()
 dataset_factory = DatasetFactory(org_data_dir='./data')
 model_factory = ModelFactory()
 loss_factory = LossFactory()
-
-# for i in range(5):
-#     print( "fold: ", str(i) )
-#     train_data = dataset_factory.get_dataset(
-#         "train",
-#         "fgvc7",
-#         image_transformer,
-#         i
-#     )
-#     print( len(train_data) )
-#     val_data = dataset_factory.get_dataset(
-#         "val",
-#         "fgvc7",
-#         image_transformer,
-#         i
-#     )
-#     print( len(val_data) )
-
-# test_data = dataset_factory.get_dataset(
-#     "test",
-#     "fgvc7"
-# )
-# print( len(test_data) )
-
-# for batch_ndx, sample in enumerate(DataLoader(train_data)):
-#     print(sample.size())
 
 # ========================== Model training ==================================
 
@@ -67,24 +45,25 @@ loss_function = loss_factory.get_loss_function(
 )
 
 # loop
-bar = ChargingBar('Iteration', max=config["iteration"])
+batch_size = 16
+bar = ChargingBar('Iteration', max= ( config["iteration"] * len(dataset) / batch_size ))
 for i in range(config["iteration"]):
-    bar.next()
-    for batch_ndx, sample in enumerate(DataLoader(dataset, batch_size=1)):
-        input = sample[0]
-        target = sample[1]
+    for batch_ndx, sample in enumerate(DataLoader(dataset, batch_size=batch_size)):
+        input, target = sample
+        input.requires_grad = False
 
         # forward pass
         output = model.forward(input.to(device))
 
         # loss calculation
-        loss = loss_function(output,  target)
+        # loss = loss_function(output,  target)
 
         # backward pass
-        loss.backward()
+        # loss.backward()
 
         # update
-        optimiser.step()
+        # optimiser.step()
+        bar.next()
 bar.finish()
 
 # ============================================================================
