@@ -4,9 +4,9 @@ dataset:
   has_additional_files: True
   additional_files_path: images
   fold: 0
-iteration: 100
+iteration: 10
 model: 
-  name: efficientnet-b7
+  name: densenet-161
 optimiser: RMSprop
 hyper_params:
   decay: 0.9
@@ -15,4 +15,4 @@ hyper_params:
   weight_decay: 0.00001
   learning_rate: 0.256
   centered: False
-loss_function: 'focal-loss'
+loss_function: 'cross-entropy-loss'

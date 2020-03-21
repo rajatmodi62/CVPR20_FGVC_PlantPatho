@@ -1,6 +1,8 @@
 import torch
-import argparse
 from os import path
+import argparse
+from torch.utils.tensorboard import SummaryWriter
+from tqdm import trange, tqdm
 from transformers.transformer_factory import TransformerFactory
 from dataset.dataset_factory import DatasetFactory
 from optimisers.optimiser_factory import OptimiserFactory
@@ -9,7 +11,6 @@ from losses.loss_factory import LossFactory
 from torch.utils.data import DataLoader
 from utils.config_parser import (get_config_data)
 from utils.experiment_utils import (model_checkpoint, experiment_dir_creator)
-from progress.bar import ChargingBar
 from utils.check_gpu import get_training_device
 
 parser = argparse.ArgumentParser()
@@ -34,7 +35,7 @@ loss_factory = LossFactory()
 # ===================== Model training / validation ==========================
 
 # setup
-experiment_dir_creator(config['experiment_name'])
+experiment_dir_creator(config['experiment_name'], rewrite=True)
 
 training_dataset = dataset_factory.get_dataset(
     'train',
@@ -70,11 +71,8 @@ loss_function = loss_factory.get_loss_function(
 
 # loop
 batch_size = config["batch_size"]
-bar = ChargingBar(
-    'Epochs',
-    max=(config["epochs"] * len(training_dataset) / batch_size)
-)
-for i in range(config["epochs"]):
+
+for i in trange(config["epochs"], desc="Epochs : "):
     # set model to training mode
     model.train()
 
@@ -82,6 +80,7 @@ for i in range(config["epochs"]):
     for batch_ndx, sample in enumerate(DataLoader(training_dataset, batch_size=batch_size)):
         input, target = sample
         input.requires_grad = False
+        target = torch.argmax(target, dim=1)
 
         # flush accumulators
         optimiser.zero_grad()
@@ -90,35 +89,50 @@ for i in range(config["epochs"]):
         output = model.forward(input.to(device))
 
         # loss calculation
-        train_loss = loss_function(output.to('cpu'), target.to('cpu'))
+        train_loss = loss_function(
+            output.to('cpu'),
+            target.to('cpu')
+        )
 
         # backward pass
         train_loss.backward()
 
         # update
         optimiser.step()
-        bar.next()
 
     # set model to evaluation mode
     model.eval()
 
     # Do a loss check on val set per epoch
+    val_acc = 0.
     val_loss = 0.
     for batch_ndx, sample in enumerate(DataLoader(validation_dataset, batch_size=1)):
         with torch.no_grad():
             input, target = sample
+            target = torch.argmax(target, dim=1)
+
             output = model.forward(input.to(device))
-            loss = loss_function(output.to('cpu'), target.to('cpu'))
-            val_loss += loss
+            loss = loss_function(
+                output.to('cpu'),
+                target.to('cpu')
+            )
+
+            val_acc += (target.item() == torch.argmax(output, dim=1).item())
+            print(loss)
+            val_loss += loss.item()
+
     val_loss /= len(validation_dataset)
+    val_acc /= len(validation_dataset)
+
+    print(val_loss)
 
     # save model params
     model_checkpoint(
         config["experiment_name"],
         val_loss,
-        train_loss,
+        train_loss.item(),
+        val_acc,
         i,
         model.state_dict()
     )
-bar.finish()
 # ============================================================================
