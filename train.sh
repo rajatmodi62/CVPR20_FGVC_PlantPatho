@@ -1,0 +1,1 @@
+python ./train.py "experiment_2.yml"

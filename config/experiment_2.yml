@@ -1,10 +1,12 @@
-experiment_name: exp1
+experiment_name: experiment_2
 dataset: 
   name: fgvc7
   has_additional_files: True
   additional_files_path: images
   fold: 0
-iteration: 100
+epochs: 800
+batch_size: 2
+resize_dims: 128
 model: 
   name: efficientnet-b7
 optimiser: RMSprop

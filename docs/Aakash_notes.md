@@ -9,3 +9,5 @@
 
 ## Code ref
 - [Focal loss](https://github.com/clcarwin/focal_loss_pytorch/blob/master/focalloss.py)
+- [JDAI-DCL](https://github.com/JDAI-CV/DCL)
+- [NN from Scratch](https://github.com/thenewera-ru/NNFromScratch)

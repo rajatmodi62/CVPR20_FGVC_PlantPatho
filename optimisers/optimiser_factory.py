@@ -7,7 +7,7 @@ class OptimiserFactory:
 
     def get_optimiser(self, optimiser_name, params, hyper_param_dict):
         if optimiser_name == 'RMSprop':
-            print("[ RMSprop optimiser loaded! ]")
+            print("[ Using RMSprop optimier ]")
             return RMSprop(
                 params,
                 lr=hyper_param_dict['learning_rate'],

@@ -12,12 +12,12 @@ class DatasetFactory:
     def get_dataset(self, mode, dataset_name, transformer=None, fold_number=None):
 
         if mode not in ["train", "test", "val"]:
-            print("[Mode should either be train/test/val]")
+            print("[ Mode should either be train/test/val ]")
         else:
             dataset_dir = path.join(self.org_data_dir, dataset_name)
 
             if dataset_name == "fgvc7":
-                print("[ Dataset fgvc7 loaded! ]")
+                print("[ Dataset fgvc7 loaded - ", mode, " ]")
                 return FGVC7_Dataset(mode, dataset_dir, transformer, fold_number)
             else:
                 print("[Dataset not found]")

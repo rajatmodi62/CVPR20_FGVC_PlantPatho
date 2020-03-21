@@ -51,6 +51,7 @@ class FGVC7_Dataset(Dataset):
         if self.mode != "test":
             label = torch.tensor(
                 self.data_frame.iloc[idx, 1:].to_numpy(dtype=float))
-            return self.transformer.get_augmented(image), label
+            label_idx = torch.argmax(label, dim=0)
+            return self.transformer.get_augmented(image), label_idx
         else:
             return self.transformer.get_augmented(image)
