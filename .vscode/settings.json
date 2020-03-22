@@ -6,6 +6,8 @@
         "get",
         "optimier",
         "optimiser",
-        "optimisers"
+        "optimisers",
+        "tqdm",
+        "trange"
     ]
 }

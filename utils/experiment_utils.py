@@ -2,31 +2,91 @@ import torch
 from os import (makedirs, path)
 from shutil import rmtree
 import pandas as pd
+import math
+from sklearn.metrics import roc_auc_score
 
 
-def model_checkpoint(experiment_name, validation_loss, training_loss, validation_acc, epochs, state_dict):
-    df = pd.DataFrame(
-        [[epochs, validation_loss, training_loss, validation_acc]])
-    result_path = path.join('results', experiment_name, 'result.csv')
-    if not path.isfile(result_path):
-        df.to_csv(result_path, header=[
-                  "epoch", "Loss ( Val )", "Loss ( Train )", "Accuracy ( Val )"], index=False)
-    else:  # else it exists so append without writing the header
-        df.to_csv(result_path, mode='a', header=False, index=False)
-    torch.save(
-        state_dict,
-        path.join('results', experiment_name, 'weights.pth')
-    )
-
-
-def experiment_dir_creator(experiment_name, rewrite=False):
-    if path.exists(path.join('results', experiment_name)) == False:
-        makedirs(path.join('results', experiment_name))
-    else:
-        if rewrite:
-            print("[ Experiment output already exists - Overwriting! ]")
-            rmtree(path.join('results', experiment_name))
+class ExperimentHelper:
+    def __init__(self, experiment_name, rewrite=False, freq=None, tb_writer=None):
+        if path.exists(path.join('results', experiment_name)) == False:
             makedirs(path.join('results', experiment_name))
         else:
-            print("[ Experiment output already exists - Manual deletion needed ]")
-            exit()
+            if rewrite:
+                print("[ Experiment output already exists - Overwriting! ]")
+                rmtree(path.join('results', experiment_name))
+                makedirs(path.join('results', experiment_name))
+            else:
+                print("[ Experiment output already exists - Manual deletion needed ]")
+                exit()
+
+        self.experiment_name = experiment_name
+        self.best_val_loss = float('inf')
+        self.tb_writer = tb_writer
+        self.freq = None
+        self.progress = False
+
+    def should_trigger(self, i):
+        if self.freq is None:
+            return True
+        else:
+            return i % self.freq == 0
+
+    def is_progress(self):
+        print('Is progress? ', self.progress)
+        print( self.best_val_loss )
+        return self.progress
+
+    def save_checkpoint(self, state_dict):
+        torch.save(
+            state_dict,
+            path.join('results', self.experiment_name, 'weights.pth')
+        )
+
+    def validate(self, loss_fn, val_output_list, val_target_list, train_output_list, train_target_list, epoch):
+        # loss calculation
+        val_loss = loss_fn(
+            val_output_list, torch.argmax(val_target_list, dim=1)).item()
+        train_loss = loss_fn(
+            train_output_list, torch.argmax(train_target_list, dim=1)).item()
+
+        # temp
+        if math.isnan(val_loss):
+            val_loss = float('inf')
+
+        val_acc = torch.argmax(val_target_list, dim=1).eq(
+            torch.argmax(val_output_list, dim=1))
+        val_acc = 1.0 * torch.sum(val_acc.int()).item() / \
+            val_output_list.size()[0]
+
+        train_acc = torch.argmax(train_target_list, dim=1).eq(
+            torch.argmax(train_output_list, dim=1))
+        train_acc = 1.0 * torch.sum(train_acc.int()
+                                    ).item() / train_output_list.size()[0]
+
+        # saving results to csv
+        df = pd.DataFrame(
+            [[epoch, val_loss, train_loss, val_acc, train_acc]])
+        result_path = path.join('results', self.experiment_name, 'result.csv')
+
+        if not path.isfile(result_path):
+            df.to_csv(result_path, header=[
+                "epoch", "Loss ( Val )", "Loss ( Train )", "Accuracy ( Val )", "Accuracy ( Train )"], index=False)
+        else:  # else it exists so append without writing the header
+            df.to_csv(result_path, mode='a', header=False, index=False)
+
+        if self.tb_writer is not None:
+            self.tb_writer.add_scalar('Loss/Train', epoch, train_loss)
+            self.tb_writer.add_scalar('Loss/Validation', epoch, val_loss)
+            self.tb_writer.add_scalar('Accuracy/Train', epoch, train_acc)
+            self.tb_writer.add_scalar('Accuracy/Validation', epoch, val_acc)
+
+        # storing loss for check
+        if self.best_val_loss >= val_loss:
+            self.best_val_loss = val_loss
+            self.progress = True
+        else:
+            self.progress = False
+
+
+def roc_auc_score_generator(output_list, target_list):
+    roc_auc_score(target_list, output_list, average="macro")

@@ -1,20 +1,23 @@
 experiment_name: experiment_2
+validation_frequency: 1
+epochs: 800
+batch_size: 2
 dataset: 
   name: fgvc7
   has_additional_files: True
   additional_files_path: images
   fold: 0
-epochs: 800
-batch_size: 2
-resize_dims: 128
+  resize_dims: 128
 model: 
   name: efficientnet-b7
-optimiser: RMSprop
-hyper_params:
-  decay: 0.9
-  momentum: 0.9
-  batch_norm_momentum:  0.99
-  weight_decay: 0.00001
-  learning_rate: 0.256
-  centered: False
-loss_function: 'cross-entropy-loss'
+optimiser: 
+  name: RMSprop
+  hyper_params:
+    decay: 0.9
+    momentum: 0.9
+    batch_norm_momentum:  0.99
+    weight_decay: 0.00001
+    learning_rate: 0.256
+    centered: False
+loss_function: 
+  name: 'cross-entropy-loss'
