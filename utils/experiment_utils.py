@@ -22,7 +22,7 @@ class ExperimentHelper:
         self.experiment_name = experiment_name
         self.best_val_loss = float('inf')
         self.tb_writer = tb_writer
-        self.freq = None
+        self.freq = freq
         self.progress = False
 
     def should_trigger(self, i):
@@ -32,8 +32,6 @@ class ExperimentHelper:
             return i % self.freq == 0
 
     def is_progress(self):
-        print('Is progress? ', self.progress)
-        print( self.best_val_loss )
         return self.progress
 
     def save_checkpoint(self, state_dict):
@@ -75,10 +73,10 @@ class ExperimentHelper:
             df.to_csv(result_path, mode='a', header=False, index=False)
 
         if self.tb_writer is not None:
-            self.tb_writer.add_scalar('Loss/Train', epoch, train_loss)
-            self.tb_writer.add_scalar('Loss/Validation', epoch, val_loss)
-            self.tb_writer.add_scalar('Accuracy/Train', epoch, train_acc)
-            self.tb_writer.add_scalar('Accuracy/Validation', epoch, val_acc)
+            self.tb_writer.add_scalar('Loss/Train', train_loss, epoch)
+            self.tb_writer.add_scalar('Loss/Validation', val_loss, epoch)
+            self.tb_writer.add_scalar('Accuracy/Train', train_acc, epoch)
+            self.tb_writer.add_scalar('Accuracy/Validation', val_acc, epoch)
 
         # storing loss for check
         if self.best_val_loss >= val_loss:

@@ -1,1 +1,5 @@
+python ./train.py "experiment_1.yml"
 python ./train.py "experiment_2.yml"
+python ./train.py "experiment_3.yml"
+python ./train.py "experiment_4.yml"
+python ./train.py "experiment_5.yml"
