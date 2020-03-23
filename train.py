@@ -167,5 +167,5 @@ for i in trange(config["epochs"], desc="Epochs : "):
 
         # save model weights
         if experiment_helper.is_progress():
-            experiment_helper.save_checkpoint(model.state_dict, val_output_list)
+            experiment_helper.save_checkpoint(model.state_dict)
 # ============================================================================
