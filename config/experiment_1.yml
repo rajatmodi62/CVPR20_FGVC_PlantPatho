@@ -1,7 +1,7 @@
 experiment_name: experiment_1
 validation_frequency: 5
-epochs: 400
-batch_size: 8
+epochs: 800
+batch_size: 64
 dataset: 
   name: fgvc7
   has_additional_files: True

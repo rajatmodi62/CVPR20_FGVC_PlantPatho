@@ -11,8 +11,6 @@ class OptimiserFactory:
             return RMSprop(
                 params,
                 lr=hyper_param_dict['learning_rate'],
-                # alpha=hyper_param_dict['alpha'],
-                # eps=hyper_param_dict['eps'],
                 weight_decay=hyper_param_dict['weight_decay'],
                 momentum=hyper_param_dict['momentum'],
                 centered=hyper_param_dict['centered']

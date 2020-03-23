@@ -47,10 +47,6 @@ class ExperimentHelper:
         train_loss = loss_fn(
             train_output_list, torch.argmax(train_target_list, dim=1)).item()
 
-        # temp
-        if math.isnan(val_loss):
-            val_loss = float('inf')
-
         val_acc = torch.argmax(val_target_list, dim=1).eq(
             torch.argmax(val_output_list, dim=1))
         val_acc = 1.0 * torch.sum(val_acc.int()).item() / \

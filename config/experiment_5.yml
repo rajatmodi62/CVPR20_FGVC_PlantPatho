@@ -1,4 +1,4 @@
-experiment_name: experiment_1
+experiment_name: experiment_5
 validation_frequency: 5
 epochs: 400
 batch_size: 8

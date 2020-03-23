@@ -8,6 +8,7 @@ from dataset.dataset_factory import DatasetFactory
 from optimisers.optimiser_factory import OptimiserFactory
 from models.model_factory import ModelFactory
 from losses.loss_factory import LossFactory
+from schedulers.scheduler_factory import SchedulerFactory
 from torch.utils.data import DataLoader
 from utils.config_parser import (get_config_data)
 from utils.experiment_utils import ExperimentHelper
@@ -35,9 +36,10 @@ optimiser_factory = OptimiserFactory()
 dataset_factory = DatasetFactory(org_data_dir='./data')
 model_factory = ModelFactory()
 loss_factory = LossFactory()
+scheduler_factory = SchedulerFactory()
 experiment_helper = ExperimentHelper(
-    config['experiment_name'], 
-    True, 
+    config['experiment_name'],
+    True,
     config['validation_frequency'],
     writer
 )
@@ -67,17 +69,26 @@ validation_dataset = dataset_factory.get_dataset(
 )
 
 model = model_factory.get_model(
-    config['model']['name']
+    config['model']['name'],
+    config['model']['hyper_params'],
+    config['model']['num_classes']
 ).to(device)
 
 optimiser = optimiser_factory.get_optimiser(
-    config['optimiser']['name'], 
-    model.parameters(), 
+    config['optimiser']['name'],
+    model.parameters(),
     config['optimiser']['hyper_params']
 )
 
+scheduler = scheduler_factory.get_scheduler(
+    optimiser,
+    config['scheduler']['name'],
+    config['scheduler']['hyper_params']
+)
+
 loss_function = loss_factory.get_loss_function(
-    config['loss_function']['name']
+    config['loss_function']['name'],
+    # config['loss_function']['hyper_params']
 )
 
 # training / validation loop
@@ -92,18 +103,20 @@ for i in trange(config["epochs"], desc="Epochs : "):
     train_target_list = []
     for batch_ndx, sample in enumerate(DataLoader(training_dataset, batch_size=batch_size)):
         input, target = sample
+        input = input.to(device)
+        target = target.to(device)
         input.requires_grad = False
 
         # flush accumulators
         optimiser.zero_grad()
 
         # forward pass
-        output = model.forward(input.to(device))
+        output = model.forward(input)
 
         # loss calculation
         loss = loss_function(
-            output.to(device),
-            torch.argmax(target, dim=1).to(device)
+            output,
+            torch.argmax(target, dim=1)
         )
 
         # backward pass
@@ -112,8 +125,11 @@ for i in trange(config["epochs"], desc="Epochs : "):
         # update
         optimiser.step()
 
-        if experiment_helper.should_trigger(i): 
-            train_target_list.append(target.to(device))
+        # update lr using scheduler
+        scheduler.step()
+
+        if experiment_helper.should_trigger(i):
+            train_target_list.append(target)
             train_output_list.append(output)
 
     # set model to evaluation mode
@@ -126,11 +142,13 @@ for i in trange(config["epochs"], desc="Epochs : "):
         for batch_ndx, sample in enumerate(DataLoader(validation_dataset, batch_size=1)):
             with torch.no_grad():
                 input, target = sample
+                input = input.to(device)
+                target = target.to(device)
 
-                output = model.forward(input.to(device))
+                output = model.forward(input)
 
                 val_output_list.append(output)
-                val_target_list.append(target.to(device))
+                val_target_list.append(target)
 
         val_output_list = torch.cat(val_output_list, dim=0)
         val_target_list = torch.cat(val_target_list, dim=0)
@@ -149,7 +167,5 @@ for i in trange(config["epochs"], desc="Epochs : "):
 
         # save model weights
         if experiment_helper.is_progress():
-            experiment_helper.save_checkpoint(model.state_dict)
-        else:
-            continue
+            experiment_helper.save_checkpoint(model.state_dict, val_output_list)
 # ============================================================================
