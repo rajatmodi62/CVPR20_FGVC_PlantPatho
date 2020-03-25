@@ -46,6 +46,8 @@ def hydrate_config(config):
             if 'num_classes' not in config['model'].keys():
                 print('[ Number of classes not mentioned ]')
                 exit()
+            if 'hyper_params' not in config['model'].keys():
+                config['model']['hyper_params'] = None
 
         # optimiser
         if 'optimiser' not in config.keys():
@@ -110,6 +112,8 @@ def hydrate_config(config):
             else:
                 print('[ No models in Model List ]')
                 exit()
+        
+    return config
 
 def get_config_data(yml_file_name):
     name = yml_file_name.split('.')[0]

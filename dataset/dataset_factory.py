@@ -18,11 +18,8 @@ class DatasetFactory:
             dataset_dir = path.join(self.org_data_dir, dataset_name)
 
             if dataset_name == "fgvc7":
-                print("[ Dataset fgvc7 loaded - <", mode, "> ]")
-                if fold_number is None:
-                    print("[ No folds created - Raw dataset ]")
-                else:
-                    print("[ Fold ", fold_number, " selected ]")
+                print("[ Dataset : fgvc7 <", mode, "/",
+                      "raw" if fold_number is None else fold_number, "> ]")
                 return FGVC7_Dataset(mode, dataset_dir, transformer, fold_number)
             else:
                 print("[ Dataset not found ]")

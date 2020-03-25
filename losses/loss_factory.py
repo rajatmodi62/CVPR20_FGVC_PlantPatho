@@ -10,7 +10,7 @@ class LossFactory:
         loss_function = None
 
         if function_name == 'focal-loss':
-            print("[ Using Focal Loss ]")
+            print("[ Loss : Focal Loss ]")
             if hyper_params is not None:
                 loss_function = FocalLoss(
                     size_average=hyper_params['size_average']
@@ -18,7 +18,7 @@ class LossFactory:
             else:
                 loss_function = FocalLoss()
         if function_name == 'cross-entropy-loss':
-            print("[ Using Cross Entropy Loss ]")
+            print("[ Loss : Cross Entropy Loss ]")
             loss_function = CrossEntropyLoss()
 
         return loss_function

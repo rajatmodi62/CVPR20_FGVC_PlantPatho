@@ -11,7 +11,7 @@ class ModelFactory():
         model = None
 
         if model_name == 'efficientnet-b7':
-            print("[ Model Efficientnet B7 loaded ]")
+            print("[ Model : Efficientnet B7 ]")
             model = EfficientNet.from_pretrained()
             if tuning_type == 'feature_extraction':
                 for param in model.parameters():
@@ -22,7 +22,7 @@ class ModelFactory():
                 model._bn_mom = hyper_params['batch_norm_momentum']
 
         if model_name == 'densenet-161':
-            print("[ Model Densenet 161 loaded ]")
+            print("[ Model : Densenet 161 ]")
             model = models.densenet161(pretrained=True)
             if tuning_type == 'feature_extraction':
                 for param in model.parameters():

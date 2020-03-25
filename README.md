@@ -96,6 +96,55 @@ The backbones we are looking forward to explore are:
 
 ---
 
+## Config structure
+
+### Training
+
+```
+mode: train
+validation_frequency: (optional)
+epochs: (optional)
+batch_size: (optional)
+train_dataset: 
+  name: 
+  fold: (optional)
+  resize_dims: 
+val_dataset: 
+  name: 
+  fold: (optional)
+  resize_dims: 
+model: 
+  name: 
+  num_classes: 
+optimiser: 
+  name: 
+  hyper_params: (optional)
+    key_1:
+    key_2: 
+scheduler:
+  name: 
+  hyper_params: (optional)
+    key_1:
+    key_2: 
+loss_function: 
+  name: 
+```
+
+### Test
+
+```
+mode: test
+test_dataset: 
+  name: 
+  resize_dims: 
+ensemble: (optional)
+model_list:
+  - model:
+      name: 
+      num_classes: 
+      path: 
+```
+
 ## Lib dependency
 ```bash
 pip install --user torch torchvision catalyst albumentations pandas scikit-image tqdm scikit-learn pyyaml

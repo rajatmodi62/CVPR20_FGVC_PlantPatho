@@ -12,11 +12,11 @@ class ExperimentHelper:
             makedirs(path.join('results', experiment_name))
         else:
             if rewrite:
-                print("[ Experiment output already exists - Overwriting! ]")
+                print("[ <", experiment_name, "> output exists - Overwriting! ]")
                 rmtree(path.join('results', experiment_name))
                 makedirs(path.join('results', experiment_name))
             else:
-                print("[ Experiment output already exists - Manual deletion needed ]")
+                print("[ <", experiment_name, "> output exists - Manual deletion needed ]")
                 exit()
 
         self.experiment_name = experiment_name
