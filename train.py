@@ -23,7 +23,7 @@ args = parser.parse_args()
 # Get experiment config values
 if args.experiment_file is None:
     exit()
-config = get_config_data(path.join('config', args.experiment_file))
+config = get_config_data(args.experiment_file)
 
 # Setup tensorboard support
 writer = SummaryWriter()

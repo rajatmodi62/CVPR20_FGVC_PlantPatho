@@ -1,4 +1,4 @@
-mode: train
+experiment_name: exp_23_3_b
 validation_frequency: 2
 epochs: 400
 batch_size: 128
@@ -6,7 +6,7 @@ dataset:
   name: fgvc7
   has_additional_files: True
   additional_files_path: images
-  fold: 0
+  fold: 1
   resize_dims: 224
 model: 
   name: efficientnet-b7

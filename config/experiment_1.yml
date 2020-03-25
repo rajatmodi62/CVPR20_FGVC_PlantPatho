@@ -1,24 +1,29 @@
-experiment_name: experiment_1
-validation_frequency: 5
-epochs: 800
-batch_size: 64
+experiment_name: exp_1
+validation_frequency: 2
+epochs: 200
+batch_size: 128
 dataset: 
   name: fgvc7
   has_additional_files: True
   additional_files_path: images
-  fold: 0
+  fold: 1
   resize_dims: 224
 model: 
   name: densenet-161
+  num_classes: 4
+  hyper_params:
+    batch_norm_momentum:  0.99
 optimiser: 
   name: RMSprop
   hyper_params:
-    decay: 0.9
     momentum: 0.9
-    batch_norm_momentum:  0.99
     weight_decay: 0.00001
     learning_rate: 0.256
     centered: False
+scheduler:
+  name: StepLR
+  hyper_params:
+    lr_decay: 0.97
+    step: 4
 loss_function: 
   name: 'cross-entropy-loss'
-

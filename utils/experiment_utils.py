@@ -41,46 +41,59 @@ class ExperimentHelper:
         )
 
     def validate(self, loss_fn, val_output_list, val_target_list, train_output_list, train_target_list, epoch):
-        # loss calculation
-        val_loss = loss_fn(
-            val_output_list, torch.argmax(val_target_list, dim=1)).item()
-        train_loss = loss_fn(
-            train_output_list, torch.argmax(train_target_list, dim=1)).item()
+        with torch.no_grad():
+            # loss calculation
+            val_loss = loss_fn(
+                val_output_list, torch.argmax(val_target_list, dim=1)).item()
+            train_loss = loss_fn(
+                train_output_list, torch.argmax(train_target_list, dim=1)).item()
 
-        val_acc = torch.argmax(val_target_list, dim=1).eq(
-            torch.argmax(val_output_list, dim=1))
-        val_acc = 1.0 * torch.sum(val_acc.int()).item() / \
-            val_output_list.size()[0]
+            val_acc = torch.argmax(val_target_list, dim=1).eq(
+                torch.argmax(val_output_list, dim=1))
+            val_acc = 1.0 * torch.sum(val_acc.int()).item() / \
+                val_output_list.size()[0]
 
-        train_acc = torch.argmax(train_target_list, dim=1).eq(
-            torch.argmax(train_output_list, dim=1))
-        train_acc = 1.0 * torch.sum(train_acc.int()
-                                    ).item() / train_output_list.size()[0]
+            train_acc = torch.argmax(train_target_list, dim=1).eq(
+                torch.argmax(train_output_list, dim=1))
+            train_acc = 1.0 * torch.sum(train_acc.int()
+                                        ).item() / train_output_list.size()[0]
 
-        # saving results to csv
-        df = pd.DataFrame(
-            [[epoch, val_loss, train_loss, val_acc, train_acc]])
-        result_path = path.join('results', self.experiment_name, 'result.csv')
+            val_roc = roc_auc_score_generator(val_output_list, val_target_list)
+            train_roc = roc_auc_score_generator(
+                train_output_list, train_target_list)
 
-        if not path.isfile(result_path):
-            df.to_csv(result_path, header=[
-                "epoch", "Loss ( Val )", "Loss ( Train )", "Accuracy ( Val )", "Accuracy ( Train )"], index=False)
-        else:  # else it exists so append without writing the header
-            df.to_csv(result_path, mode='a', header=False, index=False)
+            # saving results to csv
+            df = pd.DataFrame(
+                [[epoch, val_loss, train_loss, val_acc, train_acc, val_roc, train_roc]])
+            result_path = path.join(
+                'results', self.experiment_name, 'result.csv')
 
-        if self.tb_writer is not None:
-            self.tb_writer.add_scalar('Loss/Train', train_loss, epoch)
-            self.tb_writer.add_scalar('Loss/Validation', val_loss, epoch)
-            self.tb_writer.add_scalar('Accuracy/Train', train_acc, epoch)
-            self.tb_writer.add_scalar('Accuracy/Validation', val_acc, epoch)
+            if not path.isfile(result_path):
+                df.to_csv(result_path, header=[
+                    "epoch", "Loss ( Val )", "Loss ( Train )", "Accuracy ( Val )", "Accuracy ( Train )", "ROC ( Val )", "ROC ( Train )"], index=False)
+            else:  # else it exists so append without writing the header
+                df.to_csv(result_path, mode='a', header=False, index=False)
 
-        # storing loss for check
-        if self.best_val_loss >= val_loss:
-            self.best_val_loss = val_loss
-            self.progress = True
-        else:
-            self.progress = False
+            if self.tb_writer is not None:
+                self.tb_writer.add_scalar('Loss/Train', train_loss, epoch)
+                self.tb_writer.add_scalar('Loss/Validation', val_loss, epoch)
+                self.tb_writer.add_scalar('Accuracy/Train', train_acc, epoch)
+                self.tb_writer.add_scalar(
+                    'Accuracy/Validation', val_acc, epoch)
+                self.tb_writer.add_scalar('ROC/Train', train_roc, epoch)
+                self.tb_writer.add_scalar('ROC/Validation', val_roc, epoch)
+
+            # storing loss for check
+            if self.best_val_loss >= val_loss:
+                self.best_val_loss = val_loss
+                self.progress = True
+            else:
+                self.progress = False
 
 
 def roc_auc_score_generator(output_list, target_list):
-    roc_auc_score(target_list, output_list, average="macro")
+    return roc_auc_score(
+        target_list.cpu().numpy(), 
+        output_list.cpu().numpy(), 
+        average="macro"
+    )
