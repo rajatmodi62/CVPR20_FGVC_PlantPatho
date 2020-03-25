@@ -68,10 +68,10 @@ The backbones we are looking forward to explore are:
     - [x] Stratified k fold
 - [x] Models
     - [x] Efficientnet B7
-- [ ] Loss
+- [x] Loss
     - [x] Cross Entropy Loss
-    - [ ] Focal loss
-    - [ ] Mean ROC AUC loss ( Kaggle )
+    - [x] Focal loss
+    - [x] Mean ROC AUC loss ( Kaggle )
 - [x] Optimizer
     - [x] RMS prop with Efficient net params
 
@@ -86,12 +86,33 @@ The backbones we are looking forward to explore are:
 |       `-- images
 |-- dataset
 |-- docs
+|-- folds
+|   `-- fgvc7
+|       |-- 0
+|       |   |-- train
+|       |   `-- val
+|       |-- 1
+|       |   |-- train
+|       |   `-- val
+|       |-- 2
+|       |   |-- train
+|       |   `-- val
+|       |-- 3
+|       |   |-- train
+|       |   `-- val
+|       `-- 4
+|           |-- train
+|           `-- val
 |-- losses
 |-- models
 |-- optimisers
 |-- pretrained_weights
+|-- results
+|-- runs
 |-- schedulers
-`-- transformers
+|-- transformers
+`-- utils
+
 ```
 
 ---
