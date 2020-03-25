@@ -1,11 +1,13 @@
-experiment_name: exp_1
+mode: train
 validation_frequency: 2
-epochs: 200
+epochs: 400
 batch_size: 128
-dataset: 
+train_dataset: 
   name: fgvc7
-  has_additional_files: True
-  additional_files_path: images
+  fold: 1
+  resize_dims: 224
+val_dataset: 
+  name: fgvc7
   fold: 1
   resize_dims: 224
 model: 

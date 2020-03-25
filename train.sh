@@ -1,7 +1,10 @@
 # python ./train.py "exp_23_3_a.yml"
 # python ./train.py "exp_23_3_b.yml"
-python ./train.py "experiment_1.yml"
+# python ./train.py "experiment_1.yml"
 # python ./train.py "experiment_2.yml"
 # python ./train.py "experiment_3.yml"
 # python ./train.py "experiment_4.yml"
 # python ./train.py "experiment_5.yml"
+
+python ./train.py "train_1.yml"
+# python ./train.py "dummy.yml"
