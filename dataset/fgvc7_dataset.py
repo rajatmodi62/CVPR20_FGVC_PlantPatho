@@ -44,6 +44,9 @@ class FGVC7_Dataset(Dataset):
             NUMBER_OF_FOLDS
         )
 
+    def get_csv_path(self):
+        return self.csv_path
+
     def __len__(self):
         return len(self.data_frame)
 

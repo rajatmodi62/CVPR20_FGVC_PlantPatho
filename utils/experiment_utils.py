@@ -69,9 +69,14 @@ class ExperimentHelper:
                 'results', self.experiment_name, 'result.csv')
 
             if not path.isfile(result_path):
-                df.to_csv(result_path, header=[
-                    "epoch", "Loss ( Val )", "Loss ( Train )", "Accuracy ( Val )", "Accuracy ( Train )", "ROC ( Val )", "ROC ( Train )"], index=False)
-            else:  # else it exists so append without writing the header
+                df.to_csv(
+                    result_path, 
+                    header=[
+                    "epoch", "Loss ( Val )", "Loss ( Train )", "Accuracy ( Val )", "Accuracy ( Train )", "ROC ( Val )", "ROC ( Train )"
+                    ], 
+                    index=False
+                )
+            else: 
                 df.to_csv(result_path, mode='a', header=False, index=False)
 
             if self.tb_writer is not None:

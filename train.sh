@@ -6,5 +6,5 @@
 # python ./train.py "experiment_4.yml"
 # python ./train.py "experiment_5.yml"
 
-python ./train.py "train_1.yml"
-# python ./train.py "dummy.yml"
+# python ./train.py "train_1.yml"
+python ./train.py "test_1.yml"

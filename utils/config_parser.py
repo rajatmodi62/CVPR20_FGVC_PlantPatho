@@ -98,7 +98,7 @@ def hydrate_config(config):
             print('[ Model List not mentioned ]')
             exit()
         else:
-            if len( config['model_list'] > 0 ):
+            if len(config['model_list']) > 0:
                 for model in config['model_list']:
                     if 'name' not in model['model'].keys():
                         print('[ Model name not mentioned ]')
@@ -109,11 +109,14 @@ def hydrate_config(config):
                     if 'path' not in model['model'].keys():
                         print('[ Model weights paths not mentioned ]')
                         exit()
+                    if 'hyper_params' not in model['model'].keys():
+                        model['model']['hyper_params'] = None
             else:
                 print('[ No models in Model List ]')
                 exit()
-        
+
     return config
+
 
 def get_config_data(yml_file_name):
     name = yml_file_name.split('.')[0]

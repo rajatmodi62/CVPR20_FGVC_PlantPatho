@@ -2,7 +2,7 @@ import torch
 from os import (path, environ)
 import argparse
 from torch.utils.tensorboard import SummaryWriter
-from tqdm import trange
+from tqdm import (trange, tqdm)
 from transformers.transformer_factory import TransformerFactory
 from dataset.dataset_factory import DatasetFactory
 from optimisers.optimiser_factory import OptimiserFactory
@@ -12,6 +12,7 @@ from schedulers.scheduler_factory import SchedulerFactory
 from torch.utils.data import DataLoader
 from utils.config_parser import (get_config_data)
 from utils.experiment_utils import ExperimentHelper
+from utils.evalutaion_utils import EvaluationHelper
 from utils.check_gpu import get_training_device
 
 # stop tf warning
@@ -39,42 +40,52 @@ dataset_factory = DatasetFactory(org_data_dir='./data')
 model_factory = ModelFactory()
 
 if config['mode'] == 'test':
+    evaluation_helper = EvaluationHelper(
+        config['experiment_name'],
+        True,
+    )
 
     # ===================== Model testing / evaluation ==========================
 
     test_dataset = dataset_factory.get_dataset(
         'test',
-        config['dataset']['name'],
+        config['test_dataset']['name'],
         TransformerFactory(
-            height=config['dataset']['resize_dims'],
-            width=config['dataset']['resize_dims'],
+            height=config['test_dataset']['resize_dims'],
+            width=config['test_dataset']['resize_dims'],
         )
     )
 
     for model_name in config['model_list']:
         model = model_factory.get_model(
-            config['model']['name'],
-            config['model']['num_classes'],
-            config['model']['hyper_params']
+            model_name['model']['name'],
+            model_name['model']['num_classes'],
+            model_name['model']['hyper_params']
         ).to(device)
-        weight_path = path.join('results', config['path'], 'weights.pth')
+        weight_path = path.join(
+            'results', model_name['model']['path'], 'weights.pth')
         model.load_state_dict(torch.load(weight_path))
 
         model.eval()
 
         test_output_list = []
-        for batch_ndx, sample in enumerate(DataLoader(test_dataset, batch_size=1)):
+        for batch_ndx, sample in enumerate(tqdm(DataLoader(test_dataset, batch_size=1), desc="Samples : ")):
             with torch.no_grad():
                 input = sample
                 input = input.to(device)
-                
+
                 output = model.forward(input)
 
                 test_output_list.append(output)
-        
+
         test_output_list = torch.cat(test_output_list, dim=0)
 
         # use this list to write using a helper
+        evaluation_helper.evaluate(
+            test_dataset.get_csv_path(),
+            test_output_list,
+            model_name['model']['name']
+        )
 
     if config['ensemble']:
         # use the helper to ensemble if needed
@@ -214,7 +225,7 @@ elif config['mode'] == 'train':
 
             # save model weights
             if experiment_helper.is_progress():
-                experiment_helper.save_checkpoint(model.state_dict)
+                experiment_helper.save_checkpoint(model.state_dict())
     # ============================================================================
 else:
     print("[ Experiment Mode should either be train/test ]")
