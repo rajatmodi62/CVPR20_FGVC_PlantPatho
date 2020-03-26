@@ -1,96 +1,26 @@
 import torch
-from os import (path, environ)
-import argparse
 from torch.utils.tensorboard import SummaryWriter
-from tqdm import (trange, tqdm)
-from transformers.transformer_factory import TransformerFactory
-from dataset.dataset_factory import DatasetFactory
-from optimisers.optimiser_factory import OptimiserFactory
-from models.model_factory import ModelFactory
-from losses.loss_factory import LossFactory
-from schedulers.scheduler_factory import SchedulerFactory
 from torch.utils.data import DataLoader
-from utils.config_parser import (get_config_data)
+from os import (path, environ)
+from tqdm import (trange, tqdm)
+from losses.loss_factory import LossFactory
+from optimisers.optimiser_factory import OptimiserFactory
+from schedulers.scheduler_factory import SchedulerFactory
+from dataset.dataset_factory import DatasetFactory
+from transformers.transformer_factory import TransformerFactory
 from utils.experiment_utils import ExperimentHelper
-from utils.evalutaion_utils import EvaluationHelper
-from utils.check_gpu import get_training_device
+from models.model_factory import ModelFactory
 
 # stop tf warning
 environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-# Parse arguments
-parser = argparse.ArgumentParser()
-parser.add_argument("experiment_file",
-                    help="The name of the experiment config file")
-args = parser.parse_args()
 
-# Get experiment config values
-if args.experiment_file is None:
-    exit()
-config = get_config_data(args.experiment_file)
-
-# Get GPU / CPU device instance
-device = get_training_device()
-
-# Create pipeline objects
-dataset_factory = DatasetFactory(org_data_dir='./data')
-model_factory = ModelFactory()
-
-if config['mode'] == 'test':
-    evaluation_helper = EvaluationHelper(
-        config['experiment_name'],
-        True,
-    )
-
-    # ===================== Model testing / evaluation ==========================
-
-    test_dataset = dataset_factory.get_dataset(
-        'test',
-        config['test_dataset']['name'],
-        TransformerFactory(
-            height=config['test_dataset']['resize_dims'],
-            width=config['test_dataset']['resize_dims'],
-        )
-    )
-
-    for model_name in config['model_list']:
-        model = model_factory.get_model(
-            model_name['model']['name'],
-            model_name['model']['num_classes'],
-            model_name['model']['hyper_params'],
-            tuning_type='fine-tuning'
-        ).to(device)
-        weight_path = path.join(
-            'results', model_name['model']['path'], 'weights.pth')
-        model.load_state_dict(torch.load(weight_path))
-
-        model.eval()
-
-        test_output_list = []
-        for batch_ndx, sample in enumerate(tqdm(DataLoader(test_dataset, batch_size=1), desc="Samples : ")):
-            with torch.no_grad():
-                input = sample
-                input = input.to(device)
-
-                output = model.forward(input)
-
-                test_output_list.append(output)
-
-        test_output_list = torch.cat(test_output_list, dim=0)
-
-        # use this list to write using a helper
-        evaluation_helper.evaluate(
-            test_dataset.get_csv_path(),
-            test_output_list,
-            model_name['model']['name']
-        )
-
-    if config['ensemble']:
-        # use the helper to ensemble if needed
-        pass
-
-elif config['mode'] == 'train':
-    writer = SummaryWriter(log_dir=path.join('runs', config['experiment_name']))
+def train(config, device):
+    # Create pipeline objects
+    dataset_factory = DatasetFactory(org_data_dir='./data')
+    model_factory = ModelFactory()
+    writer = SummaryWriter(log_dir=path.join(
+        'runs', config['experiment_name']))
     experiment_helper = ExperimentHelper(
         config['experiment_name'],
         True,
@@ -101,9 +31,8 @@ elif config['mode'] == 'train':
     loss_factory = LossFactory()
     scheduler_factory = SchedulerFactory()
 
-    # ===================== Model training / validation ==========================
+    # ==================== Model training / validation setup ========================
 
-    # setup
     training_dataset = dataset_factory.get_dataset(
         'train',
         config['train_dataset']['name'],
@@ -149,8 +78,11 @@ elif config['mode'] == 'train':
         # config['loss_function']['hyper_params']
     )
 
-    # training / validation loop
     batch_size = config["batch_size"]
+
+    # ===============================================================================
+
+    # =================== Model training / validation loop ==========================
 
     for i in trange(config["epochs"], desc="Epochs : "):
 
@@ -226,7 +158,5 @@ elif config['mode'] == 'train':
             # save model weights
             if experiment_helper.is_progress():
                 experiment_helper.save_checkpoint(model.state_dict())
-    # ============================================================================
-else:
-    print("[ Experiment Mode should either be train/test ]")
-    exit()
+    
+    # ===============================================================================
