@@ -1,18 +1,18 @@
-experiment_name: exp_23_3_b
-validation_frequency: 2
+mode: train
+validation_frequency: 5
 epochs: 400
-batch_size: 128
-dataset: 
+batch_size: 4
+train_dataset: 
   name: fgvc7
-  has_additional_files: True
-  additional_files_path: images
+  fold: 1
+  resize_dims: 224
+val_dataset: 
+  name: fgvc7
   fold: 1
   resize_dims: 224
 model: 
-  name: efficientnet-b7
+  name: densenet-161
   num_classes: 4
-  hyper_params:
-    batch_norm_momentum:  0.99
 optimiser: 
   name: RMSprop
   hyper_params:

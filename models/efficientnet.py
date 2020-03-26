@@ -214,7 +214,8 @@ class EfficientNet(nn.Module):
         x = x.view(bs, -1)
         x = self._dropout(x)
         x = self._fc(x)
-        # x = F.relu(x)
+        
+        x = F.sigmoid(x)
         return x
 
     @classmethod

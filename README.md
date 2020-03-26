@@ -164,6 +164,8 @@ model_list:
       name: 
       num_classes: 
       path: 
+      hyper_params: (optional)
+        key_1:
 ```
 
 ## Lib dependency

@@ -30,7 +30,7 @@ if args.experiment_file is None:
 config = get_config_data(args.experiment_file)
 
 # Setup tensorboard support
-writer = SummaryWriter()
+writer = SummaryWriter(log_dir=path.join('runs', config['experiment_name']))
 
 # Get GPU / CPU device instance
 device = get_training_device()
@@ -60,7 +60,8 @@ if config['mode'] == 'test':
         model = model_factory.get_model(
             model_name['model']['name'],
             model_name['model']['num_classes'],
-            model_name['model']['hyper_params']
+            model_name['model']['hyper_params'],
+            tuning_type='fine-tuning'
         ).to(device)
         weight_path = path.join(
             'results', model_name['model']['path'], 'weights.pth')
@@ -129,7 +130,8 @@ elif config['mode'] == 'train':
     model = model_factory.get_model(
         config['model']['name'],
         config['model']['num_classes'],
-        config['model']['hyper_params']
+        config['model']['hyper_params'],
+        tuning_type='fine-tuning'
     ).to(device)
 
     optimiser = optimiser_factory.get_optimiser(
