@@ -29,9 +29,6 @@ if args.experiment_file is None:
     exit()
 config = get_config_data(args.experiment_file)
 
-# Setup tensorboard support
-writer = SummaryWriter(log_dir=path.join('runs', config['experiment_name']))
-
 # Get GPU / CPU device instance
 device = get_training_device()
 
@@ -93,6 +90,7 @@ if config['mode'] == 'test':
         pass
 
 elif config['mode'] == 'train':
+    writer = SummaryWriter(log_dir=path.join('runs', config['experiment_name']))
     experiment_helper = ExperimentHelper(
         config['experiment_name'],
         True,
