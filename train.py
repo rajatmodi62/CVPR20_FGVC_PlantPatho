@@ -75,7 +75,7 @@ def train(config, device):
 
     loss_function = loss_factory.get_loss_function(
         config['loss_function']['name'],
-        # config['loss_function']['hyper_params']
+        config['loss_function']['hyper_params']
     )
 
     batch_size = config["batch_size"]

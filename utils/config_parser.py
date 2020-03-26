@@ -79,6 +79,8 @@ def hydrate_config(config):
             if 'name' not in config['loss_function'].keys():
                 print('[ Loss function name not mentioned ]')
                 exit()
+            if 'hyper_params' not in config['loss_function'].keys():
+                config['loss_function']['hyper_params'] = None
 
     elif config['mode'] == 'test':
         # basic

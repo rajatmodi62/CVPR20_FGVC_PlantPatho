@@ -1,4 +1,4 @@
-python ./train.py "train_1.yml"
-python ./train.py "train_2.yml"
+python ./main.py "train_1.yml"
+python ./main.py "train_2.yml"
 
-python ./train.py "test.yml"
+python ./main.py "test.yml"
