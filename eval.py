@@ -37,7 +37,7 @@ def eval(config, device):
             model_name['model']['name'],
             model_name['model']['num_classes'],
             model_name['model']['hyper_params'],
-            tuning_type='fine-tuning'
+            # tuning_type='fine-tuning'
         ).to(device)
         weight_path = path.join(
             'results', model_name['model']['path'], 'weights.pth')

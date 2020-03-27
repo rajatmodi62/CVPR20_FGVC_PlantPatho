@@ -37,7 +37,7 @@ def train(config, device):
         'train',
         config['train_dataset']['name'],
         TransformerFactory(
-            pipe_type="image",
+            # pipe_type="image",
             height=config['train_dataset']['resize_dims'],
             width=config['train_dataset']['resize_dims'],
         ),
@@ -58,7 +58,7 @@ def train(config, device):
         config['model']['name'],
         config['model']['num_classes'],
         config['model']['hyper_params'],
-        tuning_type='fine-tuning'
+        # tuning_type='fine-tuning'
     ).to(device)
 
     optimiser = optimiser_factory.get_optimiser(

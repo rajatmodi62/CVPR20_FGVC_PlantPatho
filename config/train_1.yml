@@ -1,7 +1,7 @@
 mode: train
 validation_frequency: 5
-epochs: 400
-batch_size: 4
+epochs: 20
+batch_size: 128
 train_dataset: 
   name: fgvc7
   fold: 1
@@ -28,4 +28,4 @@ scheduler:
     lr_decay: 0.97
     step: 4
 loss_function: 
-  name: 'cross-entropy-loss'
+  name: 'negative-log-likelihood-loss'

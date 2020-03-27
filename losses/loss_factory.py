@@ -1,4 +1,4 @@
-from torch.nn import (CrossEntropyLoss)
+from torch.nn import (CrossEntropyLoss, NLLLoss)
 from losses.focal_loss import FocalLoss
 
 
@@ -20,5 +20,9 @@ class LossFactory:
         if function_name == 'cross-entropy-loss':
             print("[ Loss : Cross Entropy Loss ]")
             loss_function = CrossEntropyLoss()
+
+        if function_name == 'negative-log-likelihood-loss':
+            print("[ Loss : Negative Log Likelihood Loss ]")
+            loss_function = NLLLoss()
 
         return loss_function

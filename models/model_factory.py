@@ -1,7 +1,7 @@
 from torch import nn
-from models.efficientnet import EfficientNet
 import torchvision.models as models
-from torch.nn import functional as F
+from models.efficientnet import EfficientNet
+
 
 class ModelFactory():
     def __init__(self):
@@ -17,7 +17,11 @@ class ModelFactory():
                 for param in model.parameters():
                     param.requires_grad = False
             num_ftrs = model._fc.in_features
-            model._fc = nn.Linear(num_ftrs, num_classes)
+            model._fc = nn.Sequential(
+                nn.Linear(num_ftrs, num_classes),
+                nn.Sigmoid()
+            )
+
             if hyper_params is not None:
                 model._bn_mom = hyper_params['batch_norm_momentum']
 
@@ -28,6 +32,9 @@ class ModelFactory():
                 for param in model.parameters():
                     param.requires_grad = False
             num_ftrs = model.classifier.in_features
-            model.classifier = nn.Linear(num_ftrs, num_classes)
+            model.classifier = nn.Sequential(
+                nn.Linear(num_ftrs, num_classes),
+                nn.Sigmoid()
+            )
 
         return model
