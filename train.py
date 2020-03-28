@@ -58,7 +58,7 @@ def train(config, device):
         config['model']['name'],
         config['model']['num_classes'],
         config['model']['hyper_params'],
-        # tuning_type='fine-tuning'
+        tuning_type=config['model']['tuning_type']
     ).to(device)
 
     optimiser = optimiser_factory.get_optimiser(
@@ -67,11 +67,12 @@ def train(config, device):
         config['optimiser']['hyper_params']
     )
 
-    scheduler = scheduler_factory.get_scheduler(
-        optimiser,
-        config['scheduler']['name'],
-        config['scheduler']['hyper_params']
-    )
+    if config['scheduler'] is not None:
+        scheduler = scheduler_factory.get_scheduler(
+            optimiser,
+            config['scheduler']['name'],
+            config['scheduler']['hyper_params']
+        )
 
     loss_function = loss_factory.get_loss_function(
         config['loss_function']['name'],
@@ -116,7 +117,8 @@ def train(config, device):
             optimiser.step()
 
             # update lr using scheduler
-            scheduler.step()
+            if scheduler is not None:
+                scheduler.step()
 
             if experiment_helper.should_trigger(i):
                 train_target_list.append(target)
@@ -158,5 +160,5 @@ def train(config, device):
             # save model weights
             if experiment_helper.is_progress():
                 experiment_helper.save_checkpoint(model.state_dict())
-    
+
     # ===============================================================================

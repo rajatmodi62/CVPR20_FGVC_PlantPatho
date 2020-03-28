@@ -10,7 +10,3 @@ model_list:
       path: train_1
       hyper_params:
         batch_norm_momentum:  0.99
-  - model:
-      name: densenet-161
-      num_classes: 4
-      path: train_2

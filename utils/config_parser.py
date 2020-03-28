@@ -46,6 +46,9 @@ def hydrate_config(config):
             if 'num_classes' not in config['model'].keys():
                 print('[ Number of classes not mentioned ]')
                 exit()
+            if 'tuning_type' not in config['model'].keys():
+                print('[ Number of classes not mentioned ]')
+                config['model']['tuning_type'] = None
             if 'hyper_params' not in config['model'].keys():
                 config['model']['hyper_params'] = None
 
@@ -60,10 +63,12 @@ def hydrate_config(config):
             if 'hyper_params' not in config['optimiser'].keys():
                 config['optimiser']['hyper_params'] = None
 
-        # optimiser
+        # scheduler
         if 'scheduler' not in config.keys():
-            print('[ Scheduler not mentioned ]')
-            exit()
+            config['scheduler'] = {
+                "name": None,
+                "hyper_params": None
+            }
         else:
             if 'name' not in config['scheduler'].keys():
                 print('[ Scheduler name not mentioned ]')

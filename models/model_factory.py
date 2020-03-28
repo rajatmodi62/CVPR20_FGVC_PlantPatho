@@ -19,7 +19,7 @@ class ModelFactory():
             num_ftrs = model._fc.in_features
             model._fc = nn.Sequential(
                 nn.Linear(num_ftrs, num_classes),
-                nn.Sigmoid()
+                nn.Softmax(dim=1)
             )
 
             if hyper_params is not None:
@@ -34,7 +34,7 @@ class ModelFactory():
             num_ftrs = model.classifier.in_features
             model.classifier = nn.Sequential(
                 nn.Linear(num_ftrs, num_classes),
-                nn.Sigmoid()
+                nn.Softmax(dim=1)
             )
 
         return model
