@@ -3,6 +3,7 @@ from os import (makedirs, path)
 from shutil import rmtree
 import pandas as pd
 import numpy as np
+from utils.kaggle_metric import post_process_output
 
 
 class EvaluationHelper:
@@ -22,6 +23,8 @@ class EvaluationHelper:
                 exit()
 
     def evaluate(self, test_csv_path, test_output, model_name):
+        test_output = post_process_output(test_output)
+
         result_path = path.join(
             'results', self.experiment_name, model_name + '.csv')
         test_df = pd.read_csv(test_csv_path)

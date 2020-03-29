@@ -116,6 +116,9 @@ def hydrate_config(config):
                     if 'name' not in model['model'].keys():
                         print('[ Model name not mentioned ]')
                         exit()
+                    if 'pred_type' not in model['model'].keys():
+                        print('[ Prediction type not mentioned ]')
+                        exit()
                     if 'num_classes' not in model['model'].keys():
                         print('[ Number of classes not mentioned ]')
                         exit()

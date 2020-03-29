@@ -7,4 +7,5 @@ model_list:
   - model:
       name: densenet-161
       num_classes: 4
+      pred_type: classification
       path: train_3

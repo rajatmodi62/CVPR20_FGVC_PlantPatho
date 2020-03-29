@@ -1,0 +1,14 @@
+mode: test
+test_dataset: 
+  name: fgvc7
+  resize_dims: 224
+ensemble: False
+model_list:
+  - model:
+      name: efficientnet-b7
+      path: train_4
+      pred_type: classification
+      num_classes: 4
+      tuning_type: feature-extraction
+      hyper_params:
+        batch_norm_momentum:  0.99

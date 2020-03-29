@@ -36,6 +36,7 @@ def eval(config, device):
         model = model_factory.get_model(
             model_name['model']['name'],
             model_name['model']['num_classes'],
+            model_name['model']['pred_type'],
             model_name['model']['hyper_params'],
         ).to(device)
         weight_path = path.join(
@@ -60,7 +61,7 @@ def eval(config, device):
         evaluation_helper.evaluate(
             test_dataset.get_csv_path(),
             test_output_list,
-            model_name['model']['name']
+            model_name['model']['path']
         )
 
     if config['ensemble']:

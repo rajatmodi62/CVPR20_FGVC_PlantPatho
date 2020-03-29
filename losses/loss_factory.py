@@ -1,4 +1,4 @@
-from torch.nn import (CrossEntropyLoss, NLLLoss)
+from torch.nn import (CrossEntropyLoss, NLLLoss, MSELoss)
 from losses.focal_loss import FocalLoss
 from losses.utils import LossWrapper
 
@@ -27,5 +27,9 @@ class LossFactory:
         if function_name == 'negative-log-likelihood-loss':
             print("[ Loss : Negative Log Likelihood Loss ]")
             loss_function = LossWrapper(NLLLoss())
+
+        if function_name == 'mean-squared-error-loss':
+            print("[ Loss : Mean Squared Error Loss ]")
+            loss_function = MSELoss()
 
         return loss_function
