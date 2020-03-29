@@ -44,9 +44,9 @@ class ExperimentHelper:
         with torch.no_grad():
             # loss calculation
             val_loss = loss_fn(
-                val_output_list, torch.argmax(val_target_list, dim=1)).item()
+                val_output_list, val_target_list).item()
             train_loss = loss_fn(
-                train_output_list, torch.argmax(train_target_list, dim=1)).item()
+                train_output_list, train_target_list).item()
 
             val_acc = torch.argmax(val_target_list, dim=1).eq(
                 torch.argmax(val_output_list, dim=1))

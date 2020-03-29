@@ -1,4 +1,5 @@
 from torch import nn
+import pretrainedmodels
 import torchvision.models as models
 from models.efficientnet import EfficientNet
 

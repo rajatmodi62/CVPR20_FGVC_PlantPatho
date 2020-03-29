@@ -11,7 +11,7 @@ from transformers.transformer_factory import TransformerFactory
 from utils.experiment_utils import ExperimentHelper
 from models.model_factory import ModelFactory
 
-# stop tf warning
+# stop tensorboard warnings
 environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
@@ -76,7 +76,8 @@ def train(config, device):
 
     loss_function = loss_factory.get_loss_function(
         config['loss_function']['name'],
-        config['loss_function']['hyper_params']
+        config['loss_function']['hyper_params'],
+        config['model']['pred_type']
     )
 
     batch_size = config["batch_size"]
@@ -107,7 +108,7 @@ def train(config, device):
             # loss calculation
             loss = loss_function(
                 output,
-                torch.argmax(target, dim=1)
+                target
             )
 
             # backward pass

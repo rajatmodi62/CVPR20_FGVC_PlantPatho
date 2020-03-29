@@ -1,0 +1,28 @@
+mode: train
+validation_frequency: 2
+epochs: 30
+batch_size: 128
+train_dataset: 
+  name: fgvc7
+  fold: 1
+  resize_dims: 224
+val_dataset: 
+  name: fgvc7
+  fold: 1
+  resize_dims: 224
+model: 
+  name: efficientnet-b7
+  pred_type: classification
+  num_classes: 4
+  tuning_type: feature-extraction
+  hyper_params:
+    batch_norm_momentum:  0.99
+optimiser: 
+  name: RMSprop
+  hyper_params:
+    momentum: 0.0
+    weight_decay: 0.0
+    learning_rate: 0.001
+    centered: False
+loss_function: 
+  name: negative-log-likelihood-loss
