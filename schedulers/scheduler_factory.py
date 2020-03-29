@@ -1,4 +1,4 @@
-from torch.optim.lr_scheduler import (StepLR)
+from torch.optim.lr_scheduler import (StepLR, CosineAnnealingLR)
 
 
 class SchedulerFactory:
@@ -10,6 +10,17 @@ class SchedulerFactory:
         if name == 'StepLR':
             print("[ Scheduler : StepLR ]")
             scheduler = StepLR(
-                optimiser, hyper_params['step'], hyper_params['lr_decay'])
+                optimiser, 
+                hyper_params['step'], 
+                hyper_params['lr_decay']
+            )
+        elif name == 'CosineAnnealingLR':
+            print("[ Scheduler : CosineAnnealingLR ]")
+            scheduler = CosineAnnealingLR(
+                optimiser,
+                hyper_params['T_max'],
+                hyper_params['eta_min'],
+                hyper_params['last_epoch']
+            )
 
         return scheduler

@@ -3,7 +3,7 @@ from os import (makedirs, path)
 from shutil import rmtree
 import pandas as pd
 import math
-from sklearn.metrics import roc_auc_score
+from utils.kaggle_metric import (roc_auc_score_generator, accuracy_generator)
 
 
 class ExperimentHelper:
@@ -16,7 +16,8 @@ class ExperimentHelper:
                 rmtree(path.join('results', experiment_name))
                 makedirs(path.join('results', experiment_name))
             else:
-                print("[ <", experiment_name, "> output exists - Manual deletion needed ]")
+                print("[ <", experiment_name,
+                      "> output exists - Manual deletion needed ]")
                 exit()
 
         self.experiment_name = experiment_name
@@ -48,15 +49,9 @@ class ExperimentHelper:
             train_loss = loss_fn(
                 train_output_list, train_target_list).item()
 
-            val_acc = torch.argmax(val_target_list, dim=1).eq(
-                torch.argmax(val_output_list, dim=1))
-            val_acc = 1.0 * torch.sum(val_acc.int()).item() / \
-                val_output_list.size()[0]
-
-            train_acc = torch.argmax(train_target_list, dim=1).eq(
-                torch.argmax(train_output_list, dim=1))
-            train_acc = 1.0 * torch.sum(train_acc.int()
-                                        ).item() / train_output_list.size()[0]
+            val_acc = accuracy_generator(val_output_list, val_target_list)
+            train_acc = accuracy_generator(
+                train_output_list, train_target_list)
 
             val_roc = roc_auc_score_generator(val_output_list, val_target_list)
             train_roc = roc_auc_score_generator(
@@ -70,15 +65,16 @@ class ExperimentHelper:
 
             if not path.isfile(result_path):
                 df.to_csv(
-                    result_path, 
+                    result_path,
                     header=[
-                    "epoch", "Loss ( Val )", "Loss ( Train )", "Accuracy ( Val )", "Accuracy ( Train )", "ROC ( Val )", "ROC ( Train )"
-                    ], 
+                        "epoch", "Loss ( Val )", "Loss ( Train )", "Accuracy ( Val )", "Accuracy ( Train )", "ROC ( Val )", "ROC ( Train )"
+                    ],
                     index=False
                 )
-            else: 
+            else:
                 df.to_csv(result_path, mode='a', header=False, index=False)
 
+            # creating tensorboard events
             if self.tb_writer is not None:
                 self.tb_writer.add_scalar('Loss/Train', train_loss, epoch)
                 self.tb_writer.add_scalar('Loss/Validation', val_loss, epoch)
@@ -94,11 +90,3 @@ class ExperimentHelper:
                 self.progress = True
             else:
                 self.progress = False
-
-
-def roc_auc_score_generator(output_list, target_list):
-    return roc_auc_score(
-        target_list.cpu().numpy(), 
-        output_list.cpu().numpy(), 
-        average="macro"
-    )

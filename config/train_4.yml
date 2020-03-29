@@ -1,5 +1,5 @@
 mode: train
-validation_frequency: 2
+validation_frequency: 1
 epochs: 30
 batch_size: 128
 train_dataset: 
@@ -25,4 +25,4 @@ optimiser:
     learning_rate: 0.001
     centered: False
 loss_function: 
-  name: negative-log-likelihood-loss
+  name: cross-entropy-loss

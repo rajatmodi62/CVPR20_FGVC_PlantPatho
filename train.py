@@ -57,6 +57,7 @@ def train(config, device):
     model = model_factory.get_model(
         config['model']['name'],
         config['model']['num_classes'],
+        config['model']['pred_type'],
         config['model']['hyper_params'],
         tuning_type=config['model']['tuning_type']
     ).to(device)

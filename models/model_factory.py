@@ -8,7 +8,14 @@ class ModelFactory():
     def __init__(self):
         pass
 
-    def get_model(self, model_name, num_classes, hyper_params=None, tuning_type='feature-extraction'):
+    def get_model(self, model_name, num_classes, pred_type, hyper_params=None, tuning_type='feature-extraction'):
+        if pred_type == 'regression':
+            num_classes = 1
+        elif pred_type == 'classification':
+            pass
+        elif pred_type == 'mixed':
+            num_classes = num_classes + 1
+        
         model = None
 
         if model_name == 'efficientnet-b7':
@@ -19,8 +26,7 @@ class ModelFactory():
                     param.requires_grad = False
             num_ftrs = model._fc.in_features
             model._fc = nn.Sequential(
-                nn.Linear(num_ftrs, num_classes),
-                nn.Softmax(dim=1)
+                nn.Linear(num_ftrs, num_classes)
             )
 
             if hyper_params is not None:
@@ -34,8 +40,7 @@ class ModelFactory():
                     param.requires_grad = False
             num_ftrs = model.classifier.in_features
             model.classifier = nn.Sequential(
-                nn.Linear(num_ftrs, num_classes),
-                nn.Softmax(dim=1)
+                nn.Linear(num_ftrs, num_classes)
             )
 
         return model
