@@ -1,7 +1,7 @@
 mode: train
-validation_frequency: 1
-epochs: 30
-batch_size: 2
+validation_frequency: 2
+epochs: 50
+batch_size: 4
 train_dataset: 
   name: fgvc7
   fold: 1
@@ -24,7 +24,7 @@ optimiser:
 scheduler:
   name: CosineAnnealingLR
   hyper_params:
-    T_max: 30
+    T_max: 50
     eta_min: 0.0001
     last_epoch: -1
 loss_function: 
