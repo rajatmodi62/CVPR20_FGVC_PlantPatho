@@ -46,8 +46,8 @@ def hydrate_config(config):
             if 'pred_type' not in config['model'].keys():
                 print('[ Prediction type not mentioned ]')
                 exit()
-            if config['model']['pred_type'] not in ['classification', ' regression', 'mixed']:
-                print('[ Prediction type must be either of  classification/regression/mixed ]')
+            if config['model']['pred_type'] not in ['classification', 'regression', 'mixed']:
+                print('[ Prediction type must be either of classification/regression/mixed ]')
                 exit()
             if 'num_classes' not in config['model'].keys():
                 print('[ Number of classes not mentioned ]')
@@ -113,6 +113,9 @@ def hydrate_config(config):
         else:
             if len(config['model_list']) > 0:
                 for model in config['model_list']:
+                    if 'path' not in model['model'].keys():
+                        print('[ Model weights paths not mentioned ]')
+                        exit()
                     if 'name' not in model['model'].keys():
                         print('[ Model name not mentioned ]')
                         exit()
@@ -121,9 +124,6 @@ def hydrate_config(config):
                         exit()
                     if 'num_classes' not in model['model'].keys():
                         print('[ Number of classes not mentioned ]')
-                        exit()
-                    if 'path' not in model['model'].keys():
-                        print('[ Model weights paths not mentioned ]')
                         exit()
                     if 'hyper_params' not in model['model'].keys():
                         model['model']['hyper_params'] = None

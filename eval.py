@@ -6,12 +6,15 @@ from dataset.dataset_factory import DatasetFactory
 from transformers.transformer_factory import TransformerFactory
 from models.model_factory import ModelFactory
 from utils.evaluation_utils import EvaluationHelper
+from utils.regression_utils import covert_to_classification
 
 
 def eval(config, device):
     # Create pipeline objects
     dataset_factory = DatasetFactory(org_data_dir='./data')
+    
     model_factory = ModelFactory()
+    
     evaluation_helper = EvaluationHelper(
         config['experiment_name'],
         True,
@@ -53,6 +56,13 @@ def eval(config, device):
 
                 output = model.forward(input)
 
+                if model_name['model']['pred_type'] == 'regression':
+                    output = covert_to_classification(
+                        output, 
+                        model_name['model']['num_classes'],
+                        device    
+                    )
+
                 test_output_list.append(output)
 
         test_output_list = torch.cat(test_output_list, dim=0)
@@ -61,7 +71,8 @@ def eval(config, device):
         evaluation_helper.evaluate(
             test_dataset.get_csv_path(),
             test_output_list,
-            model_name['model']['path']
+            model_name['model']['path'],
+            model_name['model']['pred_type'],
         )
 
     if config['ensemble']:

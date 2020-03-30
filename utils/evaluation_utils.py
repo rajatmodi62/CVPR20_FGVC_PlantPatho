@@ -22,8 +22,9 @@ class EvaluationHelper:
                       "> results exists - Manual deletion needed ]")
                 exit()
 
-    def evaluate(self, test_csv_path, test_output, model_name):
-        test_output = post_process_output(test_output)
+    def evaluate(self, test_csv_path, test_output, model_name, pred_type):
+        if pred_type == 'classification':
+            test_output = post_process_output(test_output)
 
         result_path = path.join(
             'results', self.experiment_name, model_name + '.csv')

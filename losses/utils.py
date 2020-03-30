@@ -1,7 +1,7 @@
 import torch
 
 
-class LossWrapper:
+class ClassificationLossWrapper:
     def __init__(self, loss_obj):
         self.loss = loss_obj
         pass
@@ -11,3 +11,15 @@ class LossWrapper:
 
     def __call__(self, output, target):
         return self.loss(output, torch.argmax(target, dim=1))
+
+
+class RegressionLossWrapper:
+    def __init__(self, loss_obj):
+        self.loss = loss_obj
+        pass
+
+    def to(self, device):
+        self.loss.to(device)
+
+    def __call__(self, output, target):
+        return self.loss(output, torch.argmax(target, dim=1).view(-1, 1).float())

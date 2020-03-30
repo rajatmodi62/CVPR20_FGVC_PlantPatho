@@ -1,7 +1,7 @@
 mode: train
 validation_frequency: 1
 epochs: 30
-batch_size: 128
+batch_size: 2
 train_dataset: 
   name: fgvc7
   fold: 1
@@ -12,17 +12,20 @@ val_dataset:
   resize_dims: 224
 model: 
   name: efficientnet-b7
-  pred_type: classification
+  pred_type: regression
   num_classes: 4
   tuning_type: feature-extraction
   hyper_params:
     batch_norm_momentum:  0.99
 optimiser: 
-  name: RMSprop
+  name: Adam
   hyper_params:
-    momentum: 0.0
-    weight_decay: 0.0
-    learning_rate: 0.001
-    centered: False
+    learning_rate: 0.005
+scheduler:
+  name: CosineAnnealingLR
+  hyper_params:
+    T_max: 30
+    eta_min: 0.0001
+    last_epoch: -1
 loss_function: 
-  name: cross-entropy-loss
+  name: mean-squared-error-loss

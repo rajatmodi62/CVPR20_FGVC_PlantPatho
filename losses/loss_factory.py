@@ -1,6 +1,7 @@
 from torch.nn import (CrossEntropyLoss, NLLLoss, MSELoss)
 from losses.focal_loss import FocalLoss
-from losses.utils import LossWrapper
+from losses.utils import (ClassificationLossWrapper, RegressionLossWrapper)
+
 
 class LossFactory:
     def __init__(self):
@@ -22,14 +23,14 @@ class LossFactory:
                 loss_function = FocalLoss()
         if function_name == 'cross-entropy-loss':
             print("[ Loss : Cross Entropy Loss ]")
-            loss_function = LossWrapper(CrossEntropyLoss())
+            loss_function = ClassificationLossWrapper(CrossEntropyLoss())
 
         if function_name == 'negative-log-likelihood-loss':
             print("[ Loss : Negative Log Likelihood Loss ]")
-            loss_function = LossWrapper(NLLLoss())
+            loss_function = ClassificationLossWrapper(NLLLoss())
 
         if function_name == 'mean-squared-error-loss':
             print("[ Loss : Mean Squared Error Loss ]")
-            loss_function = MSELoss()
+            loss_function = RegressionLossWrapper(MSELoss())
 
         return loss_function

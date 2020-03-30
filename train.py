@@ -7,9 +7,9 @@ from losses.loss_factory import LossFactory
 from optimisers.optimiser_factory import OptimiserFactory
 from schedulers.scheduler_factory import SchedulerFactory
 from dataset.dataset_factory import DatasetFactory
+from models.model_factory import ModelFactory
 from transformers.transformer_factory import TransformerFactory
 from utils.experiment_utils import ExperimentHelper
-from models.model_factory import ModelFactory
 
 # stop tensorboard warnings
 environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -18,17 +18,26 @@ environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 def train(config, device):
     # Create pipeline objects
     dataset_factory = DatasetFactory(org_data_dir='./data')
+
     model_factory = ModelFactory()
+
     writer = SummaryWriter(log_dir=path.join(
         'runs', config['experiment_name']))
+
     experiment_helper = ExperimentHelper(
         config['experiment_name'],
+        config['model']['num_classes'],
+        device,
         True,
         config['validation_frequency'],
-        writer
+        writer,
+        config['model']['pred_type']
     )
+
     optimiser_factory = OptimiserFactory()
+
     loss_factory = LossFactory()
+
     scheduler_factory = SchedulerFactory()
 
     # ==================== Model training / validation setup ========================
@@ -123,8 +132,15 @@ def train(config, device):
                 scheduler.step()
 
             if experiment_helper.should_trigger(i):
-                train_target_list.append(target)
+                # if config['model']['pred_type'] == 'regression':
+                #     output = covert_to_classification(
+                #         output,
+                #         config['model']['num_classes'],
+                #         device
+                #     )
+
                 train_output_list.append(output)
+                train_target_list.append(target)
 
         # set model to evaluation mode
         model.eval()
@@ -140,6 +156,13 @@ def train(config, device):
                     target = target.to(device)
 
                     output = model.forward(input)
+
+                    # if config['model']['pred_type'] == 'regression':
+                    #     output = covert_to_classification(
+                    #         output,
+                    #         config['model']['num_classes'],
+                    #         device
+                    #     )
 
                     val_output_list.append(output)
                     val_target_list.append(target)
