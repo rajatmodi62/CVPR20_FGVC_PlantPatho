@@ -8,7 +8,7 @@ train_dataset:
   resize_dims: 224
 val_dataset: 
   name: fgvc7
-  fold: 1
+  fold: 2
   resize_dims: 224
 model: 
   name: efficientnet-b7
