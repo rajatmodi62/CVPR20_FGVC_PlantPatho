@@ -1,4 +1,5 @@
 import torch
+from torch.nn.functional import softmax
 from os import (makedirs, path)
 from shutil import rmtree
 import pandas as pd
@@ -8,7 +9,7 @@ from utils.regression_utils import covert_to_classification
 
 
 class EvaluationHelper:
-    def __init__(self, experiment_name, overwrite=False):
+    def __init__(self, experiment_name, overwrite=False, ensemble=False):
         self.experiment_name = experiment_name
 
         if path.exists(path.join('results', experiment_name)) == False:
@@ -23,6 +24,9 @@ class EvaluationHelper:
                       "> results exists - Manual deletion needed ]")
                 exit()
 
+        self.is_ensemble = ensemble
+        self.ensemble_list = []
+
     def evaluate(self, pred_type, num_classes, model_path, test_csv_path, test_output):
         if pred_type == 'classification':
             test_output = post_process_output(test_output)
@@ -31,6 +35,9 @@ class EvaluationHelper:
                 test_output,
                 num_classes,
             )
+
+        if self.is_ensemble:
+            self.ensemble_list.append(test_output)
 
         result_path = path.join(
             'results', self.experiment_name, model_path + '.csv')
@@ -43,6 +50,44 @@ class EvaluationHelper:
                     (
                         test_df.to_numpy(),
                         test_output.cpu().numpy()
+                    )
+                )
+            )
+
+            df.to_csv(
+                result_path,
+                header=kaggle_output_header,
+                index=False
+            )
+
+    def ensemble(self, test_csv_path):
+        print("[ Ensembling results ]")
+
+        self.ensemble_list = torch.stack(self.ensemble_list, dim=2)
+
+        if self.ensemble_list.size()[2] % 2 == 0:
+            print("[ Ensemble logic needs odd majority < ",
+                  self.ensemble_list.size()[2], " > ]")
+            exit()
+        elif self.ensemble_list.size()[2] == 1:
+            print("[ Too few experiments for ensembling ]")
+            exit()
+
+        # Voting logic
+        self.results = torch.sum(self.ensemble_list, dim=2)
+        self.results = torch.softmax(self.results, dim=1)
+
+        result_path = path.join(
+            'results', self.experiment_name, 'ensembled.csv')
+        ensemble_df = pd.read_csv(test_csv_path)
+
+        with torch.no_grad():
+            # saving results to csv
+            df = pd.DataFrame(
+                np.hstack(
+                    (
+                        ensemble_df.to_numpy(),
+                        self.results.cpu().numpy()
                     )
                 )
             )

@@ -2,10 +2,38 @@ mode: test
 test_dataset: 
   name: fgvc7
   resize_dims: 224
-ensemble: False
+ensemble: True
 model_list:
   - model:
-      path: train_4
+      path: train_a_1
+      name: efficientnet-b7
+      pred_type: regression
+      num_classes: 4
+      hyper_params:
+        batch_norm_momentum:  0.99
+  - model:
+      path: train_a_2
+      name: efficientnet-b7
+      pred_type: regression
+      num_classes: 4
+      hyper_params:
+        batch_norm_momentum:  0.99
+  - model:
+      path: train_a_3
+      name: efficientnet-b7
+      pred_type: regression
+      num_classes: 4
+      hyper_params:
+        batch_norm_momentum:  0.99
+  - model:
+      path: train_a_4
+      name: efficientnet-b7
+      pred_type: regression
+      num_classes: 4
+      hyper_params:
+        batch_norm_momentum:  0.99
+  - model:
+      path: train_a_5
       name: efficientnet-b7
       pred_type: regression
       num_classes: 4

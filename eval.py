@@ -17,6 +17,7 @@ def eval(config, device):
     evaluation_helper = EvaluationHelper(
         config['experiment_name'],
         overwrite=True,
+        ensemble=config['ensemble']
     )
 
     # ==================== Model testing / evaluation setup ========================
@@ -35,16 +36,18 @@ def eval(config, device):
     # ===================== Model testing / evaluation  loop ========================
 
     for model_name in config['model_list']:
+        print("[ Experiment : ", model_name['model']['path'], " ]")
+
         model = model_factory.get_model(
             model_name['model']['name'],
             model_name['model']['num_classes'],
             model_name['model']['pred_type'],
             model_name['model']['hyper_params'],
         ).to(device)
-        
+
         weight_path = path.join(
             'results', model_name['model']['path'], 'weights.pth')
-        
+
         model.load_state_dict(torch.load(weight_path))
 
         model.eval()
@@ -71,7 +74,8 @@ def eval(config, device):
         )
 
     if config['ensemble']:
-        # use the helper to ensemble if needed
-        pass
+        evaluation_helper.ensemble(
+            test_dataset.get_csv_path()
+        )
 
     # ===============================================================================
