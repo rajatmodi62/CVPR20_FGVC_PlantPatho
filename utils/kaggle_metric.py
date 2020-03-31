@@ -24,3 +24,8 @@ def roc_auc_score_generator(output_list, target_list):
         output_list.cpu().numpy(),
         average="macro"
     )
+
+
+# implementation based on problem statement
+kaggle_output_header = ["image_id", "healthy",
+                        "multiple_diseases", "rust", "scab"]

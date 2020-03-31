@@ -11,8 +11,6 @@ class ModelFactory():
     def get_model(self, model_name, num_classes, pred_type, hyper_params=None, tuning_type='feature-extraction'):
         if pred_type == 'regression':
             num_classes = 1
-        elif pred_type == 'classification':
-            pass
         elif pred_type == 'mixed':
             num_classes = num_classes + 1
 

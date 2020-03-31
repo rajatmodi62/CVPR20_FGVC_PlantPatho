@@ -1,6 +1,6 @@
 mode: train
-validation_frequency: 1
-epochs: 10
+validation_frequency: 2
+epochs: 4
 batch_size: 1
 train_dataset: 
   name: fgvc7

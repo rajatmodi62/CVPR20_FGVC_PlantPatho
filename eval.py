@@ -6,21 +6,20 @@ from dataset.dataset_factory import DatasetFactory
 from transformers.transformer_factory import TransformerFactory
 from models.model_factory import ModelFactory
 from utils.evaluation_utils import EvaluationHelper
-from utils.regression_utils import covert_to_classification
 
 
 def eval(config, device):
     # Create pipeline objects
     dataset_factory = DatasetFactory(org_data_dir='./data')
-    
+
     model_factory = ModelFactory()
-    
+
     evaluation_helper = EvaluationHelper(
         config['experiment_name'],
-        True,
+        overwrite=True,
     )
 
-    # ==================== Model testing / evaluation  setup ========================
+    # ==================== Model testing / evaluation setup ========================
 
     test_dataset = dataset_factory.get_dataset(
         'test',
@@ -42,8 +41,10 @@ def eval(config, device):
             model_name['model']['pred_type'],
             model_name['model']['hyper_params'],
         ).to(device)
+        
         weight_path = path.join(
             'results', model_name['model']['path'], 'weights.pth')
+        
         model.load_state_dict(torch.load(weight_path))
 
         model.eval()
@@ -56,23 +57,17 @@ def eval(config, device):
 
                 output = model.forward(input)
 
-                if model_name['model']['pred_type'] == 'regression':
-                    output = covert_to_classification(
-                        output, 
-                        model_name['model']['num_classes'],
-                        device    
-                    )
-
                 test_output_list.append(output)
 
         test_output_list = torch.cat(test_output_list, dim=0)
 
         # use this list to write using a helper
         evaluation_helper.evaluate(
-            test_dataset.get_csv_path(),
-            test_output_list,
-            model_name['model']['path'],
             model_name['model']['pred_type'],
+            model_name['model']['num_classes'],
+            model_name['model']['path'],
+            test_dataset.get_csv_path(),
+            test_output_list
         )
 
     if config['ensemble']:

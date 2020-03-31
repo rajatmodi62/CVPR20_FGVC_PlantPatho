@@ -98,15 +98,16 @@ def hydrate_config(config):
 
         # dataset (test)
         if 'test_dataset' not in config.keys():
-            print('[ Validation dataset not mentioned ]')
+            print('[ Test dataset key missing ]')
             exit()
         else:
             if 'name' not in config['test_dataset'].keys():
-                config['test_dataset']['name'] = None
+                print('[ Test dataset name not mentioned ]')
+                exit()
 
         # model list
         if 'model_list' not in config.keys():
-            print('[ Model List not mentioned ]')
+            print('[ Model List key missing ]')
             exit()
         else:
             if len(config['model_list']) > 0:

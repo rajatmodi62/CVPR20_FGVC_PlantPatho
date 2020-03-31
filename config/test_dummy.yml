@@ -1,0 +1,13 @@
+mode: test
+test_dataset: 
+  name: fgvc7
+  resize_dims: 224
+ensemble: False
+model_list:
+  - model:
+      path: train_dummy
+      name: efficientnet-b7
+      pred_type: regression
+      num_classes: 4
+      hyper_params:
+        batch_norm_momentum:  0.99
