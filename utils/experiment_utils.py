@@ -8,11 +8,11 @@ from utils.kaggle_metric import (roc_auc_score_generator, accuracy_generator)
 
 
 class ExperimentHelper:
-    def __init__(self, experiment_name, num_classes, device=None, rewrite=False, freq=None, tb_writer=None, pred_type='classification'):
+    def __init__(self, experiment_name, freq=None, tb_writer=None, overwrite=False,):
         if path.exists(path.join('results', experiment_name)) == False:
             makedirs(path.join('results', experiment_name))
         else:
-            if rewrite:
+            if overwrite:
                 print("[ <", experiment_name, "> output exists - Overwriting! ]")
                 rmtree(path.join('results', experiment_name))
                 makedirs(path.join('results', experiment_name))
@@ -21,20 +21,16 @@ class ExperimentHelper:
                       "> output exists - Manual deletion needed ]")
                 exit()
 
-        self.pred_type = pred_type
         self.experiment_name = experiment_name
         self.best_val_loss = float('inf')
         self.tb_writer = tb_writer
         self.freq = freq
         self.progress = False
-        self.num_classes = num_classes
-        self.device = device
 
     def should_trigger(self, i):
-        if self.freq is None:
-            return True
-        else:
+        if self.freq:
             return i % self.freq == 0
+        return True
 
     def is_progress(self):
         return self.progress
@@ -45,7 +41,7 @@ class ExperimentHelper:
             path.join('results', self.experiment_name, 'weights.pth')
         )
 
-    def validate(self, loss_fn, val_output_list, val_target_list, train_output_list, train_target_list, epoch):
+    def validate(self, pred_type, num_classes, loss_fn, val_output_list, val_target_list, train_output_list, train_target_list, epoch):
         with torch.no_grad():
             # loss calculation
             val_loss = loss_fn(
@@ -53,16 +49,14 @@ class ExperimentHelper:
             train_loss = loss_fn(
                 train_output_list, train_target_list).item()
 
-            if self.pred_type == 'regression':
+            if pred_type == 'regression':
                 train_output_list = covert_to_classification(
                     train_output_list,
-                    self.num_classes,
-                    self.device
+                    num_classes,
                 )
                 val_output_list = covert_to_classification(
                     val_output_list,
-                    self.num_classes,
-                    self.device
+                    num_classes,
                 )
 
             val_acc = accuracy_generator(val_output_list, val_target_list)

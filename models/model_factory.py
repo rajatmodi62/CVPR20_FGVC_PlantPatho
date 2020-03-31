@@ -15,7 +15,7 @@ class ModelFactory():
             pass
         elif pred_type == 'mixed':
             num_classes = num_classes + 1
-        
+
         model = None
 
         if model_name == 'efficientnet-b7':
@@ -42,5 +42,8 @@ class ModelFactory():
             model.classifier = nn.Sequential(
                 nn.Linear(num_ftrs, num_classes)
             )
+
+        print("[ Tuning type : ", tuning_type, " ]")
+        print("[ Prediction type : ", pred_type, " ]")
 
         return model

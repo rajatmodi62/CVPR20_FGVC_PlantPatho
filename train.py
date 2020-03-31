@@ -21,17 +21,17 @@ def train(config, device):
 
     model_factory = ModelFactory()
 
-    writer = SummaryWriter(log_dir=path.join(
-        'runs', config['experiment_name']))
+    writer = SummaryWriter(
+        log_dir=path.join(
+            'runs', config['experiment_name']
+        )
+    )
 
     experiment_helper = ExperimentHelper(
         config['experiment_name'],
-        config['model']['num_classes'],
-        device,
-        True,
         config['validation_frequency'],
-        writer,
-        config['model']['pred_type']
+        tb_writer=writer,
+        overwrite=True
     )
 
     optimiser_factory = OptimiserFactory()
@@ -68,16 +68,17 @@ def train(config, device):
         config['model']['num_classes'],
         config['model']['pred_type'],
         config['model']['hyper_params'],
-        tuning_type=config['model']['tuning_type']
+        config['model']['tuning_type']
     ).to(device)
 
     optimiser = optimiser_factory.get_optimiser(
-        config['optimiser']['name'],
         model.parameters(),
+        config['optimiser']['name'],
         config['optimiser']['hyper_params']
     )
 
-    if config['scheduler'] is not None:
+    scheduler = None
+    if config['scheduler']:
         scheduler = scheduler_factory.get_scheduler(
             optimiser,
             config['scheduler']['name'],
@@ -86,8 +87,7 @@ def train(config, device):
 
     loss_function = loss_factory.get_loss_function(
         config['loss_function']['name'],
-        config['loss_function']['hyper_params'],
-        config['model']['pred_type']
+        config['loss_function']['hyper_params']
     )
 
     batch_size = config["batch_size"]
@@ -128,17 +128,10 @@ def train(config, device):
             optimiser.step()
 
             # update lr using scheduler
-            if scheduler is not None:
+            if scheduler:
                 scheduler.step()
 
             if experiment_helper.should_trigger(i):
-                # if config['model']['pred_type'] == 'regression':
-                #     output = covert_to_classification(
-                #         output,
-                #         config['model']['num_classes'],
-                #         device
-                #     )
-
                 train_output_list.append(output)
                 train_target_list.append(target)
 
@@ -157,13 +150,6 @@ def train(config, device):
 
                     output = model.forward(input)
 
-                    # if config['model']['pred_type'] == 'regression':
-                    #     output = covert_to_classification(
-                    #         output,
-                    #         config['model']['num_classes'],
-                    #         device
-                    #     )
-
                     val_output_list.append(output)
                     val_target_list.append(target)
 
@@ -174,6 +160,8 @@ def train(config, device):
 
             # validate model
             experiment_helper.validate(
+                config['model']['pred_type'],
+                config['model']['num_classes'],
                 loss_function,
                 val_output_list,
                 val_target_list,
@@ -184,6 +172,8 @@ def train(config, device):
 
             # save model weights
             if experiment_helper.is_progress():
-                experiment_helper.save_checkpoint(model.state_dict())
+                experiment_helper.save_checkpoint(
+                    model.state_dict()
+                )
 
     # ===============================================================================

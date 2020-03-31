@@ -10,7 +10,7 @@ class LossFactory:
     def modified(self, ):
         CrossEntropyLoss()
 
-    def get_loss_function(self, function_name, pred_type, hyper_params=None):
+    def get_loss_function(self, function_name, hyper_params=None):
         loss_function = None
 
         if function_name == 'focal-loss':

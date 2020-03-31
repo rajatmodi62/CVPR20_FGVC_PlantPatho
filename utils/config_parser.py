@@ -17,27 +17,29 @@ def hydrate_config(config):
 
         # dataset (train)
         if 'train_dataset' not in config.keys():
-            print('[ Training dataset not mentioned ]')
+            print('[ Training dataset key missing ]')
             exit()
         else:
             if 'name' not in config['train_dataset'].keys():
-                config['train_dataset']['name'] = None
+                print('[ Training dataset name not mentioned ]')
+                exit()
             if 'fold' not in config['train_dataset'].keys():
                 config['train_dataset']['fold'] = None
 
         # dataset (val)
         if 'val_dataset' not in config.keys():
-            print('[ Validation dataset not mentioned ]')
+            print('[ Validation dataset key missing ]')
             exit()
         else:
             if 'name' not in config['val_dataset'].keys():
-                config['val_dataset']['name'] = None
+                print('[ Validation dataset name not mentioned ]')
+                exit()
             if 'fold' not in config['val_dataset'].keys():
                 config['val_dataset']['fold'] = None
 
         # model
         if 'model' not in config.keys():
-            print('[ Model not mentioned ]')
+            print('[ Model key missing ]')
             exit()
         else:
             if 'name' not in config['model'].keys():
@@ -53,14 +55,13 @@ def hydrate_config(config):
                 print('[ Number of classes not mentioned ]')
                 exit()
             if 'tuning_type' not in config['model'].keys():
-                print('[ Number of classes not mentioned ]')
                 config['model']['tuning_type'] = None
             if 'hyper_params' not in config['model'].keys():
                 config['model']['hyper_params'] = None
 
         # optimiser
         if 'optimiser' not in config.keys():
-            print('[ Optimiser not mentioned ]')
+            print('[ Optimiser key missing ]')
             exit()
         else:
             if 'name' not in config['optimiser'].keys():
@@ -71,10 +72,7 @@ def hydrate_config(config):
 
         # scheduler
         if 'scheduler' not in config.keys():
-            config['scheduler'] = {
-                "name": None,
-                "hyper_params": None
-            }
+            config['scheduler'] = None
         else:
             if 'name' not in config['scheduler'].keys():
                 print('[ Scheduler name not mentioned ]')
@@ -84,7 +82,7 @@ def hydrate_config(config):
 
         # loss function
         if 'loss_function' not in config.keys():
-            print('[ Loss function not mentioned ]')
+            print('[ Loss function key missing ]')
             exit()
         else:
             if 'name' not in config['loss_function'].keys():

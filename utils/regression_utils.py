@@ -1,13 +1,13 @@
 import torch
 
 
-def covert_to_classification(output, num_classes, device = None):
+def covert_to_classification(output, num_classes):
     # takes a value and number of classes, returns a onehot vector
     batch_size = output.size()[0]
 
     one_hot = None
-    if device:
-        one_hot = torch.zeros(batch_size, num_classes).to( device )
+    if output.is_cuda:
+        one_hot = torch.zeros(batch_size, num_classes).to(output.get_device())
     else:
         one_hot = torch.zeros(batch_size, num_classes)
 

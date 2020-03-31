@@ -5,7 +5,7 @@ class OptimiserFactory:
     def __init__(self):
         pass
 
-    def get_optimiser(self, optimiser_name, params, hyper_param_dict):
+    def get_optimiser(self, params, optimiser_name, hyper_param_dict):
         if optimiser_name == 'RMSprop':
             print("[ Optimiser : RMSprop ]")
             return RMSprop(
