@@ -17,15 +17,16 @@ model:
   tuning_type: feature-extraction
   hyper_params:
     batch_norm_momentum:  0.99
+  pre_trained_path: train_a_1
 optimiser: 
   name: AdamW
   hyper_params:
-    learning_rate: 1e-3
+    learning_rate: 0.001
 scheduler:
   name: CosineAnnealingLR
   hyper_params:
     T_max: 50
-    eta_min: 1e-7
+    eta_min: 0.0000001
     last_epoch: -1
 loss_function: 
   name: mean-squared-error-loss

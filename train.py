@@ -71,6 +71,15 @@ def train(config, device):
         config['model']['tuning_type']
     ).to(device)
 
+    if config['model']['pre_trained_path']:
+        weight_path = path.join(
+            'results', config['model']['pre_trained_path'], 'weights.pth')
+        if path.exists(weight_path):
+            print("[ Resuming traning using ", config['model']['pre_trained_path'], " ]")
+            model.load_state_dict(torch.load(weight_path))
+        else:
+            print("[ Provided pretrained weight path is invalid ]")
+
     optimiser = optimiser_factory.get_optimiser(
         model.parameters(),
         config['optimiser']['name'],

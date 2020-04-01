@@ -58,6 +58,8 @@ def hydrate_config(config):
                 config['model']['tuning_type'] = None
             if 'hyper_params' not in config['model'].keys():
                 config['model']['hyper_params'] = None
+            if 'pre_trained_path' not in config['model'].keys():
+                config['model']['pre_trained_path'] = None
 
         # optimiser
         if 'optimiser' not in config.keys():
