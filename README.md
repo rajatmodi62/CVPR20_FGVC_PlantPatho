@@ -120,52 +120,60 @@ The backbones we are looking forward to explore are:
 ## Config structure
 
 ### Training
+Sample files ( train_dummy_1, train_dummy_2 ) are provided in the examples directory
+
 
 ```
 mode: train
-validation_frequency: (optional)
-epochs: (optional)
-batch_size: (optional)
+validation_frequency: ( optional )
+epochs:
+batch_size: ( optional )
+num_classes: 
 train_dataset: 
-  name: 
-  fold: (optional)
-  resize_dims: 
+  name:
+  fold: ( optional )
+  resize_dims:
 val_dataset: 
-  name: 
-  fold: (optional)
-  resize_dims: 
+  name:
+  fold: ( optional )
+  resize_dims:
 model: 
-  name: 
-  num_classes: 
+  name:
+  pred_type: regression/classification
+  tuning_type: feature-extraction/fine-tuning
+  hyper_params: ( depends on the model )
+    key_1:  ( depends on the model )
+    key_2:  ( depends on the model )
 optimiser: 
   name: 
-  hyper_params: (optional)
-    key_1:
-    key_2: 
+  hyper_params:
+    key_1: ( depends on the optimiser )
+    key_2: ( depends on the optimiser )
 scheduler:
   name: 
-  hyper_params: (optional)
-    key_1:
-    key_2: 
+  hyper_params:
+    key_1: ( depends on the scheduler )
+    key_2: ( depends on the scheduler )
 loss_function: 
   name: 
+
 ```
 
 ### Test
+Sample files ( test_dummy ) are provided in the examples directory
 
 ```
 mode: test
 test_dataset: 
-  name: 
-  resize_dims: 
-ensemble: (optional)
-model_list:
-  - model:
-      name: 
-      num_classes: 
-      path: 
-      hyper_params: (optional)
-        key_1:
+  name:
+  resize_dims:
+ensemble: True/False
+num_classes:
+experiment_list:
+  - experiment:
+      path: ( valid train config file name )
+  - experiment:
+      path: ( valid train config file name )
 ```
 
 ## Lib dependency

@@ -1,0 +1,11 @@
+mode: test
+test_dataset: 
+  name: fgvc7
+  resize_dims: 224
+ensemble: True
+num_classes: 4
+experiment_list:
+  - experiment:
+      path: train_dummy_1
+  - experiment:
+      path: train_dummy_2
