@@ -144,6 +144,7 @@ model:
   hyper_params: ( depends on the model )
     key_1:  ( depends on the model )
     key_2:  ( depends on the model )
+  pre_trained_path: ( optional key to resume training from another experiment )
 optimiser: 
   name: 
   hyper_params:

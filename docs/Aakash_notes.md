@@ -11,3 +11,4 @@
 - [Focal loss](https://github.com/clcarwin/focal_loss_pytorch/blob/master/focalloss.py)
 - [JDAI-DCL](https://github.com/JDAI-CV/DCL)
 - [NN from Scratch](https://github.com/thenewera-ru/NNFromScratch)
+- [Changing forward function of predefined model](https://discuss.pytorch.org/t/how-can-i-replace-the-forward-method-of-a-predefined-torchvision-model-with-my-customized-forward-function/54224/4)

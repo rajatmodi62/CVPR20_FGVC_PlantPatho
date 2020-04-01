@@ -26,9 +26,9 @@ class ModelFactory():
                     param.requires_grad = False
             num_ftrs = model._fc.in_features
             model._fc = nn.Sequential(
-                # nn.Linear(num_ftrs, num_classes),
-                # nn.Sigmoid(),
-                nn.Linear(num_ftrs, adjusted_num_classes)
+                nn.Linear(num_ftrs, num_classes),
+                nn.Sigmoid(),
+                # nn.Linear(num_ftrs, adjusted_num_classes)
             )
 
             if hyper_params is not None:
