@@ -1,4 +1,4 @@
-from torch.optim import (RMSprop, Adam)
+from torch.optim import (RMSprop, Adam, AdamW)
 
 
 class OptimiserFactory:
@@ -18,6 +18,12 @@ class OptimiserFactory:
         if optimiser_name == 'Adam':
             print("[ Optimiser : Adam ]")
             return Adam(
+                params,
+                lr=hyper_param_dict['learning_rate']
+            )
+        if optimiser_name == 'AdamW':
+            print("[ Optimiser : AdamW ]")
+            return AdamW(
                 params,
                 lr=hyper_param_dict['learning_rate']
             )

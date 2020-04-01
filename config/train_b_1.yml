@@ -1,16 +1,16 @@
 mode: train
-validation_frequency: 1
+validation_frequency: 2
 epochs: 50
-batch_size: 128
+batch_size: 4
 num_classes: 4
 train_dataset: 
   name: fgvc7
-  fold: 4
-  resize_dims: 224
+  fold: 1
+  resize_dims: 512
 val_dataset: 
   name: fgvc7
-  fold: 4
-  resize_dims: 224
+  fold: 1
+  resize_dims: 512
 model: 
   name: efficientnet-b7
   pred_type: regression
@@ -20,12 +20,12 @@ model:
 optimiser: 
   name: AdamW
   hyper_params:
-    learning_rate: 1e-3
+    learning_rate: 0.001
 scheduler:
   name: CosineAnnealingLR
   hyper_params:
     T_max: 50
-    eta_min: 1e-7
+    eta_min: 0.0000001
     last_epoch: -1
 loss_function: 
   name: mean-squared-error-loss

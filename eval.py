@@ -40,7 +40,7 @@ def eval(config, device):
 
         model = model_factory.get_model(
             model_name['model']['name'],
-            model_name['model']['num_classes'],
+            config['num_classes'],
             model_name['model']['pred_type'],
             model_name['model']['hyper_params'],
         ).to(device)
@@ -67,7 +67,7 @@ def eval(config, device):
         # use this list to write using a helper
         evaluation_helper.evaluate(
             model_name['model']['pred_type'],
-            model_name['model']['num_classes'],
+            config['num_classes'],
             model_name['model']['path'],
             test_dataset.get_csv_path(),
             test_output_list

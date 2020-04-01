@@ -29,3 +29,6 @@ def roc_auc_score_generator(output_list, target_list):
 # implementation based on problem statement
 kaggle_output_header = ["image_id", "healthy",
                         "multiple_diseases", "rust", "scab"]
+
+# implementation based on problem statement
+custom_threshhold = [0.7, 1.5, 2.7]

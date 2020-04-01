@@ -65,7 +65,7 @@ def train(config, device):
 
     model = model_factory.get_model(
         config['model']['name'],
-        config['model']['num_classes'],
+        config['num_classes'],
         config['model']['pred_type'],
         config['model']['hyper_params'],
         config['model']['tuning_type']
@@ -161,7 +161,7 @@ def train(config, device):
             # validate model
             experiment_helper.validate(
                 config['model']['pred_type'],
-                config['model']['num_classes'],
+                config['num_classes'],
                 loss_function,
                 val_output_list,
                 val_target_list,

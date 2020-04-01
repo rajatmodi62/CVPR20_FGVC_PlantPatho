@@ -10,9 +10,9 @@ class ModelFactory():
 
     def get_model(self, model_name, num_classes, pred_type, hyper_params=None, tuning_type='feature-extraction'):
         if pred_type == 'regression':
-            num_classes = 1
+            adjusted_num_classes = 1
         elif pred_type == 'mixed':
-            num_classes = num_classes + 1
+            adjusted_num_classes = num_classes + 1
 
         model = None
 
@@ -24,7 +24,9 @@ class ModelFactory():
                     param.requires_grad = False
             num_ftrs = model._fc.in_features
             model._fc = nn.Sequential(
-                nn.Linear(num_ftrs, num_classes)
+                # nn.Linear(num_ftrs, num_classes),
+                # nn.Sigmoid(),
+                nn.Linear(num_ftrs, adjusted_num_classes)
             )
 
             if hyper_params is not None:
@@ -38,7 +40,7 @@ class ModelFactory():
                     param.requires_grad = False
             num_ftrs = model.classifier.in_features
             model.classifier = nn.Sequential(
-                nn.Linear(num_ftrs, num_classes)
+                nn.Linear(num_ftrs, adjusted_num_classes)
             )
 
         print("[ Tuning type : ", tuning_type, " ]")

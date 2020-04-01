@@ -14,6 +14,9 @@ def hydrate_config(config):
             config['epochs'] = 10
         if 'batch_size' not in config.keys():
             config['batch_size'] = 1
+        if 'num_classes' not in config.keys():
+            print('[ Number of classes not mentioned ]')
+            exit()
 
         # dataset (train)
         if 'train_dataset' not in config.keys():
@@ -50,9 +53,6 @@ def hydrate_config(config):
                 exit()
             if config['model']['pred_type'] not in ['classification', 'regression', 'mixed']:
                 print('[ Prediction type must be either of classification/regression/mixed ]')
-                exit()
-            if 'num_classes' not in config['model'].keys():
-                print('[ Number of classes not mentioned ]')
                 exit()
             if 'tuning_type' not in config['model'].keys():
                 config['model']['tuning_type'] = None
@@ -95,6 +95,9 @@ def hydrate_config(config):
         # basic
         if 'ensemble' not in config.keys():
             config['ensemble'] = False
+        if 'num_classes' not in config.keys():
+            print('[ Number of classes not mentioned ]')
+            exit()
 
         # dataset (test)
         if 'test_dataset' not in config.keys():
@@ -120,9 +123,6 @@ def hydrate_config(config):
                         exit()
                     if 'pred_type' not in model['model'].keys():
                         print('[ Prediction type not mentioned ]')
-                        exit()
-                    if 'num_classes' not in model['model'].keys():
-                        print('[ Number of classes not mentioned ]')
                         exit()
                     if 'hyper_params' not in model['model'].keys():
                         model['model']['hyper_params'] = None
