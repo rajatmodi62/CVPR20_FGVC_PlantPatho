@@ -45,7 +45,7 @@ class ModelFactory():
                 nn.Linear(num_ftrs, adjusted_num_classes)
             )
 
-        print("[ Tuning type : ", tuning_type, " ]")
+        tuning_type and print("[ Tuning type : ", tuning_type, " ]")
         print("[ Prediction type : ", pred_type, " ]")
 
         return model

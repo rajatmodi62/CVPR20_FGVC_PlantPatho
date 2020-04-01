@@ -35,18 +35,19 @@ def eval(config, device):
 
     # ===================== Model testing / evaluation  loop ========================
 
-    for model_name in config['model_list']:
-        print("[ Experiment : ", model_name['model']['path'], " ]")
+    for experiment_item in config['experiment_list']:
+        print("[ Experiment : ", experiment_item['experiment']['path'], " ]")
 
         model = model_factory.get_model(
-            model_name['model']['name'],
+            experiment_item['experiment']['name'],
             config['num_classes'],
-            model_name['model']['pred_type'],
-            model_name['model']['hyper_params'],
+            experiment_item['experiment']['pred_type'],
+            experiment_item['experiment']['hyper_params'],
+            tuning_type = None
         ).to(device)
 
         weight_path = path.join(
-            'results', model_name['model']['path'], 'weights.pth')
+            'results', experiment_item['experiment']['path'], 'weights.pth')
 
         model.load_state_dict(torch.load(weight_path))
 
@@ -66,9 +67,9 @@ def eval(config, device):
 
         # use this list to write using a helper
         evaluation_helper.evaluate(
-            model_name['model']['pred_type'],
+            experiment_item['experiment']['pred_type'],
             config['num_classes'],
-            model_name['model']['path'],
+            experiment_item['experiment']['path'],
             test_dataset.get_csv_path(),
             test_output_list
         )

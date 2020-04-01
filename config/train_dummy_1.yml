@@ -1,7 +1,7 @@
 mode: train
 validation_frequency: 1
-epochs: 50
-batch_size: 128
+epochs: 2
+batch_size: 4
 num_classes: 4
 train_dataset: 
   name: fgvc7
@@ -17,7 +17,6 @@ model:
   tuning_type: feature-extraction
   hyper_params:
     batch_norm_momentum:  0.99
-  pre_trained_path: train_a_1
 optimiser: 
   name: AdamW
   hyper_params:
@@ -25,7 +24,7 @@ optimiser:
 scheduler:
   name: CosineAnnealingLR
   hyper_params:
-    T_max: 50
+    T_max: 2
     eta_min: 0.0000001
     last_epoch: -1
 loss_function: 

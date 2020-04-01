@@ -4,22 +4,8 @@ test_dataset:
   resize_dims: 224
 ensemble: True
 num_classes: 4
-model_list:
-  - model:
-      path: train_a_1
-      name: efficientnet-b7
-      pred_type: regression
-      hyper_params:
-        batch_norm_momentum:  0.99
-  - model:
-      path: train_a_2
-      name: efficientnet-b7
-      pred_type: regression
-      hyper_params:
-        batch_norm_momentum:  0.99
-  - model:
-      path: train_a_3
-      name: efficientnet-b7
-      pred_type: regression
-      hyper_params:
-        batch_norm_momentum:  0.99
+experiment_list:
+  - experiment:
+      path: train_dummy_1
+  - experiment:
+      path: train_dummy_2

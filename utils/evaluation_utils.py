@@ -27,7 +27,7 @@ class EvaluationHelper:
         self.is_ensemble = ensemble
         self.ensemble_list = []
 
-    def evaluate(self, pred_type, num_classes, model_path, test_csv_path, test_output):
+    def evaluate(self, pred_type, num_classes, experiment_path, test_csv_path, test_output):
         if pred_type == 'classification':
             test_output = post_process_output(test_output)
         elif pred_type == 'regression':
@@ -40,7 +40,7 @@ class EvaluationHelper:
             self.ensemble_list.append(test_output)
 
         result_path = path.join(
-            'results', self.experiment_name, model_path + '.csv')
+            'results', self.experiment_name, experiment_path + '.csv')
         test_df = pd.read_csv(test_csv_path)
 
         with torch.no_grad():

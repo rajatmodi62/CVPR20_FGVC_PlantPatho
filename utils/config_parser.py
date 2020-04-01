@@ -52,7 +52,8 @@ def hydrate_config(config):
                 print('[ Prediction type not mentioned ]')
                 exit()
             if config['model']['pred_type'] not in ['classification', 'regression', 'mixed']:
-                print('[ Prediction type must be either of classification/regression/mixed ]')
+                print(
+                    '[ Prediction type must be either of classification/regression/mixed ]')
                 exit()
             if 'tuning_type' not in config['model'].keys():
                 config['model']['tuning_type'] = None
@@ -111,28 +112,41 @@ def hydrate_config(config):
                 exit()
 
         # model list
-        if 'model_list' not in config.keys():
-            print('[ Model List key missing ]')
+        if 'experiment_list' not in config.keys():
+            print('[ Experiment List key missing ]')
             exit()
         else:
-            if len(config['model_list']) > 0:
-                for model in config['model_list']:
-                    if 'path' not in model['model'].keys():
-                        print('[ Model weights paths not mentioned ]')
+            if len(config['experiment_list']) > 0:
+                for experiment in config['experiment_list']:
+                    if 'path' not in experiment['experiment'].keys():
+                        print('[ Experiment output path not mentioned ]')
                         exit()
-                    if 'name' not in model['model'].keys():
-                        print('[ Model name not mentioned ]')
-                        exit()
-                    if 'pred_type' not in model['model'].keys():
-                        print('[ Prediction type not mentioned ]')
-                        exit()
-                    if 'hyper_params' not in model['model'].keys():
-                        model['model']['hyper_params'] = None
+                    hydrate_secondary_config(
+                        experiment['experiment']['path'],
+                        experiment['experiment']
+                    )
             else:
-                print('[ No models in Model List ]')
+                print('[ No experiment in Experiment List ]')
                 exit()
 
     return config
+
+
+def hydrate_secondary_config(yml_file_name, config):
+    secondary_yml_path = None
+    if path.exists(path.join('config', yml_file_name + '.yml')):
+        secondary_yml_path = path.join('config', yml_file_name + '.yml')
+    else:
+        print("[ Experiment file missing from config ]")
+        exit()
+
+    stream = open(secondary_yml_path, 'r')
+    secondary_config = yaml.safe_load(stream)
+    secondary_config = hydrate_config(secondary_config)
+
+    config['name'] = secondary_config['model']['name']
+    config['pred_type'] = secondary_config['model']['pred_type']
+    config['hyper_params'] = secondary_config['model']['hyper_params']
 
 
 def get_config_data(yml_file_name):
