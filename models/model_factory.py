@@ -13,6 +13,8 @@ class ModelFactory():
             adjusted_num_classes = 1
         elif pred_type == 'mixed':
             adjusted_num_classes = num_classes + 1
+        else:
+            adjusted_num_classes = num_classes
 
         model = None
 
