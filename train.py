@@ -46,7 +46,7 @@ def train(config, device):
         'train',
         config['train_dataset']['name'],
         TransformerFactory(
-            # pipe_type="image",
+            pipe_type="image",
             height=config['train_dataset']['resize_dims'],
             width=config['train_dataset']['resize_dims'],
         ),

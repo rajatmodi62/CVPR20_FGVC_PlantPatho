@@ -295,7 +295,13 @@ def get_model_params(model_name, override_params):
 
 def load_pretrained_weights(model, model_name, load_fc=True, advprop=False):
     """ Loads pretrained weights, and downloads if loading for the first time. """
-    state_dict = torch.load("pretrained_weights/efficientnet_b7.pth")
+    
+    state_dict = None
+    if model_name == 'efficientnet-b7':
+        state_dict = torch.load("pretrained_weights/efficientnet_b7.pth")
+    elif model_name == 'efficientnet-b4':
+        state_dict = torch.load("pretrained_weights/efficientnet_b4.pth")
+    
     if load_fc:
         model.load_state_dict(state_dict)
     else:
