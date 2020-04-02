@@ -8,7 +8,7 @@ class ModelFactory():
     def __init__(self):
         pass
 
-    def get_model(self, model_name, num_classes, pred_type, hyper_params=None, tuning_type='feature-extraction'):
+    def get_model(self, model_name, num_classes, pred_type, hyper_params=None, tuning_type='feature-extraction'):        
         if pred_type == 'regression':
             adjusted_num_classes = 1
         elif pred_type == 'mixed':

@@ -24,7 +24,7 @@ optimiser:
 scheduler:
   name: CosineAnnealingLR
   hyper_params:
-    T_max: 2
+    T_max: 50
     eta_min: 0.0000001
     last_epoch: -1
 loss_function: 
