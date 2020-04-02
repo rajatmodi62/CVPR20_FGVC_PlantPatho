@@ -58,7 +58,6 @@ def hydrate_config(config):
             if 'tuning_type' not in config['model'].keys():
                 config['model']['tuning_type'] = None
             else:
-                print( config["model"]["tuning_type"] )
                 if config["model"]["tuning_type"] not in ["fine-tuning", "feature-extraction"]:
                     print("[ Tuning type can be one of fine-tuning/feature-extraction ]")
                     exit()
