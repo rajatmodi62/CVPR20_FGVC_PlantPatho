@@ -16,11 +16,17 @@ class DatasetFactory:
             exit()
         else:
             dataset_dir = path.join(self.org_data_dir, dataset_name)
+            dataset = None
 
             if dataset_name == "fgvc7":
                 print("[ Dataset : fgvc7 <", mode, "/",
                       "raw" if fold_number is None else fold_number, "> ]")
-                return FGVC7_Dataset(mode, dataset_dir, transformer, fold_number)
+                dataset = FGVC7_Dataset(
+                    mode, dataset_dir, transformer, fold_number)
             else:
                 print("[ Dataset not found ]")
                 exit()
+
+        print("[ Transformer : ", str(transformer), " ]")
+
+        return dataset

@@ -59,10 +59,10 @@ class FGVC7_Dataset(Dataset):
         image = io.imread(image_path)
 
         if self.mode == "test":
-            return self.transformer.get_augmented(image)
+            return self.transformer(image)
         else:
             label = torch.tensor(
                 self.data_frame.iloc[idx, 1:].to_numpy(dtype=float)
             )
-            return self.transformer.get_augmented(image), label
+            return self.transformer(image), label
             

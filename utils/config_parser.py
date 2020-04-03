@@ -163,4 +163,6 @@ def get_config_data(yml_file_name):
 
     config['experiment_name'] = name
 
+    print("[ Config : ", config['experiment_name'], " ]")
+
     return hydrate_config(config)

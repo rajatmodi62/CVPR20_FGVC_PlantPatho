@@ -12,6 +12,8 @@ def eval(config, device):
     # Create pipeline objects
     dataset_factory = DatasetFactory(org_data_dir='./data')
 
+    transformer_factory = TransformerFactory()
+
     model_factory = ModelFactory()
 
     evaluation_helper = EvaluationHelper(
@@ -25,7 +27,7 @@ def eval(config, device):
     test_dataset = dataset_factory.get_dataset(
         'test',
         config['test_dataset']['name'],
-        TransformerFactory(
+        transformer_factory.get_transformer(
             height=config['test_dataset']['resize_dims'],
             width=config['test_dataset']['resize_dims'],
         )
@@ -43,7 +45,7 @@ def eval(config, device):
             config['num_classes'],
             experiment_item['experiment']['pred_type'],
             experiment_item['experiment']['hyper_params'],
-            tuning_type = None
+            tuning_type=None
         ).to(device)
 
         weight_path = path.join(
