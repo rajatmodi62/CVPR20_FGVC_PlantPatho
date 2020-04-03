@@ -2,6 +2,7 @@ import torch
 from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import DataLoader
 from os import (path, environ)
+from math import ceil
 from tqdm import (trange, tqdm)
 from losses.loss_factory import LossFactory
 from optimisers.optimiser_factory import OptimiserFactory
@@ -109,20 +110,22 @@ def train(config, device):
 
     # =================== Model training / validation loop ==========================
 
+    print(len(DataLoader(training_dataset, batch_size=batch_size)), config["epochs"], len(training_dataset), batch_size)
+
     with tqdm(
-        total=config["epochs"] * len(training_dataset) / batch_size,
+        total= config["epochs"] * ceil(len(training_dataset) / batch_size),
         desc="Progress",
         postfix=[
             dict(batch_idx=0),
-            len(training_dataset) / batch_size,
+            ceil(len(training_dataset) / batch_size),
             dict(epoch_idx=0),
             config["epochs"]
         ],
-        bar_format='{desc}: {percentage:3.0f}%| {bar} | {n_fmt}/{total_fmt} [ETA:{remaining}] [Epoch:{postfix[2][epoch_idx]}/{postfix[3]}, Batch:{postfix[0][batch_idx]}/{postfix[1]}]'
+        bar_format='{desc}: {percentage:3.0f}%| {bar} | [ETA:{remaining}] [Batch:{postfix[0][batch_idx]}/{postfix[1]} Epoch:{postfix[2][epoch_idx]}/{postfix[3]}]'
     ) as progress_bar:
 
         for i in range(config["epochs"]):
-            # update progress bar
+            # progress bar update
             progress_bar.postfix[2]["epoch_idx"] = i + 1
 
             # set model to training mode
@@ -131,7 +134,7 @@ def train(config, device):
             train_output_list = []
             train_target_list = []
             for batch_ndx, sample in enumerate(DataLoader(training_dataset, batch_size=batch_size)):
-                # update progress bar
+                # progress bar update
                 progress_bar.postfix[0]["batch_idx"] = batch_ndx + 1
 
                 input, target = sample
@@ -208,7 +211,5 @@ def train(config, device):
                     experiment_helper.save_checkpoint(
                         model.state_dict()
                     )
-
-            progress_bar.update(1)
 
     # ===============================================================================
