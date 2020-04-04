@@ -2,8 +2,8 @@ import torch
 from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import DataLoader
 from os import (path, environ)
-from math import ceil
-from tqdm import (trange, tqdm)
+# from math import ceil
+# from tqdm import (trange, tqdm)
 from losses.loss_factory import LossFactory
 from optimisers.optimiser_factory import OptimiserFactory
 from schedulers.scheduler_factory import SchedulerFactory
@@ -11,6 +11,7 @@ from dataset.dataset_factory import DatasetFactory
 from models.model_factory import ModelFactory
 from transformers.transformer_factory import TransformerFactory
 from utils.experiment_utils import ExperimentHelper
+from utils.custom_bar import CustomBar
 
 # stop tensorboard warnings
 environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -110,23 +111,11 @@ def train(config, device):
 
     # =================== Model training / validation loop ==========================
 
-    print(len(DataLoader(training_dataset, batch_size=batch_size)), config["epochs"], len(training_dataset), batch_size)
-
-    with tqdm(
-        total= config["epochs"] * ceil(len(training_dataset) / batch_size),
-        desc="Progress",
-        postfix=[
-            dict(batch_idx=0),
-            ceil(len(training_dataset) / batch_size),
-            dict(epoch_idx=0),
-            config["epochs"]
-        ],
-        bar_format='{desc}: {percentage:3.0f}%| {bar} | [ETA:{remaining}] [Batch:{postfix[0][batch_idx]}/{postfix[1]} Epoch:{postfix[2][epoch_idx]}/{postfix[3]}]'
-    ) as progress_bar:
+    with CustomBar( config["epochs"], len(training_dataset), batch_size ) as progress_bar:
 
         for i in range(config["epochs"]):
             # progress bar update
-            progress_bar.postfix[2]["epoch_idx"] = i + 1
+            progress_bar.update_epoch_info(i)
 
             # set model to training mode
             model.train()
@@ -135,7 +124,7 @@ def train(config, device):
             train_target_list = []
             for batch_ndx, sample in enumerate(DataLoader(training_dataset, batch_size=batch_size)):
                 # progress bar update
-                progress_bar.postfix[0]["batch_idx"] = batch_ndx + 1
+                progress_bar.update_batch_info( batch_ndx )
 
                 input, target = sample
                 input = input.to(device)
@@ -169,7 +158,7 @@ def train(config, device):
                     train_target_list.append(target)
 
                 # progress bar update
-                progress_bar.update()
+                progress_bar.step()
 
             # set model to evaluation mode
             model.eval()
