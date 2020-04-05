@@ -1,8 +1,8 @@
 # Dummy
-python ./main.py "train_dummy_1.yml"
+python ./main.py -p "train_dummy_1.yml"
 # python ./main.py "train_dummy_2.yml"
 
-python ./main.py "test_dummy.yml"
+# python ./main.py "test_dummy.yml"
 
 # RM - experiment request
 # python ./main.py "train_b7_128.yml"

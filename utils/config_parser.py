@@ -154,7 +154,7 @@ def hydrate_secondary_config(yml_file_name, config):
     config['hyper_params'] = secondary_config['model']['hyper_params']
 
 
-def get_config_data(yml_file_name):
+def get_config_data(yml_file_name, publish):
     name = yml_file_name.split('.')[0]
 
     yml_path = path.join('config', yml_file_name)
@@ -163,6 +163,7 @@ def get_config_data(yml_file_name):
     config = yaml.safe_load(stream)
 
     config['experiment_name'] = name
+    config['publish'] = publish
 
     cprint("[ Config : ", config['experiment_name'], " ]", type="info1")
 

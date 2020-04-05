@@ -2,8 +2,6 @@ import torch
 from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import DataLoader
 from os import (path, environ)
-# from math import ceil
-# from tqdm import (trange, tqdm)
 from losses.loss_factory import LossFactory
 from optimisers.optimiser_factory import OptimiserFactory
 from schedulers.scheduler_factory import SchedulerFactory
@@ -111,7 +109,7 @@ def train(config, device):
 
     # =================== Model training / validation loop ==========================
 
-    with CustomBar( config["epochs"], len(training_dataset), batch_size ) as progress_bar:
+    with CustomBar(config["epochs"], len(training_dataset), batch_size) as progress_bar:
 
         for i in range(config["epochs"]):
             # progress bar update
@@ -124,7 +122,7 @@ def train(config, device):
             train_target_list = []
             for batch_ndx, sample in enumerate(DataLoader(training_dataset, batch_size=batch_size)):
                 # progress bar update
-                progress_bar.update_batch_info( batch_ndx )
+                progress_bar.update_batch_info(batch_ndx)
 
                 input, target = sample
                 input = input.to(device)
@@ -200,5 +198,8 @@ def train(config, device):
                     experiment_helper.save_checkpoint(
                         model.state_dict()
                     )
+
+    # publish on telegram
+    config['publish'] and experiment_helper.publish()
 
     # ===============================================================================

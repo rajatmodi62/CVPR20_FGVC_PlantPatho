@@ -8,12 +8,14 @@ from utils.check_gpu import get_training_device
 parser = argparse.ArgumentParser()
 parser.add_argument("experiment_file",
                     help="The name of the experiment config file")
+parser.add_argument('-p', '--publish', action='store_true', 
+    help="publishes results to telegram")
 args = parser.parse_args()
 
 # Get experiment config values
 if args.experiment_file is None:
     exit()
-config = get_config_data(args.experiment_file)
+config = get_config_data(args.experiment_file, args.publish)
 
 # Get GPU / CPU device instance
 device = get_training_device()
