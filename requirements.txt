@@ -1,0 +1,10 @@
+blessed
+torch 
+torchvision 
+catalyst 
+albumentations 
+pandas 
+scikit-image 
+tqdm 
+scikit-learn pyyaml
+pretrainedmodels

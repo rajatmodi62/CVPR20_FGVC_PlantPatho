@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 from utils.kaggle_metric import (post_process_output, kaggle_output_header)
 from utils.regression_utils import covert_to_classification
+from utils.print_util import cprint
 
 
 class EvaluationHelper:
@@ -16,12 +17,13 @@ class EvaluationHelper:
             makedirs(path.join('results', experiment_name))
         else:
             if overwrite:
-                print("[ <", experiment_name, "> results exists - Overwriting! ]")
+                cprint("[ <", experiment_name,
+                       "> results exists - Overwriting! ]", type="warn")
                 rmtree(path.join('results', experiment_name))
                 makedirs(path.join('results', experiment_name))
             else:
-                print("[ <", experiment_name,
-                      "> results exists - Manual deletion needed ]")
+                cprint("[ <", experiment_name,
+                       "> results exists - Manual deletion needed ]", type="warn")
                 exit()
 
         self.is_ensemble = ensemble
@@ -61,16 +63,16 @@ class EvaluationHelper:
             )
 
     def ensemble(self, test_csv_path):
-        print("[ Ensembling results ]")
+        cprint("[ Ensembling results ]", type="success")
 
         self.ensemble_list = torch.stack(self.ensemble_list, dim=2)
 
         if self.ensemble_list.size()[2] % 2 == 0:
-            print("[ Ensemble logic needs odd majority < ",
-                  self.ensemble_list.size()[2], " > ]")
+            cprint("[ Ensemble logic needs odd majority < ",
+                   self.ensemble_list.size()[2], " > ]", type="warn")
             exit()
         elif self.ensemble_list.size()[2] == 1:
-            print("[ Too few experiments for ensembling ]")
+            cprint("[ Too few experiments for ensembling ]", type="warn")
             exit()
 
         # Voting logic

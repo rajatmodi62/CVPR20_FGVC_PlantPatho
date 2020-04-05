@@ -1,4 +1,5 @@
 from os import path
+from utils.print_util import cprint
 import yaml
 
 
@@ -163,6 +164,6 @@ def get_config_data(yml_file_name):
 
     config['experiment_name'] = name
 
-    print("[ Config : ", config['experiment_name'], " ]")
+    cprint("[ Config : ", config['experiment_name'], " ]", type="info1")
 
     return hydrate_config(config)

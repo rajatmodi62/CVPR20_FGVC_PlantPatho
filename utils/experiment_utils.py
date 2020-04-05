@@ -1,11 +1,14 @@
 import torch
 from os import (makedirs, path)
+from blessed import Terminal
 from shutil import rmtree
 import pandas as pd
 import math
 from utils.regression_utils import covert_to_classification
 from utils.kaggle_metric import (roc_auc_score_generator, accuracy_generator)
+from utils.print_util import cprint
 
+term = Terminal()
 
 class ExperimentHelper:
     def __init__(self, experiment_name, freq=None, tb_writer=None, overwrite=False,):
@@ -13,12 +16,12 @@ class ExperimentHelper:
             makedirs(path.join('results', experiment_name))
         else:
             if overwrite:
-                print("[ <", experiment_name, "> output exists - Overwriting! ]")
+                cprint("[ <", experiment_name, "> output exists - Overwriting! ]", type="warn")
                 rmtree(path.join('results', experiment_name))
                 makedirs(path.join('results', experiment_name))
             else:
-                print("[ <", experiment_name,
-                      "> output exists - Manual deletion needed ]")
+                cprint("[ <", experiment_name,
+                      "> output exists - Manual deletion needed ]", type="warn")
                 exit()
 
         self.experiment_name = experiment_name
