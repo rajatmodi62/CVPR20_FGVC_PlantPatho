@@ -182,7 +182,7 @@ experiment_list:
 
 ## Lib dependency
 ```bash
-pip install --user torch torchvision catalyst albumentations pandas scikit-image tqdm scikit-learn pyyaml
+pip install --user torch torchvision catalyst albumentations pandas scikit-image tqdm scikit-learn pyyaml blessed pyzmq pretrainedmodels tensorboard
 ```
 
 ## Utility commands
