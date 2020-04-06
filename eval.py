@@ -48,8 +48,12 @@ def eval(config, device):
             tuning_type=None
         ).to(device)
 
+        print("[ Weight type : ", experiment_item['experiment']['weight_type'], " ]")
+        weight_path = 'weights_loss.pth'
+        if experiment_item['experiment']['weight_type'] == 'best_roc_loss':
+            weight_path = 'weights_roc.pth'
         weight_path = path.join(
-            'results', experiment_item['experiment']['path'], 'weights.pth')
+            'results', experiment_item['experiment']['path'], weight_path)
 
         model.load_state_dict(torch.load(weight_path))
 

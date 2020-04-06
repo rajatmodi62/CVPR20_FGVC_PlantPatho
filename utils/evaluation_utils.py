@@ -67,12 +67,12 @@ class EvaluationHelper:
 
         self.ensemble_list = torch.stack(self.ensemble_list, dim=2)
 
-        if self.ensemble_list.size()[2] % 2 == 0:
-            cprint("[ Ensemble logic needs odd majority < ",
-                   self.ensemble_list.size()[2], " > ]", type="warn")
-            exit()
-        elif self.ensemble_list.size()[2] == 1:
+        if self.ensemble_list.size()[2] < 3:
             cprint("[ Too few experiments for ensembling ]", type="warn")
+            exit()
+        elif self.ensemble_list.size()[2] % 2 == 0:
+            cprint("[ Ensemble logic needs odd majority < ",
+                   str(self.ensemble_list.size()[2]), " > ]", type="warn")
             exit()
 
         # Voting logic

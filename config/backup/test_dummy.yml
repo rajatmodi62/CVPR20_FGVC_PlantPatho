@@ -7,3 +7,6 @@ num_classes: 4
 experiment_list:
   - experiment:
       path: train_dummy_1
+  - experiment:
+      path: train_dummy_2
+      weight_type: best_val_roc

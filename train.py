@@ -74,15 +74,22 @@ def train(config, device):
         config['model']['tuning_type']
     ).to(device)
 
+    # if model needs to resume
     if config['model']['pre_trained_path']:
+        print("[ Weight type : ", config['model']['weight_type'], " ]")
+        weight_path = 'weights_loss.pth'
+        if config['model']['weight_type'] == 'best_roc_loss':
+            weight_path = 'weights_roc.pth'
         weight_path = path.join(
-            'results', config['model']['pre_trained_path'], 'weights.pth')
+            'results', config['model']['pre_trained_path'], weight_path)
+        
         if path.exists(weight_path):
-            print("[ Resuming traning using ",
+            print("[ Resuming traning : ",
                   config['model']['pre_trained_path'], " ]")
             model.load_state_dict(torch.load(weight_path))
         else:
             print("[ Provided pretrained weight path is invalid ]")
+            exit()
 
     optimiser = optimiser_factory.get_optimiser(
         model.parameters(),

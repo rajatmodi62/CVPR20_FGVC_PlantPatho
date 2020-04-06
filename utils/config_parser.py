@@ -66,6 +66,12 @@ def hydrate_config(config):
                 config['model']['hyper_params'] = None
             if 'pre_trained_path' not in config['model'].keys():
                 config['model']['pre_trained_path'] = None
+            else:
+                if 'weight_type' not in config['model'].keys():
+                        config['model']['weight_type'] = "best_val_loss"
+                elif config['model']['weight_type'] not in ['best_val_loss', 'best_val_roc']:
+                    print("[ Weight type can be one of best_val_loss/best_val_roc ]")
+                    exit()
 
         # optimiser
         if 'optimiser' not in config.keys():
@@ -123,8 +129,16 @@ def hydrate_config(config):
         else:
             if len(config['experiment_list']) > 0:
                 for experiment in config['experiment_list']:
+                    if 'experiment' not in experiment.keys():
+                        print('[ Experiment key missing in Experiment List ]')
+                        exit()
                     if 'path' not in experiment['experiment'].keys():
                         print('[ Experiment output path not mentioned ]')
+                        exit()
+                    if 'weight_type' not in experiment['experiment'].keys():
+                        experiment['experiment']['weight_type'] = "best_val_loss"
+                    elif experiment['experiment']['weight_type'] not in ['best_val_loss', 'best_val_roc']:
+                        print("[ Weight type can be one of best_val_loss/best_val_roc ]")
                         exit()
                     hydrate_secondary_config(
                         experiment['experiment']['path'],

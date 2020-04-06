@@ -29,10 +29,11 @@ class ExperimentHelper:
 
         self.experiment_name = experiment_name
         self.best_val_loss = float('inf')
+        self.best_val_roc = 0
         self.result = {
             "config": experiment_name,
             "best_val_loss": self.best_val_loss,
-            "best_val_acc": None,
+            "val_acc": None,
             "train_loss": None,
             "train_acc": None,
             "val_roc": None,
@@ -41,7 +42,8 @@ class ExperimentHelper:
         }
         self.tb_writer = tb_writer
         self.freq = freq
-        self.progress = False
+        self.progress_loss = False
+        self.progress_roc = False
 
     def should_trigger(self, i):
         if self.freq:
@@ -49,12 +51,16 @@ class ExperimentHelper:
         return True
 
     def is_progress(self):
-        return self.progress
+        return (self.progress_loss or self.progress_roc)
 
     def save_checkpoint(self, state_dict):
-        torch.save(
+        self.progress_loss and torch.save(
             state_dict,
-            path.join('results', self.experiment_name, 'weights.pth')
+            path.join('results', self.experiment_name, 'weights_loss.pth')
+        )
+        self.progress_roc and torch.save(
+            state_dict,
+            path.join('results', self.experiment_name, 'weights_roc.pth')
         )
 
     def validate(self, pred_type, num_classes, loss_fn, val_output_list, val_target_list, train_output_list, train_target_list, epoch):
@@ -113,18 +119,25 @@ class ExperimentHelper:
             # storing loss for check
             if self.best_val_loss >= val_loss:
                 self.best_val_loss = val_loss
-                self.progress = True
+                self.progress_loss = True
 
                 # update dict for publishing
                 self.result["best_val_loss"] = val_loss
-                self.result["best_val_acc"] = val_acc
+                self.result["val_acc"] = val_acc
                 self.result["train_loss"] = train_loss
                 self.result["train_acc"] = train_acc
                 self.result["val_roc"] = val_roc
                 self.result["train_roc"] = train_roc
                 self.result["epoch"] = epoch
             else:
-                self.progress = False
+                self.progress_loss = False
+
+            # storing roc for check
+            if self.best_val_roc < val_roc:
+                self.best_val_roc = val_roc
+                self.progress_roc = True
+            else:
+                self.progress_roc = False
 
     def publish(self):
         publish(self.result)

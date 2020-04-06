@@ -18,6 +18,7 @@ model:
   hyper_params:
     batch_norm_momentum:  0.99
   pre_trained_path: train_dummy_1
+  weight_type: best_val_loss
 optimiser: 
   name: AdamW
   hyper_params:

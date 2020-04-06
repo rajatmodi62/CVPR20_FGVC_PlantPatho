@@ -3,7 +3,7 @@ from blessed import Terminal
 term = Terminal()
 
 
-def cprint(*args, type=None):
+def cprint(*args, type="info1"):
     if type == "warn":
         print(term.red(*args))
     if type == "info1":
@@ -14,5 +14,3 @@ def cprint(*args, type=None):
         print(term.deepskyblue(*args))
     elif type == 'success':
         print(term.lawngreen(*args))
-    else:
-        print(*args)

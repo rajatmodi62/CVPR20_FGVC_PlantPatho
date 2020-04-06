@@ -9,3 +9,4 @@ experiment_list:
       path: train_dummy_1
   - experiment:
       path: train_dummy_2
+      weight_type: best_roc_loss

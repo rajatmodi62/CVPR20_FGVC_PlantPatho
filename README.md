@@ -145,6 +145,7 @@ model:
     key_1:  ( depends on the model )
     key_2:  ( depends on the model )
   pre_trained_path: ( optional key to resume training from another experiment )
+  weight_type: ( optional key to pick the type of weight - best_val_loss/best_val_roc )
 optimiser: 
   name: 
   hyper_params:
@@ -173,8 +174,10 @@ num_classes:
 experiment_list:
   - experiment:
       path: ( valid train config file name )
+      weight_type: ( optional key to pick the type of weight - best_val_loss/best_val_roc )
   - experiment:
       path: ( valid train config file name )
+      weight_type: ( optional key to pick the type of weight - best_val_loss/best_val_roc )
 ```
 
 ## Lib dependency

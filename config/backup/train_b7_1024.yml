@@ -1,6 +1,6 @@
 mode: train
 validation_frequency: 5
-epochs: 50
+epochs: 100
 batch_size: 1
 num_classes: 4
 train_dataset: 
