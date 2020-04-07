@@ -1,5 +1,6 @@
 from torch.nn import (CrossEntropyLoss, NLLLoss, MSELoss)
 from losses.focal_loss import FocalLoss
+from losses.arcface_loss import ArcfaceLoss
 from losses.utils import (ClassificationLossWrapper, RegressionLossWrapper)
 
 
@@ -32,5 +33,9 @@ class LossFactory:
         if function_name == 'mean-squared-error-loss':
             print("[ Loss : Mean Squared Error Loss ]")
             loss_function = RegressionLossWrapper(MSELoss())
+
+        if function_name == 'archface-loss':
+            print("[ Loss: Archface Loss ]")
+            loss_function = ArcfaceLoss()
 
         return loss_function
