@@ -1,4 +1,6 @@
+import torch
 from torch import nn
+from os import path
 import pretrainedmodels
 import torchvision.models as models
 from models.efficientnet import EfficientNet
@@ -8,7 +10,7 @@ class ModelFactory():
     def __init__(self):
         pass
 
-    def get_model(self, model_name, num_classes, pred_type, hyper_params=None, tuning_type='feature-extraction'):
+    def get_model(self, model_name, num_classes, pred_type, hyper_params=None, tuning_type='feature-extraction', pre_trained_path=None, weight_type=None):
         if pred_type == 'regression':
             adjusted_num_classes = 1
         elif pred_type == 'mixed':
@@ -26,9 +28,9 @@ class ModelFactory():
                     param.requires_grad = False
             num_ftrs = model._fc.in_features
             model._fc = nn.Sequential(
-                nn.Linear(num_ftrs, num_classes),
-                nn.Sigmoid(),
-                # nn.Linear(num_ftrs, adjusted_num_classes)
+                # nn.Linear(num_ftrs, num_classes),
+                # nn.Sigmoid(),
+                nn.Linear(num_ftrs, adjusted_num_classes)
             )
 
             if hyper_params is not None:
@@ -42,9 +44,9 @@ class ModelFactory():
                     param.requires_grad = False
             num_ftrs = model._fc.in_features
             model._fc = nn.Sequential(
-                nn.Linear(num_ftrs, num_classes),
-                nn.Sigmoid(),
-                # nn.Linear(num_ftrs, adjusted_num_classes)
+                # nn.Linear(num_ftrs, num_classes),
+                # nn.Sigmoid(),
+                nn.Linear(num_ftrs, adjusted_num_classes)
             )
 
             if hyper_params is not None:
@@ -63,5 +65,25 @@ class ModelFactory():
 
         tuning_type and print("[ Tuning type : ", tuning_type, " ]")
         print("[ Prediction type : ", pred_type, " ]")
+
+        # if model needs to resume from pretrained weights
+        if pre_trained_path:
+            print("[ Weight type : ", weight_type, " ]")
+            weight_path = 'weights_loss.pth'
+            if weight_type == 'best_roc_loss':
+                weight_path = 'weights_roc.pth'
+            weight_path = path.join(
+                'results', pre_trained_path, weight_path)
+
+            if path.exists(weight_path):
+                print("[ Loading checkpoint : ",
+                      pre_trained_path, " ]")
+                model.load_state_dict(torch.load(
+                    weight_path
+                    # ,map_location={'cuda:1': 'cuda:0'}
+                ))
+            else:
+                print("[ Provided pretrained weight path is invalid ]")
+                exit()
 
         return model

@@ -47,21 +47,23 @@ class ExperimentHelper:
 
     def should_trigger(self, i):
         if self.freq:
-            return i % self.freq == 0
+            return (i + 1) % self.freq == 0
         return True
 
     def is_progress(self):
         return (self.progress_loss or self.progress_roc)
 
     def save_checkpoint(self, state_dict):
-        self.progress_loss and torch.save(
-            state_dict,
-            path.join('results', self.experiment_name, 'weights_loss.pth')
-        )
-        self.progress_roc and torch.save(
-            state_dict,
-            path.join('results', self.experiment_name, 'weights_roc.pth')
-        )
+        if self.progress_loss:
+            torch.save(
+                state_dict,
+                path.join('results', self.experiment_name, 'weights_loss.pth')
+            )
+        if self.progress_roc: 
+            torch.save(
+                state_dict,
+                path.join('results', self.experiment_name, 'weights_roc.pth')
+            )
 
     def validate(self, pred_type, num_classes, loss_fn, val_output_list, val_target_list, train_output_list, train_target_list, epoch):
         with torch.no_grad():
@@ -71,7 +73,7 @@ class ExperimentHelper:
             train_loss = loss_fn(
                 train_output_list, train_target_list).item()
 
-            if pred_type == 'regression':
+            if pred_type == 'regression' or pred_type == 'mixed':
                 train_output_list = covert_to_classification(
                     train_output_list,
                     num_classes,
@@ -91,7 +93,7 @@ class ExperimentHelper:
 
             # saving results to csv
             df = pd.DataFrame(
-                [[epoch, val_loss, train_loss, val_acc, train_acc, val_roc, train_roc]])
+                [[epoch + 1, val_loss, train_loss, val_acc, train_acc, val_roc, train_roc]])
             result_path = path.join(
                 'results', self.experiment_name, 'result.csv')
 

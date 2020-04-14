@@ -1,0 +1,29 @@
+mode: train
+validation_frequency: 5
+epochs: 30
+batch_size: 4
+num_classes: 4
+train_dataset: 
+  name: fgvc7
+  fold: 1
+  resize_dims: 224
+val_dataset: 
+  name: fgvc7
+  fold: 1
+  resize_dims: 224
+model: 
+  name: densenet-161
+  pred_type: classification
+  tuning_type: fine-tuning
+optimiser: 
+  name: AdamW
+  hyper_params:
+    learning_rate: 0.001
+scheduler:
+  name: CosineAnnealingLR
+  hyper_params:
+    T_max: 30
+    eta_min: 0.0000001
+    last_epoch: -1
+loss_function: 
+  name: cross-entropy-loss

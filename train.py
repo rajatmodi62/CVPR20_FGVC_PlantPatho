@@ -10,12 +10,16 @@ from models.model_factory import ModelFactory
 from transformers.transformer_factory import TransformerFactory
 from utils.experiment_utils import ExperimentHelper
 from utils.custom_bar import CustomBar
+from utils.seed_backend import seed_all
 
 # stop tensorboard warnings
 environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
 def train(config, device):
+    # seed backend
+    seed_all( config['seed'] )
+
     # Create pipeline objects
     dataset_factory = DatasetFactory(org_data_dir='./data')
 
@@ -71,25 +75,10 @@ def train(config, device):
         config['num_classes'],
         config['model']['pred_type'],
         config['model']['hyper_params'],
-        config['model']['tuning_type']
+        config['model']['tuning_type'],
+        config['model']['pre_trained_path'],
+        config['model']['weight_type']
     ).to(device)
-
-    # if model needs to resume
-    if config['model']['pre_trained_path']:
-        print("[ Weight type : ", config['model']['weight_type'], " ]")
-        weight_path = 'weights_loss.pth'
-        if config['model']['weight_type'] == 'best_roc_loss':
-            weight_path = 'weights_roc.pth'
-        weight_path = path.join(
-            'results', config['model']['pre_trained_path'], weight_path)
-        
-        if path.exists(weight_path):
-            print("[ Resuming traning : ",
-                  config['model']['pre_trained_path'], " ]")
-            model.load_state_dict(torch.load(weight_path))
-        else:
-            print("[ Provided pretrained weight path is invalid ]")
-            exit()
 
     optimiser = optimiser_factory.get_optimiser(
         model.parameters(),
@@ -107,6 +96,7 @@ def train(config, device):
 
     loss_function = loss_factory.get_loss_function(
         config['loss_function']['name'],
+        config['model']['pred_type'],
         config['loss_function']['hyper_params']
     )
 

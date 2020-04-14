@@ -1,7 +1,7 @@
 import argparse
 from train import train
 from eval import eval
-from utils.config_parser import (get_config_data)
+from utils.config_parser import get_config_data
 from utils.check_gpu import get_training_device
 
 # Parse arguments

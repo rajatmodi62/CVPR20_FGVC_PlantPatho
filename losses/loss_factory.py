@@ -1,17 +1,15 @@
 from torch.nn import (CrossEntropyLoss, NLLLoss, MSELoss)
 from losses.focal_loss import FocalLoss
 from losses.arcface_loss import ArcfaceLoss
-from losses.utils import (ClassificationLossWrapper, RegressionLossWrapper)
+from losses.utils import (ClassificationLossWrapper,
+                          RegressionLossWrapper, MixedLossWrapper)
 
 
 class LossFactory:
     def __init__(self):
         pass
 
-    def modified(self, ):
-        CrossEntropyLoss()
-
-    def get_loss_function(self, function_name, hyper_params=None):
+    def get_pure(self, function_name, hyper_params=None):
         loss_function = None
 
         if function_name == 'focal-loss':
@@ -22,20 +20,45 @@ class LossFactory:
                 )
             else:
                 loss_function = FocalLoss()
-        if function_name == 'cross-entropy-loss':
+
+        elif function_name == 'cross-entropy-loss':
             print("[ Loss : Cross Entropy Loss ]")
-            loss_function = ClassificationLossWrapper(CrossEntropyLoss())
+            loss_function = CrossEntropyLoss()
 
-        if function_name == 'negative-log-likelihood-loss':
+        elif function_name == 'negative-log-likelihood-loss':
             print("[ Loss : Negative Log Likelihood Loss ]")
-            loss_function = ClassificationLossWrapper(NLLLoss())
+            loss_function = NLLLoss()
 
-        if function_name == 'mean-squared-error-loss':
+        elif function_name == 'mean-squared-error-loss':
             print("[ Loss : Mean Squared Error Loss ]")
-            loss_function = RegressionLossWrapper(MSELoss())
+            loss_function = MSELoss()
 
-        if function_name == 'archface-loss':
+        elif function_name == 'archface-loss':
             print("[ Loss: Archface Loss ]")
             loss_function = ArcfaceLoss()
 
         return loss_function
+
+    def get_loss_function(self, function_name, pred_type, hyper_params=None):
+        wrapped_loss_function = None
+
+        if pred_type == 'regression':
+            wrapped_loss_function = RegressionLossWrapper(
+                self.get_pure(function_name, hyper_params))
+        elif pred_type == 'classification':
+            wrapped_loss_function = ClassificationLossWrapper(
+                self.get_pure(function_name, hyper_params))
+        elif pred_type == 'mixed':
+            wrapped_loss_function = MixedLossWrapper(
+                self.get_pure(
+                    function_name,
+                    hyper_params
+                ),
+                self.get_pure(
+                    hyper_params['classification_loss'],
+                    hyper_params
+                ),
+                hyper_params['classification_coefficient']
+            )
+
+        return wrapped_loss_function

@@ -6,6 +6,9 @@ def covert_to_classification(output, num_classes, threshholding_type='custom'):
     # takes a value and number of classes, returns a onehot vector
     batch_size = output.size()[0]
 
+    # consider only first column ( for mixed )
+    output = output[:, 0].view(-1, 1)
+
     one_hot = None
     if output.is_cuda:
         one_hot = torch.zeros(batch_size, num_classes).to(output.get_device())

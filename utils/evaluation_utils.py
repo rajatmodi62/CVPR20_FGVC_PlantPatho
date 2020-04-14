@@ -32,7 +32,7 @@ class EvaluationHelper:
     def evaluate(self, pred_type, num_classes, experiment_path, test_csv_path, test_output):
         if pred_type == 'classification':
             test_output = post_process_output(test_output)
-        elif pred_type == 'regression':
+        elif pred_type == 'regression' or pred_type == 'mixed':
             test_output = covert_to_classification(
                 test_output,
                 num_classes,

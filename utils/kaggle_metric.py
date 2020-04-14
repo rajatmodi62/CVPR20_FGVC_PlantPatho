@@ -31,4 +31,4 @@ kaggle_output_header = ["image_id", "healthy",
                         "multiple_diseases", "rust", "scab"]
 
 # implementation based on problem statement
-custom_threshhold = [0.7, 1.5, 2.7]
+custom_threshhold = [0.8, 1.9, 2.2]

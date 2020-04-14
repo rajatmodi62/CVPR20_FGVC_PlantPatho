@@ -9,6 +9,8 @@ def hydrate_config(config):
 
     if config['mode'] == 'train':
         # basics
+        if 'seed' not in config.keys():
+            config['seed'] = None
         if 'validation_frequency' not in config.keys():
             config['validation_frequency'] = None
         if 'epochs' not in config.keys():
@@ -66,6 +68,7 @@ def hydrate_config(config):
                 config['model']['hyper_params'] = None
             if 'pre_trained_path' not in config['model'].keys():
                 config['model']['pre_trained_path'] = None
+                config['model']['weight_type'] = None
             else:
                 if 'weight_type' not in config['model'].keys():
                         config['model']['weight_type'] = "best_val_loss"

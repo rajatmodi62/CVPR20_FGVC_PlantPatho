@@ -1,12 +1,16 @@
 mode: test
 test_dataset: 
   name: fgvc7
-  resize_dims: 224
+  resize_dims: 320
 ensemble: True
 num_classes: 4
 experiment_list:
   - experiment:
-      path: train_dummy_1
+      path: b4_9
+      weight_type: best_val_roc
   - experiment:
-      path: train_dummy_2
+      path: b4_8
+      weight_type: best_val_roc
+  - experiment:
+      path: b4_7
       weight_type: best_val_roc
