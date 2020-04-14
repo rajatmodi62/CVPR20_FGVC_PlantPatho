@@ -33,8 +33,8 @@ class LossFactory:
             print("[ Loss : Mean Squared Error Loss ]")
             loss_function = MSELoss()
 
-        elif function_name == 'archface-loss':
-            print("[ Loss: Archface Loss ]")
+        elif function_name == 'arcface-loss':
+            print("[ Loss: Arcface Loss ]")
             loss_function = ArcfaceLoss()
 
         return loss_function

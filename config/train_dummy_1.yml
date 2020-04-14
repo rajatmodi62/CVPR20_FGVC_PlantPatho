@@ -12,8 +12,8 @@ val_dataset:
   fold: 4
   resize_dims: 224
 model: 
-  name: efficientnet-b7
-  pred_type: mixed
+  name: efficientnet-b4
+  pred_type: classification
   tuning_type: feature-extraction
   hyper_params:
     batch_norm_momentum:  0.99
@@ -28,7 +28,9 @@ scheduler:
     eta_min: 0.0000001
     last_epoch: -1
 loss_function: 
-  name: mean-squared-error-loss
-  hyper_params:
-    classification_loss: cross-entropy-loss
-    classification_coefficient: 0.3
+  # name: mean-squared-error-loss
+  # hyper_params:
+  #   classification_loss: cross-entropy-loss
+  #   classification_coefficient: 0.3
+  name: arcface-loss
+  # name: cross-entropy-loss

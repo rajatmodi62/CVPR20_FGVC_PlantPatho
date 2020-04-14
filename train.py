@@ -18,7 +18,7 @@ environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 def train(config, device):
     # seed backend
-    seed_all( config['seed'] )
+    seed_all(config['seed'])
 
     # Create pipeline objects
     dataset_factory = DatasetFactory(org_data_dir='./data')
