@@ -1,8 +1,8 @@
 # Dummy
-python ./main.py "train_dummy_1.yml"
+# python ./main.py "train_dummy_1.yml"
 # python ./main.py "train_dummy_2.yml"
 
-python ./main.py "test_dummy.yml"
+# python ./main.py "test_dummy.yml"
 
 # RM - experiment request
 # python ./main.py "train_b7_128.yml"
@@ -41,3 +41,7 @@ python ./main.py "test_dummy.yml"
 # python ./main.py "t_10_d.yml"
 # python ./main.py "t_10_e.yml"
 # python ./main.py "test_t.yml"
+# python ./main.py "b4_11.yml"
+python ./main.py "test_b4.yml"
+
+# python ./main.py "b4_12.yml"

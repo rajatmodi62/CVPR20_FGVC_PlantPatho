@@ -62,7 +62,8 @@ def hydrate_config(config):
                 config['model']['tuning_type'] = None
             else:
                 if config["model"]["tuning_type"] not in ["fine-tuning", "feature-extraction"]:
-                    print("[ Tuning type can be one of fine-tuning/feature-extraction ]")
+                    print(
+                        "[ Tuning type can be one of fine-tuning/feature-extraction ]")
                     exit()
             if 'hyper_params' not in config['model'].keys():
                 config['model']['hyper_params'] = None
@@ -71,7 +72,7 @@ def hydrate_config(config):
                 config['model']['weight_type'] = None
             else:
                 if 'weight_type' not in config['model'].keys():
-                        config['model']['weight_type'] = "best_val_loss"
+                    config['model']['weight_type'] = "best_val_loss"
                 elif config['model']['weight_type'] not in ['best_val_loss', 'best_val_roc']:
                     print("[ Weight type can be one of best_val_loss/best_val_roc ]")
                     exit()
@@ -141,11 +142,16 @@ def hydrate_config(config):
                     if 'weight_type' not in experiment['experiment'].keys():
                         experiment['experiment']['weight_type'] = "best_val_loss"
                     elif experiment['experiment']['weight_type'] not in ['best_val_loss', 'best_val_roc']:
-                        print("[ Weight type can be one of best_val_loss/best_val_roc ]")
+                        print(
+                            "[ Weight type can be one of best_val_loss/best_val_roc ]")
                         exit()
+                    if 'resize_dims' not in experiment['experiment'].keys():
+                        experiment['experiment']['resize_dims'] = None
+
                     hydrate_secondary_config(
                         experiment['experiment']['path'],
-                        experiment['experiment']
+                        experiment['experiment'],
+                        experiment['experiment']['resize_dims'] == 'original'
                     )
             else:
                 print('[ No experiment in Experiment List ]')
@@ -154,7 +160,7 @@ def hydrate_config(config):
     return config
 
 
-def hydrate_secondary_config(yml_file_name, config):
+def hydrate_secondary_config(yml_file_name, config, dims=False):
     secondary_yml_path = None
     if path.exists(path.join('config', yml_file_name + '.yml')):
         secondary_yml_path = path.join('config', yml_file_name + '.yml')
@@ -169,6 +175,8 @@ def hydrate_secondary_config(yml_file_name, config):
     config['name'] = secondary_config['model']['name']
     config['pred_type'] = secondary_config['model']['pred_type']
     config['hyper_params'] = secondary_config['model']['hyper_params']
+    if dims:
+        config['resize_dims'] = secondary_config['train_dataset']['resize_dims'] if dims else None
 
 
 def get_config_data(yml_file_name, publish):

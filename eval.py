@@ -6,6 +6,7 @@ from dataset.dataset_factory import DatasetFactory
 from transformers.transformer_factory import TransformerFactory
 from models.model_factory import ModelFactory
 from utils.evaluation_utils import EvaluationHelper
+from utils.print_util import cprint
 
 
 def eval(config, device):
@@ -22,23 +23,23 @@ def eval(config, device):
         ensemble=config['ensemble']
     )
 
-    # ==================== Model testing / evaluation setup ========================
-
-    test_dataset = dataset_factory.get_dataset(
-        'test',
-        config['test_dataset']['name'],
-        transformer_factory.get_transformer(
-            height=config['test_dataset']['resize_dims'],
-            width=config['test_dataset']['resize_dims'],
-        )
-    )
-
-    # ===============================================================================
-
-    # ===================== Model testing / evaluation  loop ========================
+    # =============================== Experiment  loop =================================
 
     for experiment_item in config['experiment_list']:
-        print("[ Experiment : ", experiment_item['experiment']['path'], " ]")
+        cprint("[ Experiment : ", experiment_item['experiment']['path'], " ]", type="info2")
+
+        # ==================== Model testing / evaluation setup ========================
+
+        test_dataset = dataset_factory.get_dataset(
+            'test',
+            config['test_dataset']['name'],
+            transformer_factory.get_transformer(
+                height=experiment_item['experiment']['resize_dims'] if experiment_item[
+                    'experiment']['resize_dims'] else config['test_dataset']['resize_dims'],
+                width=experiment_item['experiment']['resize_dims'] if experiment_item[
+                    'experiment']['resize_dims'] else config['test_dataset']['resize_dims']
+            )
+        )
 
         model = model_factory.get_model(
             experiment_item['experiment']['name'],
@@ -49,6 +50,10 @@ def eval(config, device):
             experiment_item['experiment']['path'],
             experiment_item['experiment']['weight_type']
         ).to(device)
+
+        # ===============================================================================
+
+        # ===================== Model testing / evaluation  loop ========================
 
         model.eval()
 
@@ -73,9 +78,11 @@ def eval(config, device):
             test_output_list
         )
 
+        # ===============================================================================
+
     if config['ensemble']:
         evaluation_helper.ensemble(
             test_dataset.get_csv_path()
         )
 
-    # ===============================================================================
+    # ===================================================================================

@@ -64,8 +64,7 @@ def train(config, device):
         config['val_dataset']['name'],
         transformer_factory.get_transformer(
             height=config['val_dataset']['resize_dims'],
-            width=config['val_dataset']['resize_dims'],
-            pipe_type="image"
+            width=config['val_dataset']['resize_dims']
         ),
         config['val_dataset']['fold']
     )

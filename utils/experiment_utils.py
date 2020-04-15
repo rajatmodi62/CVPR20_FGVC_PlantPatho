@@ -5,11 +5,17 @@ from shutil import rmtree
 import pandas as pd
 import math
 from utils.regression_utils import covert_to_classification
-from utils.kaggle_metric import (roc_auc_score_generator, accuracy_generator)
+from utils.kaggle_metric import (roc_auc_score_generator)
 from utils.print_util import cprint
 from utils.telegram_update import publish
 
 term = Terminal()
+
+
+def accuracy_generator(output_list, target_list):
+    acc = torch.argmax(target_list, dim=1).eq(
+        torch.argmax(output_list, dim=1))
+    return 1.0 * torch.sum(acc.int()).item() / output_list.size()[0]
 
 
 class ExperimentHelper:
@@ -59,7 +65,7 @@ class ExperimentHelper:
                 state_dict,
                 path.join('results', self.experiment_name, 'weights_loss.pth')
             )
-        if self.progress_roc: 
+        if self.progress_roc:
             torch.save(
                 state_dict,
                 path.join('results', self.experiment_name, 'weights_roc.pth')

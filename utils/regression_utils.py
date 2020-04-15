@@ -1,6 +1,7 @@
 import torch
-from utils.kaggle_metric import custom_threshhold
 
+# implementation based on problem statement
+custom_threshhold = [0.8, 1.9, 2.2]
 
 def covert_to_classification(output, num_classes, threshholding_type='custom'):
     # takes a value and number of classes, returns a onehot vector
