@@ -1,5 +1,5 @@
 # Dummy
-python ./main.py -a "train_dummy_1.yml"
+# python ./main.py "train_dummy_1.yml"
 # python ./main.py "train_dummy_2.yml"
 
 # python ./main.py "test_dummy.yml"
@@ -53,3 +53,5 @@ python ./main.py -a "train_dummy_1.yml"
 # python ./main.py "b4_13e.yml"
 
 # python ./main.py "test_b4.yml"
+
+python ./main.py -a 'aug_search.yml'

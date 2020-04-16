@@ -6,7 +6,7 @@ import json
 
 
 class Writer:
-    def __init__(self, overwrite=False):
+    def __init__(self, overwrite=True):
         if path.exists(path.join('auto_aug_utils/data')) == False:
             makedirs('auto_aug_utils/data')
         else:
@@ -37,7 +37,9 @@ class Writer:
             df.to_csv(result_path, mode='a', header=False, index=False)
 
     def freeze_policies(self, policies):
+        filtered = [policy[1] for policy in policies]
+
         # save it to json
-        with open('transformers/best_policy.json', 'w') as fid:
-            # fid.write(str([v[1] for v in policies]))
-            json.dump(policies, fid)
+        with open('transformers/best_policy.json', 'w+') as fid:
+            json_str = json.dumps(filtered, indent=2)
+            fid.write(json_str)
