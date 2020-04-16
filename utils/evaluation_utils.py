@@ -79,6 +79,13 @@ class EvaluationHelper:
         self.results = torch.sum(self.ensemble_list, dim=2)
         self.results = torch.softmax(self.results, dim=1)
 
+        # hard thresholding
+        # OHV_target = torch.zeros(self.results.size()).to(
+        #     self.results.get_device())
+        # OHV_target[range(self.results.size()[0]),
+        #            torch.argmax(self.results, dim=1)] = 1
+        # self.results = OHV_target
+
         result_path = path.join(
             'results', self.experiment_name, 'ensembled.csv')
         ensemble_df = pd.read_csv(test_csv_path)

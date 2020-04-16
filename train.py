@@ -12,14 +12,13 @@ from utils.experiment_utils import ExperimentHelper
 from utils.custom_bar import CustomBar
 from utils.seed_backend import seed_all
 
+import numpy
+
 # stop tensorboard warnings
 environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
-def train(config, device):
-    # seed backend
-    seed_all(config['seed'])
-
+def train(config, device, policy=None):
     # Create pipeline objects
     dataset_factory = DatasetFactory(org_data_dir='./data')
 
@@ -54,7 +53,7 @@ def train(config, device):
         transformer_factory.get_transformer(
             height=config['train_dataset']['resize_dims'],
             width=config['train_dataset']['resize_dims'],
-            pipe_type="image"
+            policy=policy
         ),
         config['train_dataset']['fold']
     )
@@ -64,7 +63,8 @@ def train(config, device):
         config['val_dataset']['name'],
         transformer_factory.get_transformer(
             height=config['val_dataset']['resize_dims'],
-            width=config['val_dataset']['resize_dims']
+            width=config['val_dataset']['resize_dims'],
+            policy=policy
         ),
         config['val_dataset']['fold']
     )
@@ -197,5 +197,7 @@ def train(config, device):
 
     # publish on telegram
     config['publish'] and experiment_helper.publish()
+
+    return (experiment_helper.best_val_loss, experiment_helper.best_val_roc)
 
     # ===============================================================================

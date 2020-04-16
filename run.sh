@@ -1,5 +1,5 @@
 # Dummy
-# python ./main.py "train_dummy_1.yml"
+python ./main.py -a "train_dummy_1.yml"
 # python ./main.py "train_dummy_2.yml"
 
 # python ./main.py "test_dummy.yml"
@@ -42,6 +42,14 @@
 # python ./main.py "t_10_e.yml"
 # python ./main.py "test_t.yml"
 # python ./main.py "b4_11.yml"
-python ./main.py "test_b4.yml"
+# python ./main.py "test_b4.yml"
 
 # python ./main.py "b4_12.yml"
+
+# python ./main.py "b4_13a.yml"
+# python ./main.py "b4_13b.yml"
+# python ./main.py "b4_13c.yml"
+# python ./main.py "b4_13d.yml"
+# python ./main.py "b4_13e.yml"
+
+# python ./main.py "test_b4.yml"

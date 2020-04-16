@@ -26,7 +26,8 @@ def eval(config, device):
     # =============================== Experiment  loop =================================
 
     for experiment_item in config['experiment_list']:
-        cprint("[ Experiment : ", experiment_item['experiment']['path'], " ]", type="info2")
+        cprint("[ Experiment : ", experiment_item['experiment']
+               ['path'], " ]", type="info2")
 
         # ==================== Model testing / evaluation setup ========================
 
@@ -34,10 +35,8 @@ def eval(config, device):
             'test',
             config['test_dataset']['name'],
             transformer_factory.get_transformer(
-                height=experiment_item['experiment']['resize_dims'] if experiment_item[
-                    'experiment']['resize_dims'] else config['test_dataset']['resize_dims'],
-                width=experiment_item['experiment']['resize_dims'] if experiment_item[
-                    'experiment']['resize_dims'] else config['test_dataset']['resize_dims']
+                height=experiment_item['experiment']['resize_dims'],
+                width=experiment_item['experiment']['resize_dims']
             )
         )
 

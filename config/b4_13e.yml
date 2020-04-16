@@ -1,16 +1,16 @@
 mode: train
 seed: 128
 validation_frequency: 5
-epochs: 100
+epochs: 50
 batch_size: 4
 num_classes: 4
 train_dataset: 
   name: fgvc7
-  fold: 1
+  fold: 4
   resize_dims: 320
 val_dataset: 
   name: fgvc7
-  fold: 1
+  fold: 4
   resize_dims: 320
 model: 
   name: efficientnet-b4
@@ -21,12 +21,12 @@ model:
 optimiser: 
   name: AdamW
   hyper_params:
-    learning_rate: 0.001
+    learning_rate: 0.0005
 scheduler:
   name: CosineAnnealingLR
   hyper_params:
-    T_max: 100
-    eta_min: 0.0000001
+    T_max: 50
+    eta_min: 0.00000001
     last_epoch: -1
 loss_function: 
   name: arcface-loss

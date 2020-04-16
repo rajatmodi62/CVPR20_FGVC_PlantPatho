@@ -4,7 +4,7 @@ from math import (cos, sin, pi)
 
 
 class ArcfaceLoss:
-    def __init__(self, s=10.0, m=0.2, reduction="mean"):
+    def __init__(self, s=30.0, m=0.5, reduction="mean"):
         self.s = s
         self.m = m
         self.loss_fn = CrossEntropyLoss(reduction=reduction)

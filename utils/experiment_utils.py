@@ -1,6 +1,5 @@
 import torch
 from os import (makedirs, path)
-from blessed import Terminal
 from shutil import rmtree
 import pandas as pd
 import math
@@ -8,8 +7,6 @@ from utils.regression_utils import covert_to_classification
 from utils.kaggle_metric import (roc_auc_score_generator)
 from utils.print_util import cprint
 from utils.telegram_update import publish
-
-term = Terminal()
 
 
 def accuracy_generator(output_list, target_list):
@@ -146,6 +143,8 @@ class ExperimentHelper:
                 self.progress_roc = True
             else:
                 self.progress_roc = False
+
+            return (val_loss, train_loss, val_acc, train_acc, val_roc, train_roc)
 
     def publish(self):
         publish(self.result)

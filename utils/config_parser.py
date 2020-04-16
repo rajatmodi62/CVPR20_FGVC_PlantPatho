@@ -146,7 +146,7 @@ def hydrate_config(config):
                             "[ Weight type can be one of best_val_loss/best_val_roc ]")
                         exit()
                     if 'resize_dims' not in experiment['experiment'].keys():
-                        experiment['experiment']['resize_dims'] = None
+                        experiment['experiment']['resize_dims'] = config['test_dataset']['resize_dims']
 
                     hydrate_secondary_config(
                         experiment['experiment']['path'],
