@@ -1,16 +1,16 @@
 mode: train
 validation_frequency: 1
 epochs: 1
-batch_size: 4
+batch_size: 128
 num_classes: 4
 train_dataset: 
   name: fgvc7
   fold: 4
-  resize_dims: 224
+  resize_dims: 180
 val_dataset: 
   name: fgvc7
   fold: 4
-  resize_dims: 224
+  resize_dims: 180
 model: 
   name: efficientnet-b4
   pred_type: classification
@@ -24,13 +24,8 @@ optimiser:
 scheduler:
   name: CosineAnnealingLR
   hyper_params:
-    T_max: 2
+    T_max: 1
     eta_min: 0.0000001
     last_epoch: -1
 loss_function: 
-  # name: mean-squared-error-loss
-  # hyper_params:
-  #   classification_loss: cross-entropy-loss
-  #   classification_coefficient: 0.3
   name: arcface-loss
-  # name: cross-entropy-loss
