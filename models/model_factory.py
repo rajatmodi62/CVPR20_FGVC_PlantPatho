@@ -63,6 +63,24 @@ class ModelFactory():
                 nn.Linear(num_ftrs, adjusted_num_classes)
             )
 
+        if model_name == 'resnet34':
+            print("[ Model : Resnet 34 ]")
+            model = pretrainedmodels.__dict__['resnet34'](
+                num_classes=1000, pretrained='imagenet')
+            conv1 = model.conv1
+            model.conv1 = nn.Conv2d(in_channels=4,
+                                    out_channels=conv1.out_channels,
+                                    kernel_size=conv1.kernel_size,
+                                    stride=conv1.stride,
+                                    padding=conv1.padding,
+                                    bias=conv1.bias)
+
+            model.avgpool = nn.AdaptiveAvgPool2d(1)
+            in_features = model.last_linear.in_features
+            model.last_linear = nn.Sequential(
+                nn.Linear(in_features, adjusted_num_classes)
+            )
+
         tuning_type and print("[ Tuning type : ", tuning_type, " ]")
         print("[ Prediction type : ", pred_type, " ]")
 
