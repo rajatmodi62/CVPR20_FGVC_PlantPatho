@@ -6,7 +6,7 @@ from utils.print_util import cprint
 TOP_POLICY_CNT = 5
 SUB_POLICY_CNT = 5
 OPERATIONS_PER_SUB = 2
-AUG_SEARCH_LOOP = 3
+AUG_SEARCH_LOOP = 25
 
 
 def search(config, device):
@@ -30,7 +30,6 @@ def search(config, device):
 
         # get best score using the policy
         best_loss, best_roc = train(config, device, policy=policy)
-        writer.write(i, best_roc)
 
         # add policy to list
         policies.append((best_roc, policy))
@@ -43,5 +42,3 @@ def search(config, device):
         writer.freeze_policies(policies)
 
         cprint("[ Policy Score: " + str(best_roc) + " ]", type="success")
-
-    pass
