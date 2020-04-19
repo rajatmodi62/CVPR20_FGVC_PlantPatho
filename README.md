@@ -125,6 +125,7 @@ Sample files ( train_dummy_1, train_dummy_2 ) are provided in the examples direc
 
 ```
 mode: train
+seed: (optional)
 validation_frequency: ( optional )
 epochs:
 batch_size: ( optional )
@@ -139,7 +140,7 @@ val_dataset:
   resize_dims:
 model: 
   name:
-  pred_type: regression/classification
+  pred_type: regression/classification/mixed
   tuning_type: feature-extraction/fine-tuning
   hyper_params: ( depends on the model )
     key_1:  ( depends on the model )
@@ -157,8 +158,10 @@ scheduler:
     key_1: ( depends on the scheduler )
     key_2: ( depends on the scheduler )
 loss_function: 
-  name: 
-
+  name: ( in case of mixed, this will be the regression loss )
+  hyper_params:
+    classification_loss: ( in case of mixed )
+    classification_coefficient: ( in case of mixed - (0, 1) )
 ```
 
 ### Test
@@ -175,6 +178,7 @@ experiment_list:
   - experiment:
       path: ( valid train config file name )
       weight_type: ( optional key to pick the type of weight - best_val_loss/best_val_roc )
+      resize_dims: ( optional override - original/integer - Use the training config values or the integer passed )
   - experiment:
       path: ( valid train config file name )
       weight_type: ( optional key to pick the type of weight - best_val_loss/best_val_roc )
