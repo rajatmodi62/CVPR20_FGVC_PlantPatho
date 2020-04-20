@@ -5,7 +5,7 @@ import socket
 from utils.print_util import cprint
 
 
-def publish(results):
+def publish_msg(results):
     ctx = zmq.Context()
     sock = ctx.socket(zmq.PUSH)
     sock.connect("tcp://192.168.100.21:1234")

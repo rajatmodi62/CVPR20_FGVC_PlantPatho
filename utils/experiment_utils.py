@@ -6,7 +6,8 @@ import math
 from utils.regression_utils import covert_to_classification
 from utils.kaggle_metric import (roc_auc_score_generator)
 from utils.print_util import cprint
-from utils.telegram_update import publish
+from utils.telegram_update import publish_msg
+from utils.wandb_update import (wandb_init, publish_intermediate)
 
 
 def accuracy_generator(output_list, target_list):
@@ -16,7 +17,7 @@ def accuracy_generator(output_list, target_list):
 
 
 class ExperimentHelper:
-    def __init__(self, experiment_name, freq=None, tb_writer=None, overwrite=False,):
+    def __init__(self, experiment_name, freq=None, tb_writer=None, overwrite=False, publish=False, config=None):
         if path.exists(path.join('results', experiment_name)) == False:
             makedirs(path.join('results', experiment_name))
         else:
@@ -30,12 +31,24 @@ class ExperimentHelper:
                        "> output exists - Manual deletion needed ]", type="warn")
                 exit()
 
+        self.publish = publish
+        self.publish and wandb_init(config)
+
         self.experiment_name = experiment_name
         self.best_val_loss = float('inf')
         self.best_val_roc = 0
         self.result = {
             "config": experiment_name,
             "best_val_loss": self.best_val_loss,
+            "val_acc": None,
+            "train_loss": None,
+            "train_acc": None,
+            "val_roc": None,
+            "train_roc": None,
+            "epoch": None
+        }
+        self.intermediate_result = {
+            "val_loss": self.best_val_loss,
             "val_acc": None,
             "train_loss": None,
             "train_acc": None,
@@ -131,8 +144,8 @@ class ExperimentHelper:
                 self.result["val_acc"] = val_acc
                 self.result["train_loss"] = train_loss
                 self.result["train_acc"] = train_acc
-                self.result["val_roc"] = val_roc
-                self.result["train_roc"] = train_roc
+                self.result["val_kaggle_metric"] = val_roc
+                self.result["train_kaggle_metric"] = train_roc
                 self.result["epoch"] = epoch
             else:
                 self.progress_loss = False
@@ -144,7 +157,24 @@ class ExperimentHelper:
             else:
                 self.progress_roc = False
 
+            # publish intermediate
+            self.publish and self.publish_intermediate({
+                "val_loss": val_loss,
+                "val_acc": val_acc,
+                "train_loss": train_loss,
+                "train_acc": train_acc,
+                "val_kaggle_metric": val_roc,
+                "train_kaggle_metric": train_roc,
+                "epoch": epoch + 1
+            })
+
             return (val_loss, train_loss, val_acc, train_acc, val_roc, train_roc)
 
-    def publish(self):
-        publish(self.result)
+    def publish_final(self, config):
+        # telegram
+        # publish_msg(self.result)
+        pass
+
+    def publish_intermediate(self, results):
+        # wandb
+        publish_intermediate(results)

@@ -12,8 +12,6 @@ from utils.experiment_utils import ExperimentHelper
 from utils.custom_bar import CustomBar
 from utils.seed_backend import seed_all
 
-import numpy
-
 # stop tensorboard warnings
 environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
@@ -36,7 +34,9 @@ def train(config, device, policy=None):
         config['experiment_name'],
         config['validation_frequency'],
         tb_writer=writer,
-        overwrite=True
+        overwrite=True,
+        publish=config['publish'],
+        config=config
     )
 
     optimiser_factory = OptimiserFactory()
@@ -194,8 +194,8 @@ def train(config, device, policy=None):
                         model.state_dict()
                     )
 
-    # publish on telegram
-    config['publish'] and experiment_helper.publish()
+    # publish final
+    config['publish'] and experiment_helper.publish_final(config)
 
     return (experiment_helper.best_val_loss, experiment_helper.best_val_roc)
 

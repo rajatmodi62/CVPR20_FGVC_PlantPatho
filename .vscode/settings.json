@@ -5,12 +5,14 @@
     "cSpell.words": [
         "get",
         "header",
+        "init",
         "kaggle",
         "optimier",
         "optimiser",
         "optimisers",
         "output",
         "tqdm",
-        "trange"
+        "trange",
+        "wandb"
     ]
 }
