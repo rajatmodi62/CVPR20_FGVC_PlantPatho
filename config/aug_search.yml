@@ -13,7 +13,7 @@ val_dataset:
   fold: 4
   resize_dims: 320
 model: 
-  name: efficientnet-b4
+  name: resnet34
   pred_type: classification
   tuning_type: fine-tuning
   hyper_params:
