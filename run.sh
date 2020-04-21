@@ -56,6 +56,8 @@
 
 # python ./main.py -a 'aug_search.yml'
 
-python ./main.py -p 'b4_14_a.yml'
-python ./main.py -p 'b4_14_b.yml'
-python ./main.py -p 'b4_14_c.yml'
+# python ./main.py -p 'b4_14_a.yml'
+# python ./main.py -p 'b4_14_b.yml'
+# python ./main.py -p 'b4_14_c.yml'
+
+python ./main.py -p 'exp_15.yml'
