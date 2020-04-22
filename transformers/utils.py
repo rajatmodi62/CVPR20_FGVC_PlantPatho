@@ -115,6 +115,7 @@ class PolicyTransformer:
                 op_1, params_1 = sub_policy[0]
                 op_2, params_2 = sub_policy[1]
                 aug = Compose([
+                    Resize(512, 512, p=1.0),
                     op_obj[op_1](**params_1),
                     op_obj[op_2](**params_2),
                 ])
