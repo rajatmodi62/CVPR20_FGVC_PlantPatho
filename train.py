@@ -53,6 +53,7 @@ def train(config, device, policy=None):
         transformer_factory.get_transformer(
             height=config['train_dataset']['resize_dims'],
             width=config['train_dataset']['resize_dims'],
+            pipe_type="policy",
             policy=policy
         ),
         config['train_dataset']['fold']

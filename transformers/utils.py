@@ -19,6 +19,9 @@ from albumentations import (
     Compose)
 from albumentations.pytorch import ToTensor
 import random
+import json
+from os import path
+from itertools import chain
 
 op_obj = {
     'RandomContrast': RandomContrast,
@@ -120,8 +123,24 @@ class PolicyTransformer:
                     op_obj[op_2](**params_2),
                 ])
                 self.aug_list.append(aug)
+        else:
+            if path.exists('transformers/best_policy.json'):
+                with open('transformers/best_policy.json') as f:
+                    policy_array = json.load(f)
+                    sub_policy_pool = chain.from_iterable(policy_array)
 
-        # if policy is none use best_policy.json to create aug list
+                    for sub_policy in sub_policy_pool:
+                        op_1, params_1 = sub_policy[0]
+                        op_2, params_2 = sub_policy[1]
+                        aug = Compose([
+                            Resize(512, 512, p=1.0),
+                            op_obj[op_1](**params_1),
+                            op_obj[op_2](**params_2),
+                        ])
+                        self.aug_list.append(aug)
+            else:
+                print("[ Policy JSON not found ]")
+                exit()
 
     def __call__(self, original_image):
         modified_image = None
