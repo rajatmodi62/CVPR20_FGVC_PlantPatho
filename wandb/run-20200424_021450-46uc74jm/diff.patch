@@ -1,0 +1,761 @@
+diff --git a/auto_aug.py b/auto_aug.py
+index ebe05d7..d67e38e 100644
+--- a/auto_aug.py
++++ b/auto_aug.py
+@@ -15,7 +15,7 @@ def search(config, device):
+     cprint("[ Getting baseline policy ]", type="info2")
+     # get a baseline score with no augmentations
+     best_loss, best_roc = train(config, device, policy=None)
+-    writer.write(-1, best_roc)
++    writer.write(0, best_roc)
+     cprint("[ Baseline score: " + str(best_roc) + " ]", type="success")
+ 
+     policies = []
+@@ -41,4 +41,7 @@ def search(config, device):
+         # save policy list
+         writer.freeze_policies(policies)
+ 
++        # save score vs iteration
++        writer.write(i + 1, best_roc)
++
+         cprint("[ Policy Score: " + str(best_roc) + " ]", type="success")
+diff --git a/config/b4_11.yml b/config/b4_11.yml
+deleted file mode 100644
+index 51edf99..0000000
+--- a/config/b4_11.yml
++++ /dev/null
+@@ -1,32 +0,0 @@
+-mode: train
+-seed: 128
+-validation_frequency: 5
+-epochs: 100
+-batch_size: 4
+-num_classes: 4
+-train_dataset: 
+-  name: fgvc7
+-  fold: 1
+-  resize_dims: 320
+-val_dataset: 
+-  name: fgvc7
+-  fold: 1
+-  resize_dims: 320
+-model: 
+-  name: efficientnet-b4
+-  pred_type: classification
+-  tuning_type: fine-tuning
+-  hyper_params:
+-    batch_norm_momentum: 0.99
+-optimiser: 
+-  name: AdamW
+-  hyper_params:
+-    learning_rate: 0.001
+-scheduler:
+-  name: CosineAnnealingLR
+-  hyper_params:
+-    T_max: 100
+-    eta_min: 0.0000001
+-    last_epoch: -1
+-loss_function: 
+-  name: arcface-loss
+diff --git a/config/b4_12.yml b/config/b4_12.yml
+deleted file mode 100644
+index 51edf99..0000000
+--- a/config/b4_12.yml
++++ /dev/null
+@@ -1,32 +0,0 @@
+-mode: train
+-seed: 128
+-validation_frequency: 5
+-epochs: 100
+-batch_size: 4
+-num_classes: 4
+-train_dataset: 
+-  name: fgvc7
+-  fold: 1
+-  resize_dims: 320
+-val_dataset: 
+-  name: fgvc7
+-  fold: 1
+-  resize_dims: 320
+-model: 
+-  name: efficientnet-b4
+-  pred_type: classification
+-  tuning_type: fine-tuning
+-  hyper_params:
+-    batch_norm_momentum: 0.99
+-optimiser: 
+-  name: AdamW
+-  hyper_params:
+-    learning_rate: 0.001
+-scheduler:
+-  name: CosineAnnealingLR
+-  hyper_params:
+-    T_max: 100
+-    eta_min: 0.0000001
+-    last_epoch: -1
+-loss_function: 
+-  name: arcface-loss
+diff --git a/config/b4_13a.yml b/config/b4_13a.yml
+deleted file mode 100644
+index 99020e2..0000000
+--- a/config/b4_13a.yml
++++ /dev/null
+@@ -1,32 +0,0 @@
+-mode: train
+-seed: 128
+-validation_frequency: 5
+-epochs: 50
+-batch_size: 4
+-num_classes: 4
+-train_dataset: 
+-  name: fgvc7
+-  fold: 0
+-  resize_dims: 320
+-val_dataset: 
+-  name: fgvc7
+-  fold: 0
+-  resize_dims: 320
+-model: 
+-  name: efficientnet-b4
+-  pred_type: classification
+-  tuning_type: fine-tuning
+-  hyper_params:
+-    batch_norm_momentum: 0.99
+-optimiser: 
+-  name: AdamW
+-  hyper_params:
+-    learning_rate: 0.0005
+-scheduler:
+-  name: CosineAnnealingLR
+-  hyper_params:
+-    T_max: 50
+-    eta_min: 0.00000001
+-    last_epoch: -1
+-loss_function: 
+-  name: arcface-loss
+diff --git a/config/b4_13b.yml b/config/b4_13b.yml
+deleted file mode 100644
+index e7ef556..0000000
+--- a/config/b4_13b.yml
++++ /dev/null
+@@ -1,32 +0,0 @@
+-mode: train
+-seed: 128
+-validation_frequency: 5
+-epochs: 50
+-batch_size: 4
+-num_classes: 4
+-train_dataset: 
+-  name: fgvc7
+-  fold: 1
+-  resize_dims: 320
+-val_dataset: 
+-  name: fgvc7
+-  fold: 1
+-  resize_dims: 320
+-model: 
+-  name: efficientnet-b4
+-  pred_type: classification
+-  tuning_type: fine-tuning
+-  hyper_params:
+-    batch_norm_momentum: 0.99
+-optimiser: 
+-  name: AdamW
+-  hyper_params:
+-    learning_rate: 0.0005
+-scheduler:
+-  name: CosineAnnealingLR
+-  hyper_params:
+-    T_max: 50
+-    eta_min: 0.00000001
+-    last_epoch: -1
+-loss_function: 
+-  name: arcface-loss
+diff --git a/config/b4_13c.yml b/config/b4_13c.yml
+deleted file mode 100644
+index f9cf678..0000000
+--- a/config/b4_13c.yml
++++ /dev/null
+@@ -1,32 +0,0 @@
+-mode: train
+-seed: 128
+-validation_frequency: 5
+-epochs: 50
+-batch_size: 4
+-num_classes: 4
+-train_dataset: 
+-  name: fgvc7
+-  fold: 2
+-  resize_dims: 320
+-val_dataset: 
+-  name: fgvc7
+-  fold: 2
+-  resize_dims: 320
+-model: 
+-  name: efficientnet-b4
+-  pred_type: classification
+-  tuning_type: fine-tuning
+-  hyper_params:
+-    batch_norm_momentum: 0.99
+-optimiser: 
+-  name: AdamW
+-  hyper_params:
+-    learning_rate: 0.0005
+-scheduler:
+-  name: CosineAnnealingLR
+-  hyper_params:
+-    T_max: 50
+-    eta_min: 0.00000001
+-    last_epoch: -1
+-loss_function: 
+-  name: arcface-loss
+diff --git a/config/b4_13d.yml b/config/b4_13d.yml
+deleted file mode 100644
+index 157f110..0000000
+--- a/config/b4_13d.yml
++++ /dev/null
+@@ -1,32 +0,0 @@
+-mode: train
+-seed: 128
+-validation_frequency: 5
+-epochs: 50
+-batch_size: 4
+-num_classes: 4
+-train_dataset: 
+-  name: fgvc7
+-  fold: 3
+-  resize_dims: 320
+-val_dataset: 
+-  name: fgvc7
+-  fold: 3
+-  resize_dims: 320
+-model: 
+-  name: efficientnet-b4
+-  pred_type: classification
+-  tuning_type: fine-tuning
+-  hyper_params:
+-    batch_norm_momentum: 0.99
+-optimiser: 
+-  name: AdamW
+-  hyper_params:
+-    learning_rate: 0.0005
+-scheduler:
+-  name: CosineAnnealingLR
+-  hyper_params:
+-    T_max: 50
+-    eta_min: 0.00000001
+-    last_epoch: -1
+-loss_function: 
+-  name: arcface-loss
+diff --git a/config/b4_13e.yml b/config/b4_13e.yml
+deleted file mode 100644
+index 17ae038..0000000
+--- a/config/b4_13e.yml
++++ /dev/null
+@@ -1,32 +0,0 @@
+-mode: train
+-seed: 128
+-validation_frequency: 5
+-epochs: 50
+-batch_size: 4
+-num_classes: 4
+-train_dataset: 
+-  name: fgvc7
+-  fold: 4
+-  resize_dims: 320
+-val_dataset: 
+-  name: fgvc7
+-  fold: 4
+-  resize_dims: 320
+-model: 
+-  name: efficientnet-b4
+-  pred_type: classification
+-  tuning_type: fine-tuning
+-  hyper_params:
+-    batch_norm_momentum: 0.99
+-optimiser: 
+-  name: AdamW
+-  hyper_params:
+-    learning_rate: 0.0005
+-scheduler:
+-  name: CosineAnnealingLR
+-  hyper_params:
+-    T_max: 50
+-    eta_min: 0.00000001
+-    last_epoch: -1
+-loss_function: 
+-  name: arcface-loss
+diff --git a/config/b4_14_a.yml b/config/b4_14_a.yml
+deleted file mode 100644
+index 85fab64..0000000
+--- a/config/b4_14_a.yml
++++ /dev/null
+@@ -1,35 +0,0 @@
+-mode: train
+-seed: 128
+-validation_frequency: 2
+-epochs: 50
+-batch_size: 4
+-num_classes: 4
+-train_dataset: 
+-  name: fgvc7
+-  fold: 4
+-  resize_dims: 320
+-val_dataset: 
+-  name: fgvc7
+-  fold: 4
+-  resize_dims: 320
+-model: 
+-  name: efficientnet-b4
+-  pred_type: mixed
+-  tuning_type: fine-tuning
+-  hyper_params:
+-    batch_norm_momentum: 0.99
+-optimiser: 
+-  name: AdamW
+-  hyper_params:
+-    learning_rate: 0.0005
+-scheduler:
+-  name: CosineAnnealingLR
+-  hyper_params:
+-    T_max: 50
+-    eta_min: 0.0000001
+-    last_epoch: -1
+-loss_function: 
+-  name: mean-squared-error-loss
+-  hyper_params:
+-    classification_loss: arcface-loss
+-    classification_coefficient: 0.3
+diff --git a/config/b4_14_b.yml b/config/b4_14_b.yml
+deleted file mode 100644
+index 37832c3..0000000
+--- a/config/b4_14_b.yml
++++ /dev/null
+@@ -1,35 +0,0 @@
+-mode: train
+-seed: 128
+-validation_frequency: 2
+-epochs: 50
+-batch_size: 4
+-num_classes: 4
+-train_dataset: 
+-  name: fgvc7
+-  fold: 4
+-  resize_dims: 320
+-val_dataset: 
+-  name: fgvc7
+-  fold: 4
+-  resize_dims: 320
+-model: 
+-  name: efficientnet-b4
+-  pred_type: mixed
+-  tuning_type: fine-tuning
+-  hyper_params:
+-    batch_norm_momentum: 0.99
+-optimiser: 
+-  name: AdamW
+-  hyper_params:
+-    learning_rate: 0.0005
+-scheduler:
+-  name: CosineAnnealingLR
+-  hyper_params:
+-    T_max: 50
+-    eta_min: 0.0000001
+-    last_epoch: -1
+-loss_function: 
+-  name: mean-squared-error-loss
+-  hyper_params:
+-    classification_loss: arcface-loss
+-    classification_coefficient: 0.5
+diff --git a/config/b4_14_c.yml b/config/b4_14_c.yml
+deleted file mode 100644
+index c3dcc17..0000000
+--- a/config/b4_14_c.yml
++++ /dev/null
+@@ -1,35 +0,0 @@
+-mode: train
+-seed: 128
+-validation_frequency: 2
+-epochs: 50
+-batch_size: 4
+-num_classes: 4
+-train_dataset: 
+-  name: fgvc7
+-  fold: 4
+-  resize_dims: 320
+-val_dataset: 
+-  name: fgvc7
+-  fold: 4
+-  resize_dims: 320
+-model: 
+-  name: efficientnet-b4
+-  pred_type: mixed
+-  tuning_type: fine-tuning
+-  hyper_params:
+-    batch_norm_momentum: 0.99
+-optimiser: 
+-  name: AdamW
+-  hyper_params:
+-    learning_rate: 0.0005
+-scheduler:
+-  name: CosineAnnealingLR
+-  hyper_params:
+-    T_max: 50
+-    eta_min: 0.0000001
+-    last_epoch: -1
+-loss_function: 
+-  name: mean-squared-error-loss
+-  hyper_params:
+-    classification_loss: arcface-loss
+-    classification_coefficient: 0.7
+diff --git a/config/exp_15.yml b/config/exp_15.yml
+deleted file mode 100644
+index 40d8823..0000000
+--- a/config/exp_15.yml
++++ /dev/null
+@@ -1,32 +0,0 @@
+-mode: train
+-seed: 128
+-validation_frequency: 5
+-epochs: 50
+-batch_size: 4
+-num_classes: 4
+-train_dataset: 
+-  name: fgvc7
+-  fold: 4
+-  resize_dims: 320
+-val_dataset: 
+-  name: fgvc7
+-  fold: 4
+-  resize_dims: 320
+-model: 
+-  name: resnet34
+-  pred_type: classification
+-  tuning_type: fine-tuning
+-  hyper_params:
+-    batch_norm_momentum: 0.99
+-optimiser: 
+-  name: AdamW
+-  hyper_params:
+-    learning_rate: 0.0005
+-scheduler:
+-  name: CosineAnnealingLR
+-  hyper_params:
+-    T_max: 50
+-    eta_min: 0.00000001
+-    last_epoch: -1
+-loss_function: 
+-  name: arcface-loss
+diff --git a/config/test_b4.yml b/config/test_b4.yml
+deleted file mode 100644
+index e6d4ef1..0000000
+--- a/config/test_b4.yml
++++ /dev/null
+@@ -1,22 +0,0 @@
+-mode: test
+-test_dataset: 
+-  name: fgvc7
+-  resize_dims: 320
+-ensemble: True
+-num_classes: 4
+-experiment_list:
+-  - experiment:
+-      path: b4_13a
+-      weight_type: best_val_roc
+-  - experiment:
+-      path: b4_13b
+-      weight_type: best_val_roc
+-  - experiment:
+-      path: b4_13c
+-      weight_type: best_val_roc
+-  - experiment:
+-      path: b4_13d
+-      weight_type: best_val_roc
+-  - experiment:
+-      path: b4_13e
+-      weight_type: best_val_roc
+\ No newline at end of file
+diff --git a/config/test_dummy.yml b/config/test_dummy.yml
+deleted file mode 100644
+index 715c185..0000000
+--- a/config/test_dummy.yml
++++ /dev/null
+@@ -1,12 +0,0 @@
+-mode: test
+-test_dataset: 
+-  name: fgvc7
+-  resize_dims: 224
+-ensemble: True
+-num_classes: 4
+-experiment_list:
+-  - experiment:
+-      path: train_dummy_1
+-  # - experiment:
+-  #     path: train_dummy_2
+-  #     weight_type: best_val_roc
+\ No newline at end of file
+diff --git a/config/train_dummy_1.yml b/config/train_dummy_1.yml
+deleted file mode 100644
+index 8537960..0000000
+--- a/config/train_dummy_1.yml
++++ /dev/null
+@@ -1,31 +0,0 @@
+-mode: train
+-validation_frequency: 1
+-epochs: 2
+-batch_size: 28
+-num_classes: 4
+-train_dataset: 
+-  name: fgvc7
+-  fold: 4
+-  resize_dims: 180
+-val_dataset: 
+-  name: fgvc7
+-  fold: 4
+-  resize_dims: 180
+-model: 
+-  name: efficientnet-b4
+-  pred_type: classification
+-  tuning_type: feature-extraction
+-  hyper_params:
+-    batch_norm_momentum:  0.99
+-optimiser: 
+-  name: AdamW
+-  hyper_params:
+-    learning_rate: 0.001
+-scheduler:
+-  name: CosineAnnealingLR
+-  hyper_params:
+-    T_max: 2
+-    eta_min: 0.0000001
+-    last_epoch: -1
+-loss_function: 
+-  name: arcface-loss
+\ No newline at end of file
+diff --git a/run.sh b/run.sh
+index ea16dc7..60b5a4e 100755
+--- a/run.sh
++++ b/run.sh
+@@ -1,5 +1,5 @@
+ # Dummy
+-python ./main.py -a "train_dummy_1.yml"
++# python ./main.py -a "train_dummy_1.yml"
+ # python ./main.py "train_dummy_2.yml"
+ 
+ # python ./main.py "test_dummy.yml"
+@@ -60,4 +60,11 @@ python ./main.py -a "train_dummy_1.yml"
+ # python ./main.py -p 'b4_14_b.yml'
+ # python ./main.py -p 'b4_14_c.yml'
+ 
+-# python ./main.py -p 'exp_15.yml'
+\ No newline at end of file
++# python ./main.py -p 'exp_15.yml'
++
++python ./main.py -p 'exp_16_a.yml'
++python ./main.py -p 'exp_16_b.yml'
++python ./main.py -p 'exp_16_c.yml'
++python ./main.py -p 'exp_16_d.yml'
++python ./main.py -p 'exp_16_e.yml'
++python ./main.py 'test_16.yml'
+\ No newline at end of file
+diff --git a/transformers/best_policy.json b/transformers/best_policy.json
+index 1361497..8552ead 100644
+--- a/transformers/best_policy.json
++++ b/transformers/best_policy.json
+@@ -1,88 +1,4 @@
+ [
+-  [
+-    [
+-      [
+-        "InvertImg",
+-        {
+-          "p": 0.5
+-        }
+-      ],
+-      [
+-        "RandomBrightness",
+-        {
+-          "limit": 0.16444521996278905,
+-          "p": 0.25
+-        }
+-      ]
+-    ],
+-    [
+-      [
+-        "Blur",
+-        {
+-          "blur_limit": 4,
+-          "p": 0.0
+-        }
+-      ],
+-      [
+-        "Rotate",
+-        {
+-          "limit": 17,
+-          "p": 0.25
+-        }
+-      ]
+-    ],
+-    [
+-      [
+-        "GridDistortion",
+-        {
+-          "num_steps": 3,
+-          "distort_limit": 0.28705736270218707,
+-          "p": 0.0
+-        }
+-      ],
+-      [
+-        "Rotate",
+-        {
+-          "limit": 7,
+-          "p": 0.0
+-        }
+-      ]
+-    ],
+-    [
+-      [
+-        "Rotate",
+-        {
+-          "limit": 40,
+-          "p": 0.0
+-        }
+-      ],
+-      [
+-        "InvertImg",
+-        {
+-          "p": 0.75
+-        }
+-      ]
+-    ],
+-    [
+-      [
+-        "RandomGamma",
+-        {
+-          "gamma_limit": [
+-            72,
+-            128
+-          ],
+-          "p": 0.25
+-        }
+-      ],
+-      [
+-        "MotionBlur",
+-        {
+-          "blur_limit": 3,
+-          "p": 0.0
+-        }
+-      ]
+-    ]
+-  ],
+   [
+     [
+       [
+@@ -264,6 +180,97 @@
+       ]
+     ]
+   ],
++  [
++    [
++      [
++        "MotionBlur",
++        {
++          "blur_limit": 3,
++          "p": 0.5
++        }
++      ],
++      [
++        "ShiftScaleRotate",
++        {
++          "shift_limit": 0.06148464144527799,
++          "scale_limit": 0.0,
++          "rotate_limit": 0,
++          "p": 0.25
++        }
++      ]
++    ],
++    [
++      [
++        "MotionBlur",
++        {
++          "blur_limit": 5,
++          "p": 0.25
++        }
++      ],
++      [
++        "GridDistortion",
++        {
++          "num_steps": 4,
++          "distort_limit": 0.27091780647728625,
++          "p": 0.0
++        }
++      ]
++    ],
++    [
++      [
++        "RandomGamma",
++        {
++          "gamma_limit": [
++            79,
++            118
++          ],
++          "p": 0.0
++        }
++      ],
++      [
++        "Blur",
++        {
++          "blur_limit": 4,
++          "p": 0.0
++        }
++      ]
++    ],
++    [
++      [
++        "RandomBrightness",
++        {
++          "limit": 0.21154968767871296,
++          "p": 0.0
++        }
++      ],
++      [
++        "GridDistortion",
++        {
++          "num_steps": 3,
++          "distort_limit": 0.2601783109847845,
++          "p": 0.5
++        }
++      ]
++    ],
++    [
++      [
++        "RandomBrightness",
++        {
++          "limit": 0.1214401471013084,
++          "p": 0.5
++        }
++      ],
++      [
++        "ElasticTransform",
++        {
++          "alpha": 1,
++          "sigma": 30,
++          "alpha_affine": 46,
++          "p": 0.25
++        }
++      ]
++    ]
++  ],
+   [
+     [
+       [
+@@ -441,4 +448,4 @@
+       ]
+     ]
+   ]
+-]
+\ No newline at end of file
++]
+diff --git a/wandb/debug.log b/wandb/debug.log
+index 896f4d2..a3494b1 100644
+Binary files a/wandb/debug.log and b/wandb/debug.log differ

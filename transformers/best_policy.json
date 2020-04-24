@@ -2,90 +2,6 @@
   [
     [
       [
-        "InvertImg",
-        {
-          "p": 0.5
-        }
-      ],
-      [
-        "RandomBrightness",
-        {
-          "limit": 0.16444521996278905,
-          "p": 0.25
-        }
-      ]
-    ],
-    [
-      [
-        "Blur",
-        {
-          "blur_limit": 4,
-          "p": 0.0
-        }
-      ],
-      [
-        "Rotate",
-        {
-          "limit": 17,
-          "p": 0.25
-        }
-      ]
-    ],
-    [
-      [
-        "GridDistortion",
-        {
-          "num_steps": 3,
-          "distort_limit": 0.28705736270218707,
-          "p": 0.0
-        }
-      ],
-      [
-        "Rotate",
-        {
-          "limit": 7,
-          "p": 0.0
-        }
-      ]
-    ],
-    [
-      [
-        "Rotate",
-        {
-          "limit": 40,
-          "p": 0.0
-        }
-      ],
-      [
-        "InvertImg",
-        {
-          "p": 0.75
-        }
-      ]
-    ],
-    [
-      [
-        "RandomGamma",
-        {
-          "gamma_limit": [
-            72,
-            128
-          ],
-          "p": 0.25
-        }
-      ],
-      [
-        "MotionBlur",
-        {
-          "blur_limit": 3,
-          "p": 0.0
-        }
-      ]
-    ]
-  ],
-  [
-    [
-      [
         "GridDistortion",
         {
           "num_steps": 5,
@@ -259,6 +175,97 @@
         {
           "num_steps": 3,
           "distort_limit": 0.23367235529535352,
+          "p": 0.25
+        }
+      ]
+    ]
+  ],
+  [
+    [
+      [
+        "MotionBlur",
+        {
+          "blur_limit": 3,
+          "p": 0.5
+        }
+      ],
+      [
+        "ShiftScaleRotate",
+        {
+          "shift_limit": 0.06148464144527799,
+          "scale_limit": 0.0,
+          "rotate_limit": 0,
+          "p": 0.25
+        }
+      ]
+    ],
+    [
+      [
+        "MotionBlur",
+        {
+          "blur_limit": 5,
+          "p": 0.25
+        }
+      ],
+      [
+        "GridDistortion",
+        {
+          "num_steps": 4,
+          "distort_limit": 0.27091780647728625,
+          "p": 0.0
+        }
+      ]
+    ],
+    [
+      [
+        "RandomGamma",
+        {
+          "gamma_limit": [
+            79,
+            118
+          ],
+          "p": 0.0
+        }
+      ],
+      [
+        "Blur",
+        {
+          "blur_limit": 4,
+          "p": 0.0
+        }
+      ]
+    ],
+    [
+      [
+        "RandomBrightness",
+        {
+          "limit": 0.21154968767871296,
+          "p": 0.0
+        }
+      ],
+      [
+        "GridDistortion",
+        {
+          "num_steps": 3,
+          "distort_limit": 0.2601783109847845,
+          "p": 0.5
+        }
+      ]
+    ],
+    [
+      [
+        "RandomBrightness",
+        {
+          "limit": 0.1214401471013084,
+          "p": 0.5
+        }
+      ],
+      [
+        "ElasticTransform",
+        {
+          "alpha": 1,
+          "sigma": 30,
+          "alpha_affine": 46,
           "p": 0.25
         }
       ]

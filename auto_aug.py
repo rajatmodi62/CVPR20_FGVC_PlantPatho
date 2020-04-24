@@ -15,7 +15,7 @@ def search(config, device):
     cprint("[ Getting baseline policy ]", type="info2")
     # get a baseline score with no augmentations
     best_loss, best_roc = train(config, device, policy=None)
-    writer.write(-1, best_roc)
+    writer.write(0, best_roc)
     cprint("[ Baseline score: " + str(best_roc) + " ]", type="success")
 
     policies = []
@@ -40,5 +40,8 @@ def search(config, device):
 
         # save policy list
         writer.freeze_policies(policies)
+
+        # save score vs iteration
+        writer.write(i + 1, best_roc)
 
         cprint("[ Policy Score: " + str(best_roc) + " ]", type="success")

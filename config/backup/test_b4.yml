@@ -1,0 +1,22 @@
+mode: test
+test_dataset: 
+  name: fgvc7
+  resize_dims: 320
+ensemble: True
+num_classes: 4
+experiment_list:
+  - experiment:
+      path: b4_13a
+      weight_type: best_val_roc
+  - experiment:
+      path: b4_13b
+      weight_type: best_val_roc
+  - experiment:
+      path: b4_13c
+      weight_type: best_val_roc
+  - experiment:
+      path: b4_13d
+      weight_type: best_val_roc
+  - experiment:
+      path: b4_13e
+      weight_type: best_val_roc
