@@ -1,0 +1,23 @@
+mode: test
+seed: 32
+test_dataset: 
+  name: fgvc7
+  resize_dims: 320
+ensemble: True
+num_classes: 4
+experiment_list:
+  - experiment:
+      path: exp_19_a
+      weight_type: best_val_roc
+  - experiment:
+      path: exp_19_b
+      weight_type: best_val_roc
+  - experiment:
+      path: exp_19_c
+      weight_type: best_val_roc
+  - experiment:
+      path: exp_19_d
+      weight_type: best_val_roc
+  - experiment:
+      path: exp_19_e
+      weight_type: best_val_roc

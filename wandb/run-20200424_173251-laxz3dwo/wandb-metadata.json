@@ -1,0 +1,29 @@
+{
+    "root": "/home/humble_d/Projects/data_science/CVPR2020-FGVC7",
+    "program": "./main.py",
+    "git": {
+        "remote": "https://github.com/AakashMallik/CVPR2020-FGVC7.git",
+        "commit": "398d8f3da129195660e4a0c763f2646e2fd9f255"
+    },
+    "email": "aakashs.mallik.cse15@itbhu.ac.in",
+    "codePath": "main.py",
+    "startedAt": "2020-04-24T17:32:51.329671",
+    "host": "coldboot",
+    "username": "humble_d",
+    "executable": "/usr/bin/python",
+    "os": "Linux-5.3.8-arch1-1-x86_64-with-arch",
+    "python": "3.7.4",
+    "gpu": "GeForce RTX 2060 SUPER",
+    "gpu_count": 1,
+    "cpu_count": 12,
+    "args": [
+        "-p",
+        "exp_18_a.yml"
+    ],
+    "state": "finished",
+    "jobType": null,
+    "mode": "run",
+    "project": "plantpatho-2020",
+    "heartbeatAt": "2020-04-24T18:55:11.641452",
+    "exitcode": 0
+}

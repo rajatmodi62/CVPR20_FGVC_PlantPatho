@@ -13,8 +13,8 @@ def search(config, device):
     writer = Writer()
 
     cprint("[ Getting baseline policy ]", type="info2")
-    # get a baseline score with no augmentations
-    best_loss, best_roc = train(config, device, policy=None)
+    # get a baseline score with no augmentations (passing empty policy array)
+    best_loss, best_roc = train(config, device, policy=[])
     writer.write(0, best_roc)
     cprint("[ Baseline score: " + str(best_roc) + " ]", type="success")
 

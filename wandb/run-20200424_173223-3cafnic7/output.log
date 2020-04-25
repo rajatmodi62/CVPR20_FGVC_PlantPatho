@@ -1,0 +1,30 @@
+[38;2;0;191;255m[ Setting up project on W&B ](B[m
+[ Dataset : fgvc7 < train / 0 > ]
+[ Transformer :  320x320 | Policy  ]
+[ Dataset : fgvc7 < val / 0 > ]
+[ Transformer :  320x320 | RGB-Norm  ]
+[ Model : Efficientnet B4 ]
+[ Tuning type :  fine-tuning  ]
+[ Prediction type :  classification  ]
+[ Optimiser : AdamW ]
+[ Scheduler : CosineAnnealingLR ]
+[ Loss: Arcface Loss ]
+Progress:   0%|                                                                                                                                            | [ETA:?] [Batch:0/61 Epoch:0/50]Progress:   0%|                                                                                                                                            | [ETA:?] [Batch:1/61 Epoch:1/50]
+Traceback (most recent call last):
+  File "./main.py", line 40, in <module>
+    train( config, device )
+  File "/home/humble_d/Projects/data_science/CVPR2020-FGVC7/train.py", line 132, in train
+    output = model.forward(input)
+  File "/home/humble_d/Projects/data_science/CVPR2020-FGVC7/models/efficientnet.py", line 210, in forward
+    x = self.extract_features(inputs)
+  File "/home/humble_d/Projects/data_science/CVPR2020-FGVC7/models/efficientnet.py", line 199, in extract_features
+    x = block(x, drop_connect_rate=drop_connect_rate)
+  File "/home/humble_d/.local/lib/python3.7/site-packages/torch/nn/modules/module.py", line 532, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/humble_d/Projects/data_science/CVPR2020-FGVC7/models/efficientnet.py", line 87, in forward
+    x = self._swish(self._bn1(self._depthwise_conv(x)))
+  File "/home/humble_d/.local/lib/python3.7/site-packages/torch/nn/modules/module.py", line 532, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/humble_d/Projects/data_science/CVPR2020-FGVC7/models/utils.py", line 144, in forward
+    x = F.conv2d(x, self.weight, self.bias, self.stride, self.padding, self.dilation, self.groups)
+RuntimeError: CUDA out of memory. Tried to allocate 50.00 MiB (GPU 0; 7.79 GiB total capacity; 6.53 GiB already allocated; 20.06 MiB free; 6.64 GiB reserved in total by PyTorch)

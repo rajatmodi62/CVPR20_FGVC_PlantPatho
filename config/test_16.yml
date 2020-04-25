@@ -1,5 +1,5 @@
 mode: test
-seed: 128
+seed: 32
 test_dataset: 
   name: fgvc7
   resize_dims: 320

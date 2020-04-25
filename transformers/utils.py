@@ -113,7 +113,7 @@ class PolicyTransformer:
         ])
 
         self.aug_list = []
-        if self.policy:
+        if isinstance(self.policy, list):
             for sub_policy in policy:
                 op_1, params_1 = sub_policy[0]
                 op_2, params_2 = sub_policy[1]
@@ -143,7 +143,7 @@ class PolicyTransformer:
                 exit()
 
     def __call__(self, original_image):
-        modified_image = None
+        modified_image = original_image
 
         if len(self.aug_list) > 0:
             aug = random.choice(self.aug_list)
@@ -155,9 +155,13 @@ class PolicyTransformer:
         return modified_image
 
     def __str__(self):
-        if self.policy:
-            string = str(self.height) + "x" + str(self.width) + \
+        string = None
+        if isinstance(self.policy, list):
+            if len(self.aug_list) > 0: 
+                string = str(self.height) + "x" + str(self.width) + \
                 " | " + "Policy (Search Mode)"
+            else:
+                string = str(self.height) + "x" + str(self.width) + " | " + "RGB-Norm" 
         else:
             string = str(self.height) + "x" + \
                 str(self.width) + " | " + "Policy"

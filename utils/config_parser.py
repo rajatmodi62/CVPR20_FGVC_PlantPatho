@@ -31,6 +31,8 @@ def hydrate_config(config):
                 exit()
             if 'fold' not in config['train_dataset'].keys():
                 config['train_dataset']['fold'] = None
+            if 'transform' not in config['train_dataset'].keys():
+                config['train_dataset']['transform'] = None
 
         # dataset (val)
         if 'val_dataset' not in config.keys():
@@ -42,6 +44,8 @@ def hydrate_config(config):
                 exit()
             if 'fold' not in config['val_dataset'].keys():
                 config['val_dataset']['fold'] = None
+            if 'transform' not in config['val_dataset'].keys():
+                config['val_dataset']['transform'] = None
 
         # model
         if 'model' not in config.keys():
