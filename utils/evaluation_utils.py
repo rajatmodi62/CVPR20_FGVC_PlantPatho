@@ -62,7 +62,7 @@ class EvaluationHelper:
                 index=False
             )
 
-    def ensemble(self, test_csv_path):
+    def ensemble(self, test_csv_path, type = "softmax"):
         cprint("[ Ensembling results ]", type="success")
 
         self.ensemble_list = torch.stack(self.ensemble_list, dim=2)
@@ -76,15 +76,19 @@ class EvaluationHelper:
             exit()
 
         # Voting logic
-        self.results = torch.sum(self.ensemble_list, dim=2)
-        self.results = torch.softmax(self.results, dim=1)
-
-        # hard thresholding
-        # OHV_target = torch.zeros(self.results.size()).to(
-        #     self.results.get_device())
-        # OHV_target[range(self.results.size()[0]),
-        #            torch.argmax(self.results, dim=1)] = 1
-        # self.results = OHV_target
+        if type == "softmax":
+            self.results = torch.sum(self.ensemble_list, dim=2)
+            self.results = torch.softmax(self.results, dim=1)
+        elif type == "thresholding":
+            self.results = torch.mean(self.ensemble_list, dim=2)
+            OHV_target = torch.zeros(self.results.size()).to(
+                self.results.get_device())
+            OHV_target[range(self.results.size()[0]),
+                       torch.argmax(self.results, dim=1)] = 1
+            self.results = OHV_target
+        elif type == "mean":
+            self.results = torch.mean(self.ensemble_list, dim=2)
+        
 
         result_path = path.join(
             'results', self.experiment_name, 'ensembled.csv')

@@ -1,5 +1,5 @@
 # Dummy
-python ./main.py -a "train_dummy_1.yml"
+# python ./main.py -a "train_dummy_1.yml"
 # python ./main.py "train_dummy_2.yml"
 
 # python ./main.py "test_dummy.yml"
@@ -79,3 +79,25 @@ python ./main.py -a "train_dummy_1.yml"
 # python ./main.py -p 'exp_19_d.yml'
 # python ./main.py -p 'exp_19_e.yml'
 # python ./main.py 'test_19.yml'
+
+# python ./main.py -p 'exp_20_a.yml'
+# python ./main.py -p 'exp_20_b.yml'
+# python ./main.py -p 'exp_20_c.yml'
+# python ./main.py -p 'exp_20_d.yml'
+# python ./main.py -p 'exp_20_e.yml'
+# python ./main.py -p 'exp_20_f.yml'
+# python ./main.py -p 'exp_20_g.yml'
+# python ./main.py -p 'exp_20_h.yml'
+# python ./main.py -p 'exp_20_i.yml'
+
+# python ./main.py -p 'exp_21.yml'
+# python ./main.py 'test_21.yml'
+
+# python ./main.py -p 'exp_22_a.yml'
+# python ./main.py -p 'exp_22_b.yml'
+# python ./main.py 'test_22.yml'
+
+# python ./main.py -p 'exp_23_a.yml'
+# python ./main.py -p 'exp_23_b.yml'
+# python ./main.py -p 'exp_23_c.yml'
+python ./main.py "test_23_ms.yml"

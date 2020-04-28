@@ -81,7 +81,8 @@ def eval(config, device):
 
     if config['ensemble']:
         evaluation_helper.ensemble(
-            test_dataset.get_csv_path()
+            test_dataset.get_csv_path(),
+            type="softmax"
         )
 
     # ===================================================================================

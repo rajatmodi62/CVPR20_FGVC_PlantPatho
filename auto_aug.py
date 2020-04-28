@@ -6,7 +6,7 @@ from utils.print_util import cprint
 TOP_POLICY_CNT = 5
 SUB_POLICY_CNT = 5
 OPERATIONS_PER_SUB = 2
-AUG_SEARCH_LOOP = 25
+AUG_SEARCH_LOOP = 10
 
 
 def search(config, device):

@@ -1,0 +1,33 @@
+mode: train
+seed: 1024
+validation_frequency: 2
+epochs: 30
+batch_size: 42
+num_classes: 4
+train_dataset: 
+  name: fgvc7
+  fold: 4
+  resize_dims: 320
+  transform: policy
+val_dataset: 
+  name: fgvc7
+  fold: 4
+  resize_dims: 320
+model: 
+  name: resnet34
+  pred_type: classification
+  tuning_type: fine-tuning
+  hyper_params:
+    batch_norm_momentum: 0.99
+optimiser: 
+  name: AdamW
+  hyper_params:
+    learning_rate: 0.0005
+scheduler:
+  name: CosineAnnealingLR
+  hyper_params:
+    T_max: 50
+    eta_min: 0.00000001
+    last_epoch: -1
+loss_function: 
+  name: arcface-loss

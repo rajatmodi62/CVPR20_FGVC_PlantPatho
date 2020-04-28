@@ -1,0 +1,41 @@
+mode: test
+seed: 1024
+test_dataset: 
+  name: fgvc7
+  resize_dims: 320
+ensemble: True
+num_classes: 4
+experiment_list:
+  - experiment:
+      path: exp_23_a
+      weight_type: best_val_roc
+  - experiment:
+      path: exp_23_a_d1
+      weight_type: best_val_roc
+      resize_dims: 128
+  - experiment:
+      path: exp_23_a_u1
+      weight_type: best_val_roc
+      resize_dims: 512
+  - experiment:
+      path: exp_23_b
+      weight_type: best_val_roc
+  - experiment:
+      path: exp_23_b_d1
+      weight_type: best_val_roc
+      resize_dims: 128
+  - experiment:
+      path: exp_23_b_u1
+      weight_type: best_val_roc
+      resize_dims: 512
+  - experiment:
+      path: exp_23_c
+      weight_type: best_val_roc
+  - experiment:
+      path: exp_23_c_d1
+      weight_type: best_val_roc
+      resize_dims: 128
+  - experiment:
+      path: exp_23_c_u1
+      weight_type: best_val_roc
+      resize_dims: 512

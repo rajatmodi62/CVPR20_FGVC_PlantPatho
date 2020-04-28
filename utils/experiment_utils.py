@@ -151,7 +151,7 @@ class ExperimentHelper:
                 self.progress_loss = False
 
             # storing roc for check
-            if self.best_val_roc < val_roc:
+            if self.best_val_roc <= val_roc:
                 self.best_val_roc = val_roc
                 self.progress_roc = True
             else:
@@ -177,4 +177,4 @@ class ExperimentHelper:
 
     def publish_intermediate(self, results):
         # wandb
-        publish_intermediate(results)
+        publish_intermediate(results, self.best_val_loss, self.best_val_roc)

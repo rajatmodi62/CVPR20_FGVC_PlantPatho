@@ -1,0 +1,47 @@
+wandb_version: 1
+
+_wandb:
+  desc: null
+  value:
+    cli_version: 0.8.32
+    code_path: code/main.py
+    framework: torch
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    python_version: 3.7.4
+batch_size:
+  desc: null
+  value: 42
+best_kaggle_metric:
+  desc: null
+  value: 0.9876787846936916
+best_val_loss:
+  desc: null
+  value: 0.5517624020576477
+epochs:
+  desc: null
+  value: 30
+experiment_name:
+  desc: null
+  value: exp_22_b
+learning_rate:
+  desc: null
+  value: 0.0005
+loss_function:
+  desc: null
+  value: arcface-loss
+model:
+  desc: null
+  value: resnet34
+optimiser:
+  desc: null
+  value: AdamW
+prediction_type:
+  desc: null
+  value: classification
+resize_dims:
+  desc: null
+  value: 320
+seed:
+  desc: null
+  value: 1024

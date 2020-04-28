@@ -38,7 +38,25 @@ class ModelFactory():
 
         if model_name == 'efficientnet-b4':
             print("[ Model : Efficientnet B4 ]")
-            model = EfficientNet.from_pretrained(model_name='efficientnet-b4')
+            model = EfficientNet.from_pretrained(
+                model_name='efficientnet-b4', advprop=True)
+            if tuning_type == 'feature-extraction':
+                for param in model.parameters():
+                    param.requires_grad = False
+            num_ftrs = model._fc.in_features
+            model._fc = nn.Sequential(
+                # nn.Linear(num_ftrs, num_classes),
+                # nn.Sigmoid(),
+                nn.Linear(num_ftrs, adjusted_num_classes)
+            )
+
+            if hyper_params is not None:
+                model._bn_mom = hyper_params['batch_norm_momentum']
+
+        if model_name == 'efficientnet-b5':
+            print("[ Model : Efficientnet B5 ]")
+            model = EfficientNet.from_pretrained(
+                model_name='efficientnet-b5', advprop=True)
             if tuning_type == 'feature-extraction':
                 for param in model.parameters():
                     param.requires_grad = False
@@ -65,7 +83,8 @@ class ModelFactory():
 
         if model_name == 'resnet34':
             print("[ Model : Resnet 34 ]")
-            model = pretrainedmodels.__dict__['resnet34'](pretrained='imagenet')
+            model = pretrainedmodels.__dict__[
+                'resnet34'](pretrained='imagenet')
 
             model.avgpool = nn.AdaptiveAvgPool2d(1)
             in_features = model.last_linear.in_features
@@ -80,7 +99,7 @@ class ModelFactory():
         if pre_trained_path:
             print("[ Weight type : ", weight_type, " ]")
             weight_path = 'weights_loss.pth'
-            if weight_type == 'best_roc_loss':
+            if weight_type == 'best_val_roc':
                 weight_path = 'weights_roc.pth'
             weight_path = path.join(
                 'results', pre_trained_path, weight_path)

@@ -1,0 +1,215 @@
+diff --git a/README.md b/README.md
+index 416433d..1cc3c8b 100644
+--- a/README.md
++++ b/README.md
+@@ -68,12 +68,21 @@ The backbones we are looking forward to explore are:
+     - [x] Stratified k fold
+ - [x] Models
+     - [x] Efficientnet B7
++    - [x] Efficientnet B4
++    - [x] Resnet 34
++    - [x] Densenet 161
+ - [x] Loss
+     - [x] Cross Entropy Loss
+     - [x] Focal loss
+-    - [x] Mean ROC AUC loss ( Kaggle )
++    - [x] ArcFace loss
++    - [ ] Mean ROC AUC loss ( Kaggle )
+ - [x] Optimizer
+     - [x] RMS prop with Efficient net params
++    - [X] Adam
++    - [x] AdamW
++- [X] Scheduler
++    - [X] CosineAnelingLR
++    - [X] StepLR
+ 
+ ---
+ 
+@@ -134,10 +143,12 @@ train_dataset:
+   name:
+   fold: ( optional )
+   resize_dims:
++  transform: (optional, uses default if not specified)
+ val_dataset: 
+   name:
+   fold: ( optional )
+   resize_dims:
++  transform: (optional, uses default if not specified)
+ model: 
+   name:
+   pred_type: regression/classification/mixed
+@@ -184,6 +195,26 @@ experiment_list:
+       weight_type: ( optional key to pick the type of weight - best_val_loss/best_val_roc )
+ ```
+ 
++## How to use
++#### 1. Using it for train/test
++simply modify the run.sh with the required commands:  
++```
++python main.py "train_dummy_1.yml"
++python main.py "test_dummy.yml"
++```  
++  
++#### 2. Using it for augmentation search
++Add ```-a``` flag with the training config that you are going to use for scoring:
++```
++python main.py -a 'train_dummy_1.yml'
++```  
++  
++#### 3. Publish mode while training
++Add ```-p``` flag with the training config to publish results to W&B and Telegram:
++```
++python main.py -p 'train_dummy_1.yml'
++```
++
+ ## Lib dependency
+ ```bash
+ pip install --user torch wandb torchvision catalyst albumentations pandas scikit-image tqdm scikit-learn pyyaml blessed pyzmq pretrainedmodels tensorboard
+diff --git a/models/__pycache__/utils.cpython-37.pyc b/models/__pycache__/utils.cpython-37.pyc
+index 43faa6e..30c7f9c 100644
+Binary files a/models/__pycache__/utils.cpython-37.pyc and b/models/__pycache__/utils.cpython-37.pyc differ
+diff --git a/models/model_factory.py b/models/model_factory.py
+index ad5d5c9..00cabbb 100644
+--- a/models/model_factory.py
++++ b/models/model_factory.py
+@@ -52,6 +52,23 @@ class ModelFactory():
+             if hyper_params is not None:
+                 model._bn_mom = hyper_params['batch_norm_momentum']
+ 
++        if model_name == 'efficientnet-b5':
++            print("[ Model : Efficientnet B5 ]")
++            model = EfficientNet.from_pretrained(
++                model_name='efficientnet-b5', advprop=True)
++            if tuning_type == 'feature-extraction':
++                for param in model.parameters():
++                    param.requires_grad = False
++            num_ftrs = model._fc.in_features
++            model._fc = nn.Sequential(
++                # nn.Linear(num_ftrs, num_classes),
++                # nn.Sigmoid(),
++                nn.Linear(num_ftrs, adjusted_num_classes)
++            )
++
++            if hyper_params is not None:
++                model._bn_mom = hyper_params['batch_norm_momentum']
++
+         if model_name == 'densenet-161':
+             print("[ Model : Densenet 161 ]")
+             model = models.densenet161(pretrained=True)
+@@ -65,7 +82,8 @@ class ModelFactory():
+ 
+         if model_name == 'resnet34':
+             print("[ Model : Resnet 34 ]")
+-            model = pretrainedmodels.__dict__['resnet34'](pretrained='imagenet')
++            model = pretrainedmodels.__dict__[
++                'resnet34'](pretrained='imagenet')
+ 
+             model.avgpool = nn.AdaptiveAvgPool2d(1)
+             in_features = model.last_linear.in_features
+diff --git a/models/utils.py b/models/utils.py
+index 36a3ddf..04dd42d 100644
+--- a/models/utils.py
++++ b/models/utils.py
+@@ -299,6 +299,11 @@ def load_pretrained_weights(model, model_name, load_fc=True, advprop=False):
+     state_dict = None
+     if model_name == 'efficientnet-b7':
+         state_dict = torch.load("pretrained_weights/efficientnet_b7.pth")
++    elif model_name == 'efficientnet-b5':
++        if advprop:
++            state_dict = torch.load("pretrained_weights/adv_efficientnet_b5.pth")
++        else:
++            state_dict = torch.load("pretrained_weights/efficientnet_b5.pth")
+     elif model_name == 'efficientnet-b4':
+         state_dict = torch.load("pretrained_weights/efficientnet_b4.pth")
+     
+diff --git a/run.sh b/run.sh
+index a270ff0..05a07ee 100755
+--- a/run.sh
++++ b/run.sh
+@@ -1,5 +1,5 @@
+ # Dummy
+-python ./main.py -a "train_dummy_1.yml"
++# python ./main.py -a "train_dummy_1.yml"
+ # python ./main.py "train_dummy_2.yml"
+ 
+ # python ./main.py "test_dummy.yml"
+@@ -78,4 +78,16 @@ python ./main.py -a "train_dummy_1.yml"
+ # python ./main.py -p 'exp_19_c.yml'
+ # python ./main.py -p 'exp_19_d.yml'
+ # python ./main.py -p 'exp_19_e.yml'
+-# python ./main.py 'test_19.yml'
+\ No newline at end of file
++# python ./main.py 'test_19.yml'
++
++# python ./main.py -p 'exp_20_a.yml'
++# python ./main.py -p 'exp_20_b.yml'
++# python ./main.py -p 'exp_20_c.yml'
++# python ./main.py -p 'exp_20_d.yml'
++# python ./main.py -p 'exp_20_e.yml'
++# python ./main.py -p 'exp_20_f.yml'
++# python ./main.py -p 'exp_20_g.yml'
++# python ./main.py -p 'exp_20_h.yml'
++# python ./main.py -p 'exp_20_i.yml'
++
++python ./main.py -p 'exp_21.yml'
+\ No newline at end of file
+diff --git a/transformers/utils.py b/transformers/utils.py
+index 6ebd804..2cb876b 100644
+--- a/transformers/utils.py
++++ b/transformers/utils.py
+@@ -127,7 +127,8 @@ class PolicyTransformer:
+             if path.exists('transformers/best_policy.json'):
+                 with open('transformers/best_policy.json') as f:
+                     policy_array = json.load(f)
+-                    sub_policy_pool = chain.from_iterable(policy_array)
++                    # sub_policy_pool = chain.from_iterable(policy_array)
++                    sub_policy_pool = policy_array[-1]
+ 
+                     for sub_policy in sub_policy_pool:
+                         op_1, params_1 = sub_policy[0]
+diff --git a/utils/__pycache__/experiment_utils.cpython-37.pyc b/utils/__pycache__/experiment_utils.cpython-37.pyc
+index 0afb739..7a753f0 100644
+Binary files a/utils/__pycache__/experiment_utils.cpython-37.pyc and b/utils/__pycache__/experiment_utils.cpython-37.pyc differ
+diff --git a/utils/experiment_utils.py b/utils/experiment_utils.py
+index 1addb5d..ee0ba93 100644
+--- a/utils/experiment_utils.py
++++ b/utils/experiment_utils.py
+@@ -177,4 +177,4 @@ class ExperimentHelper:
+ 
+     def publish_intermediate(self, results):
+         # wandb
+-        publish_intermediate(results)
++        publish_intermediate(results, self.best_val_loss, self.best_val_roc)
+diff --git a/utils/wandb_update.py b/utils/wandb_update.py
+index b21facb..49cbc19 100644
+--- a/utils/wandb_update.py
++++ b/utils/wandb_update.py
+@@ -1,9 +1,10 @@
+ import wandb
+ from utils.print_util import cprint
+ 
++
+ def wandb_init(config):
+     wandb.init(project="plantpatho-2020")
+-    
++
+     wandb.config.experiment_name = config['experiment_name']
+     wandb.config.seed = config['seed']
+     wandb.config.model = config['model']['name']
+@@ -19,5 +20,12 @@ def wandb_init(config):
+     return True
+ 
+ 
+-def publish_intermediate(results):
++def publish_intermediate(results, best_val_loss, best_val_roc):
++    wandb.config.update(
++        {
++            "best_val_loss": best_val_loss,
++            "best_val_roc": best_val_roc
++        }, 
++        allow_val_change=True
++    )
+     return wandb.log(results)
+diff --git a/wandb/debug.log b/wandb/debug.log
+index f9f3c11..43b8f76 100644
+Binary files a/wandb/debug.log and b/wandb/debug.log differ

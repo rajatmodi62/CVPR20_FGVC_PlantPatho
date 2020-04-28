@@ -299,8 +299,16 @@ def load_pretrained_weights(model, model_name, load_fc=True, advprop=False):
     state_dict = None
     if model_name == 'efficientnet-b7':
         state_dict = torch.load("pretrained_weights/efficientnet_b7.pth")
+    elif model_name == 'efficientnet-b5':
+        if advprop:
+            state_dict = torch.load("pretrained_weights/adv_efficientnet_b5.pth")
+        else:
+            state_dict = torch.load("pretrained_weights/efficientnet_b5.pth")
     elif model_name == 'efficientnet-b4':
-        state_dict = torch.load("pretrained_weights/efficientnet_b4.pth")
+        if advprop:
+            state_dict = torch.load("pretrained_weights/adv_efficientnet_b4.pth")
+        else:
+            state_dict = torch.load("pretrained_weights/efficientnet_b4.pth")
     
     if load_fc:
         model.load_state_dict(state_dict)

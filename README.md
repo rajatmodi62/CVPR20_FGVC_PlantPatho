@@ -68,12 +68,21 @@ The backbones we are looking forward to explore are:
     - [x] Stratified k fold
 - [x] Models
     - [x] Efficientnet B7
+    - [x] Efficientnet B4
+    - [x] Resnet 34
+    - [x] Densenet 161
 - [x] Loss
     - [x] Cross Entropy Loss
     - [x] Focal loss
-    - [x] Mean ROC AUC loss ( Kaggle )
+    - [x] ArcFace loss
+    - [ ] Mean ROC AUC loss ( Kaggle )
 - [x] Optimizer
     - [x] RMS prop with Efficient net params
+    - [X] Adam
+    - [x] AdamW
+- [X] Scheduler
+    - [X] CosineAnelingLR
+    - [X] StepLR
 
 ---
 
@@ -134,10 +143,12 @@ train_dataset:
   name:
   fold: ( optional )
   resize_dims:
+  transform: (optional, uses default if not specified)
 val_dataset: 
   name:
   fold: ( optional )
   resize_dims:
+  transform: (optional, uses default if not specified)
 model: 
   name:
   pred_type: regression/classification/mixed
@@ -182,6 +193,26 @@ experiment_list:
   - experiment:
       path: ( valid train config file name )
       weight_type: ( optional key to pick the type of weight - best_val_loss/best_val_roc )
+```
+
+## How to use
+#### 1. Using it for train/test
+simply modify the run.sh with the required commands:  
+```
+python main.py "train_dummy_1.yml"
+python main.py "test_dummy.yml"
+```  
+  
+#### 2. Using it for augmentation search
+Add ```-a``` flag with the training config that you are going to use for scoring:
+```
+python main.py -a 'train_dummy_1.yml'
+```  
+  
+#### 3. Publish mode while training
+Add ```-p``` flag with the training config to publish results to W&B and Telegram:
+```
+python main.py -p 'train_dummy_1.yml'
 ```
 
 ## Lib dependency

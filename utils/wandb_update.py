@@ -1,9 +1,10 @@
 import wandb
 from utils.print_util import cprint
 
+
 def wandb_init(config):
     wandb.init(project="plantpatho-2020")
-    
+
     wandb.config.experiment_name = config['experiment_name']
     wandb.config.seed = config['seed']
     wandb.config.model = config['model']['name']
@@ -19,5 +20,12 @@ def wandb_init(config):
     return True
 
 
-def publish_intermediate(results):
+def publish_intermediate(results, best_val_loss, best_kaggle_metric):
+    wandb.config.update(
+        {
+            "best_val_loss": best_val_loss,
+            "best_kaggle_metric": best_kaggle_metric
+        }, 
+        allow_val_change=True
+    )
     return wandb.log(results)
