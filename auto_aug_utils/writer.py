@@ -40,6 +40,6 @@ class Writer:
         filtered = [policy[1] for policy in policies]
 
         # save it to json
-        with open('transformers/best_policy.json', 'w+') as fid:
+        with open('transformer/best_policy.json', 'w+') as fid:
             json_str = json.dumps(filtered, indent=2)
             fid.write(json_str)

@@ -3,8 +3,8 @@ from torch.utils.data import DataLoader
 from os import (path, environ)
 from tqdm import (trange, tqdm)
 from dataset.dataset_factory import DatasetFactory
-from transformers.transformer_factory import TransformerFactory
-from models.model_factory import ModelFactory
+from transformer.transformer_factory import TransformerFactory
+from model.model_factory import ModelFactory
 from utils.evaluation_utils import EvaluationHelper
 from utils.print_util import cprint
 

@@ -1,8 +1,8 @@
 # Dummy
-# python ./main.py -a "train_dummy_1.yml"
+python ./main.py -a "train_dummy_1.yml"
 # python ./main.py "train_dummy_2.yml"
 
-# python ./main.py "test_dummy.yml"
+python ./main.py "test_dummy.yml"
 
 # RM - experiment request
 # python ./main.py "train_b7_128.yml"
@@ -100,4 +100,9 @@
 # python ./main.py -p 'exp_23_a.yml'
 # python ./main.py -p 'exp_23_b.yml'
 # python ./main.py -p 'exp_23_c.yml'
-python ./main.py "test_23_ms.yml"
+# python ./main.py "test_23_ms.yml"
+
+# python ./main.py -p 'exp_24_a.yml'
+# python ./main.py -p 'exp_24_b.yml'
+# python ./main.py -p 'exp_24_c.yml'
+# python ./main.py 'test_24.yml'

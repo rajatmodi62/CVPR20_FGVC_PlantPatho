@@ -119,7 +119,7 @@ The backbones we are looking forward to explore are:
 |-- results
 |-- runs
 |-- schedulers
-|-- transformers
+|-- transformer
 `-- utils
 
 ```
@@ -217,7 +217,7 @@ python main.py -p 'train_dummy_1.yml'
 
 ## Lib dependency
 ```bash
-pip install --user torch wandb torchvision catalyst albumentations pandas scikit-image tqdm scikit-learn pyyaml blessed pyzmq pretrainedmodels tensorboard
+pip install --user torch wandb torchvision catalyst albumentations pandas scikit-image tqdm scikit-learn pyyaml blessed pyzmq pretrainedmodels tensorboard transformers
 ```
 
 ## Utility commands

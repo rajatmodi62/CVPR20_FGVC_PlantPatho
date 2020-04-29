@@ -14,7 +14,7 @@ def search(config, device):
 
     cprint("[ Getting baseline policy ]", type="info2")
     # get a baseline score with no augmentations (passing empty policy array)
-    best_loss, best_roc = train(config, device, policy=[])
+    best_loss, best_roc = train(config, device, auto_aug_policy=[])
     writer.write(0, best_roc)
     cprint("[ Baseline score: " + str(best_roc) + " ]", type="success")
 
@@ -29,7 +29,7 @@ def search(config, device):
         policy = sample_policy(SUB_POLICY_CNT, OPERATIONS_PER_SUB)
 
         # get best score using the policy
-        best_loss, best_roc = train(config, device, policy=policy)
+        best_loss, best_roc = train(config, device, auto_aug_policy=policy)
 
         # add policy to list
         policies.append((best_roc, policy))

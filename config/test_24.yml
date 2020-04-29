@@ -1,0 +1,17 @@
+mode: test
+seed: 1024
+test_dataset: 
+  name: fgvc7
+  resize_dims: 456
+ensemble: True
+num_classes: 4
+experiment_list:
+  - experiment:
+      path: exp_24_a
+      weight_type: best_val_loss
+  - experiment:
+      path: exp_24_b
+      weight_type: best_val_loss
+  - experiment:
+      path: exp_24_c
+      weight_type: best_val_loss

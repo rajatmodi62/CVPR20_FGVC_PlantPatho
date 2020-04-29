@@ -1,22 +1,19 @@
 import torch
 from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import DataLoader
-from os import (path, environ)
-from losses.loss_factory import LossFactory
-from optimisers.optimiser_factory import OptimiserFactory
-from schedulers.scheduler_factory import SchedulerFactory
+from os import path
+from loss.loss_factory import LossFactory
+from optimiser.optimiser_factory import OptimiserFactory
+from scheduler.scheduler_factory import SchedulerFactory
 from dataset.dataset_factory import DatasetFactory
-from models.model_factory import ModelFactory
-from transformers.transformer_factory import TransformerFactory
+from model.model_factory import ModelFactory
+from transformer.transformer_factory import TransformerFactory
 from utils.experiment_utils import ExperimentHelper
 from utils.custom_bar import CustomBar
 from utils.seed_backend import seed_all
 
-# stop tensorboard warnings
-environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-
-def train(config, device, policy=None):
+def train(config, device, auto_aug_policy=None):
     # Create pipeline objects
     dataset_factory = DatasetFactory(org_data_dir='./data')
 
@@ -54,7 +51,7 @@ def train(config, device, policy=None):
             height=config['train_dataset']['resize_dims'],
             width=config['train_dataset']['resize_dims'],
             pipe_type=config['train_dataset']['transform'],
-            policy=policy
+            auto_aug_policy=auto_aug_policy
         ),
         config['train_dataset']['fold']
     )
@@ -91,7 +88,9 @@ def train(config, device, policy=None):
         scheduler = scheduler_factory.get_scheduler(
             optimiser,
             config['scheduler']['name'],
-            config['scheduler']['hyper_params']
+            config['scheduler']['hyper_params'],
+            epochs=config["epochs"],
+            iter_per_epoch=len(training_dataset)/config["batch_size"]
         )
 
     loss_function = loss_factory.get_loss_function(

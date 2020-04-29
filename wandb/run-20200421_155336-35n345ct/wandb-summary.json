@@ -1,1 +1,0 @@
-{"_step": 9, "val_loss": 1.0841290950775146, "_timestamp": 1587487330.6736467, "val_acc": 0.9258241758241759, "_runtime": 2915.2573935985565, "val_kaggle_metric": 0.9722199809994492, "epoch": 50, "train_kaggle_metric": 1.0, "train_acc": 1.0, "train_loss": 1.43214788295154e-06}

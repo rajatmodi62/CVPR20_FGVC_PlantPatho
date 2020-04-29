@@ -1,4 +1,10 @@
 import os
+
+# stop tensorboard warnings
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+# stop W&B logs
+os.environ['WANDB_SILENT'] = 'true'
+
 import argparse
 from train import train
 from eval import eval
@@ -6,9 +12,6 @@ from auto_aug import search
 from utils.config_parser import get_config_data
 from utils.check_gpu import get_training_device
 from utils.seed_backend import seed_all
-
-# set environment keys
-os.environ['WANDB_SILENT'] = 'true'
 
 # Parse arguments
 parser = argparse.ArgumentParser()
