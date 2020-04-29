@@ -4,7 +4,7 @@ from shutil import rmtree
 import pandas as pd
 import math
 from utils.regression_utils import covert_to_classification
-from utils.kaggle_metric import (roc_auc_score_generator)
+from utils.kaggle_metric import (kaggle_metric_generator)
 from utils.print_util import cprint
 from utils.telegram_update import publish_msg
 from utils.wandb_update import (wandb_init, publish_intermediate)
@@ -36,15 +36,15 @@ class ExperimentHelper:
 
         self.experiment_name = experiment_name
         self.best_val_loss = float('inf')
-        self.best_val_roc = 0
+        self.best_val_kaggle_metric = 0
         self.result = {
             "config": experiment_name,
             "best_val_loss": self.best_val_loss,
             "val_acc": None,
             "train_loss": None,
             "train_acc": None,
-            "val_roc": None,
-            "train_roc": None,
+            "val_kaggle_metric": None,
+            "train_kaggle_metric": None,
             "epoch": None
         }
         self.intermediate_result = {
@@ -52,14 +52,14 @@ class ExperimentHelper:
             "val_acc": None,
             "train_loss": None,
             "train_acc": None,
-            "val_roc": None,
-            "train_roc": None,
+            "val_kaggle_metric": None,
+            "train_kaggle_metric": None,
             "epoch": None
         }
         self.tb_writer = tb_writer
         self.freq = freq
         self.progress_loss = False
-        self.progress_roc = False
+        self.progress_kaggle_metric = False
 
     def should_trigger(self, i):
         if self.freq:
@@ -67,7 +67,7 @@ class ExperimentHelper:
         return True
 
     def is_progress(self):
-        return (self.progress_loss or self.progress_roc)
+        return (self.progress_loss or self.progress_kaggle_metric)
 
     def save_checkpoint(self, state_dict):
         if self.progress_loss:
@@ -75,10 +75,10 @@ class ExperimentHelper:
                 state_dict,
                 path.join('results', self.experiment_name, 'weights_loss.pth')
             )
-        if self.progress_roc:
+        if self.progress_kaggle_metric:
             torch.save(
                 state_dict,
-                path.join('results', self.experiment_name, 'weights_roc.pth')
+                path.join('results', self.experiment_name, 'weights_kaggle_metric.pth')
             )
 
     def validate(self, pred_type, num_classes, loss_fn, val_output_list, val_target_list, train_output_list, train_target_list, epoch):
@@ -103,13 +103,13 @@ class ExperimentHelper:
             train_acc = accuracy_generator(
                 train_output_list, train_target_list)
 
-            val_roc = roc_auc_score_generator(val_output_list, val_target_list)
-            train_roc = roc_auc_score_generator(
+            val_kaggle_metric = kaggle_metric_generator(val_output_list, val_target_list)
+            train_kaggle_metric = kaggle_metric_generator(
                 train_output_list, train_target_list)
 
             # saving results to csv
             df = pd.DataFrame(
-                [[epoch + 1, val_loss, train_loss, val_acc, train_acc, val_roc, train_roc]])
+                [[epoch + 1, val_loss, train_loss, val_acc, train_acc, val_kaggle_metric, train_kaggle_metric]])
             result_path = path.join(
                 'results', self.experiment_name, 'result.csv')
 
@@ -117,7 +117,7 @@ class ExperimentHelper:
                 df.to_csv(
                     result_path,
                     header=[
-                        "epoch", "Loss ( Val )", "Loss ( Train )", "Accuracy ( Val )", "Accuracy ( Train )", "ROC ( Val )", "ROC ( Train )"
+                        "epoch", "Loss ( Val )", "Loss ( Train )", "Accuracy ( Val )", "Accuracy ( Train )", "Kaggle Metric ( Val )", "Kaggle Metric ( Train )"
                     ],
                     index=False
                 )
@@ -131,8 +131,8 @@ class ExperimentHelper:
                 self.tb_writer.add_scalar('Accuracy/Train', train_acc, epoch)
                 self.tb_writer.add_scalar(
                     'Accuracy/Validation', val_acc, epoch)
-                self.tb_writer.add_scalar('ROC/Train', train_roc, epoch)
-                self.tb_writer.add_scalar('ROC/Validation', val_roc, epoch)
+                self.tb_writer.add_scalar('Kaggle Metric/Train', train_kaggle_metric, epoch)
+                self.tb_writer.add_scalar('Kaggle Metric/Validation', val_kaggle_metric, epoch)
 
             # storing loss for check
             if self.best_val_loss >= val_loss:
@@ -144,18 +144,18 @@ class ExperimentHelper:
                 self.result["val_acc"] = val_acc
                 self.result["train_loss"] = train_loss
                 self.result["train_acc"] = train_acc
-                self.result["val_kaggle_metric"] = val_roc
-                self.result["train_kaggle_metric"] = train_roc
+                self.result["val_kaggle_metric"] = val_kaggle_metric
+                self.result["train_kaggle_metric"] = train_kaggle_metric
                 self.result["epoch"] = epoch
             else:
                 self.progress_loss = False
 
-            # storing roc for check
-            if self.best_val_roc <= val_roc:
-                self.best_val_roc = val_roc
-                self.progress_roc = True
+            # storing Kaggle Metric for check
+            if self.best_val_kaggle_metric <= val_kaggle_metric:
+                self.best_val_kaggle_metric = val_kaggle_metric
+                self.progress_kaggle_metric = True
             else:
-                self.progress_roc = False
+                self.progress_kaggle_metric = False
 
             # publish intermediate
             self.publish and self.publish_intermediate({
@@ -163,12 +163,12 @@ class ExperimentHelper:
                 "val_acc": val_acc,
                 "train_loss": train_loss,
                 "train_acc": train_acc,
-                "val_kaggle_metric": val_roc,
-                "train_kaggle_metric": train_roc,
+                "val_kaggle_metric": val_kaggle_metric,
+                "train_kaggle_metric": train_kaggle_metric,
                 "epoch": epoch + 1
             })
 
-            return (val_loss, train_loss, val_acc, train_acc, val_roc, train_roc)
+            return (val_loss, train_loss, val_acc, train_acc, val_kaggle_metric, train_kaggle_metric)
 
     def publish_final(self, config):
         # telegram
@@ -177,4 +177,4 @@ class ExperimentHelper:
 
     def publish_intermediate(self, results):
         # wandb
-        publish_intermediate(results, self.best_val_loss, self.best_val_roc)
+        publish_intermediate(results, self.best_val_loss, self.best_val_kaggle_metric)

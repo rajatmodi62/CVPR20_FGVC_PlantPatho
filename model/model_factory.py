@@ -100,8 +100,8 @@ class ModelFactory():
         if pre_trained_path:
             print("[ Weight type : ", weight_type, " ]")
             weight_path = 'weights_loss.pth'
-            if weight_type == 'best_val_roc':
-                weight_path = 'weights_roc.pth'
+            if weight_type == 'best_val_kaggle_metric':
+                weight_path = 'weights_kaggle_metric.pth'
             weight_path = path.join(
                 'results', pre_trained_path, weight_path)
 

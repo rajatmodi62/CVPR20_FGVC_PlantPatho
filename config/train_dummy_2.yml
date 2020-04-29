@@ -7,17 +7,19 @@ train_dataset:
   name: fgvc7
   fold: 4
   resize_dims: 512
+  transform: policy
 val_dataset: 
   name: fgvc7
   fold: 4
   resize_dims: 512
 model: 
   name: efficientnet-b7
-  pred_type: regression
+  pred_type: classification
   tuning_type: feature-extraction
   hyper_params:
     batch_norm_momentum:  0.99
   pre_trained_path: train_dummy_1
+  weight_type: best_val_kaggle_metric
 optimiser: 
   name: AdamW
   hyper_params:
@@ -29,4 +31,4 @@ scheduler:
     eta_min: 0.0000001
     last_epoch: -1
 loss_function: 
-  name: mean-squared-error-loss
+  name: cross-entropy-loss

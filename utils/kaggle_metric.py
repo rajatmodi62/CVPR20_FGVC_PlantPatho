@@ -8,7 +8,7 @@ def post_process_output(output):
     return softmax(output, dim=1)
 
 
-def roc_auc_score_generator(output_list, target_list):
+def kaggle_metric_generator(output_list, target_list):
     # implementation based on problem statement
     output_list = post_process_output(output_list)
 

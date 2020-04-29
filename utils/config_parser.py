@@ -77,8 +77,8 @@ def hydrate_config(config):
             else:
                 if 'weight_type' not in config['model'].keys():
                     config['model']['weight_type'] = "best_val_loss"
-                elif config['model']['weight_type'] not in ['best_val_loss', 'best_val_roc']:
-                    print("[ Weight type can be one of best_val_loss/best_val_roc ]")
+                elif config['model']['weight_type'] not in ['best_val_loss', 'best_val_kaggle_metric']:
+                    print("[ Weight type can be one of best_val_loss/best_val_kaggle_metric ]")
                     exit()
 
         # optimiser
@@ -145,9 +145,9 @@ def hydrate_config(config):
                         exit()
                     if 'weight_type' not in experiment['experiment'].keys():
                         experiment['experiment']['weight_type'] = "best_val_loss"
-                    elif experiment['experiment']['weight_type'] not in ['best_val_loss', 'best_val_roc']:
+                    elif experiment['experiment']['weight_type'] not in ['best_val_loss', 'best_val_kaggle_metric']:
                         print(
-                            "[ Weight type can be one of best_val_loss/best_val_roc ]")
+                            "[ Weight type can be one of best_val_loss/best_val_kaggle_metric ]")
                         exit()
                     if 'resize_dims' not in experiment['experiment'].keys():
                         experiment['experiment']['resize_dims'] = config['test_dataset']['resize_dims']

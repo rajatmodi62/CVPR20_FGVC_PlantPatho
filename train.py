@@ -198,6 +198,6 @@ def train(config, device, auto_aug_policy=None):
     # publish final
     config['publish'] and experiment_helper.publish_final(config)
 
-    return (experiment_helper.best_val_loss, experiment_helper.best_val_roc)
+    return (experiment_helper.best_val_loss, experiment_helper.best_val_kaggle_metric)
 
     # ===============================================================================

@@ -1,6 +1,6 @@
 # Dummy
-python ./main.py -a "train_dummy_1.yml"
-# python ./main.py "train_dummy_2.yml"
+python ./main.py "train_dummy_1.yml"
+python ./main.py "train_dummy_2.yml"
 
 python ./main.py "test_dummy.yml"
 
