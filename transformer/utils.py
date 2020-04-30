@@ -10,11 +10,14 @@ from albumentations import (
     Blur,
     MotionBlur,
     InvertImg,
+    IAASharpen,
     GridDistortion,
+    IAAPiecewiseAffine,
     Rotate,
     RandomScale,
     ShiftScaleRotate,
     ElasticTransform,
+    IAAEmboss,
     OneOf,
     Compose)
 from albumentations.pytorch import ToTensor
@@ -36,41 +39,6 @@ op_obj = {
     'GridDistortion': GridDistortion,
     'ElasticTransform': ElasticTransform
 }
-
-
-class ImageTransformer:
-    def __init__(self, height, width):
-        self.height = height
-        self.width = width
-
-    def __call__(self, original_image):
-        self.augmentation_pipeline = Compose(
-            [
-                Resize(self.height, self.width, p=1.0),
-                Normalize(mean=[0.485, 0.456, 0.406],
-                          std=[0.229, 0.224, 0.225]),
-                OneOf(
-                    [
-                        HorizontalFlip(),
-                        VerticalFlip()
-                    ],
-                    p=0.5
-                ),
-                RandomRotate90(p=0.5),
-                ToTensor()
-            ]
-        )
-
-        augmented = self.augmentation_pipeline(
-            image=original_image
-        )
-        image = augmented["image"]
-        return image
-
-    def __str__(self):
-        string = str(self.height) + "x" + str(self.width) + \
-            " | " + "RGB-Norm" + " | " + "Rand-Rotate90"
-        return string
 
 
 class DefaultTransformer:
@@ -96,6 +64,48 @@ class DefaultTransformer:
 
     def __str__(self):
         string = str(self.height) + "x" + str(self.width) + " | " + "RGB-Norm"
+        return string
+
+
+class ImageTransformer:
+    def __init__(self, height, width):
+        self.height = height
+        self.width = width
+
+    def __call__(self, original_image):
+        self.augmentation_pipeline = Compose(
+            [
+                HorizontalFlip(p=0.5),
+                VerticalFlip(p=0.5),
+                ShiftScaleRotate(rotate_limit=25.0, p=0.7),
+                OneOf([IAAEmboss(p=1),
+                       IAASharpen(p=1),
+                       Blur(p=1)], p=0.5),
+                IAAPiecewiseAffine(p=0.5),
+                Resize(self.height, self.width, p=1.0),
+                Normalize(mean=[0.485, 0.456, 0.406],
+                          std=[0.229, 0.224, 0.225]),
+                OneOf(
+                    [
+                        HorizontalFlip(),
+                        VerticalFlip()
+                    ],
+                    p=0.5
+                ),
+                RandomRotate90(p=0.5),
+                ToTensor()
+            ]
+        )
+
+        augmented = self.augmentation_pipeline(
+            image=original_image
+        )
+        image = augmented["image"]
+        return image
+
+    def __str__(self):
+        string = str(self.height) + "x" + str(self.width) + \
+            " | " + "RGB-Norm" + " | " + "Rand-Rotate90"
         return string
 
 
@@ -157,11 +167,12 @@ class PolicyTransformer:
     def __str__(self):
         string = None
         if isinstance(self.auto_aug_policy, list):
-            if len(self.aug_list) > 0: 
+            if len(self.aug_list) > 0:
                 string = str(self.height) + "x" + str(self.width) + \
-                " | " + "Policy (Search Mode)"
+                    " | " + "Policy (Search Mode)"
             else:
-                string = str(self.height) + "x" + str(self.width) + " | " + "RGB-Norm" 
+                string = str(self.height) + "x" + \
+                    str(self.width) + " | " + "RGB-Norm"
         else:
             string = str(self.height) + "x" + \
                 str(self.width) + " | " + "Policy"

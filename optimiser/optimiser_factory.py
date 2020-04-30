@@ -27,4 +27,5 @@ class OptimiserFactory:
             return AdamW(
                 params,
                 lr=hyper_params['learning_rate']
+                weight_decay=hyper_params['weight_decay']
             )
