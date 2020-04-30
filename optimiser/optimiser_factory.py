@@ -26,6 +26,6 @@ class OptimiserFactory:
             print("[ Optimiser : AdamW ]")
             return AdamW(
                 params,
-                lr=hyper_params['learning_rate']
+                lr=hyper_params['learning_rate'],
                 weight_decay=hyper_params['weight_decay']
             )
