@@ -56,7 +56,7 @@ class ModelFactory():
         if model_name == 'efficientnet-b5':
             print("[ Model : Efficientnet B5 ]")
             model = EfficientNet.from_pretrained(
-                model_name='efficientnet-b5', advprop=True)
+                model_name='efficientnet-b5', advprop=False)
             if tuning_type == 'feature-extraction':
                 for param in model.parameters():
                     param.requires_grad = False
