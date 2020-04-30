@@ -6,6 +6,9 @@ test_dataset:
 ensemble: False
 num_classes: 4
 experiment_list:
+  # - experiment:
+  #     path: exp_26_a
+  #     weight_type: best_val_kaggle_metric
   - experiment:
-      path: exp_26_a
+      path: exp_26_b
       weight_type: best_val_kaggle_metric
