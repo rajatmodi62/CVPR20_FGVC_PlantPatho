@@ -49,9 +49,12 @@ class DefaultTransformer:
     def __call__(self, original_image):
         self.augmentation_pipeline = Compose(
             [
-                Resize(self.height, self.width, p=1.0),
-                Normalize(mean=[0.485, 0.456, 0.406],
-                          std=[0.229, 0.224, 0.225]),
+                Resize(self.height, self.width, always_apply=True),
+                Normalize(
+                    mean=[0.485, 0.456, 0.406],
+                    std=[0.229, 0.224, 0.225],
+                    always_apply=True
+                ),
                 ToTensor()
             ]
         )
@@ -82,17 +85,12 @@ class ImageTransformer:
                        IAASharpen(p=1),
                        Blur(p=1)], p=0.5),
                 IAAPiecewiseAffine(p=0.5),
-                Resize(self.height, self.width, p=1.0),
-                Normalize(mean=[0.485, 0.456, 0.406],
-                          std=[0.229, 0.224, 0.225]),
-                OneOf(
-                    [
-                        HorizontalFlip(),
-                        VerticalFlip()
-                    ],
-                    p=0.5
+                Resize(self.height, self.width, always_apply=True),
+                Normalize(
+                    mean=[0.485, 0.456, 0.406],
+                    std=[0.229, 0.224, 0.225],
+                    always_apply=True
                 ),
-                RandomRotate90(p=0.5),
                 ToTensor()
             ]
         )
