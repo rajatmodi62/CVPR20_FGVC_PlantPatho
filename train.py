@@ -116,7 +116,7 @@ def train(config, device, auto_aug_policy=None):
 
             train_output_list = []
             train_target_list = []
-            for batch_ndx, sample in enumerate(DataLoader(training_dataset, batch_size=batch_size)):
+            for batch_ndx, sample in enumerate(DataLoader(training_dataset, batch_size=batch_size, num_workers=2, shuffle=True)):
                 # progress bar update
                 progress_bar.update_batch_info(batch_ndx)
 
@@ -161,7 +161,7 @@ def train(config, device, auto_aug_policy=None):
             if experiment_helper.should_trigger(i):
                 val_output_list = []
                 val_target_list = []
-                for batch_ndx, sample in enumerate(DataLoader(validation_dataset, batch_size=1)):
+                for batch_ndx, sample in enumerate(DataLoader(validation_dataset, batch_size=batch_size, num_workers=2)):
                     with torch.no_grad():
                         input, target = sample
                         input = input.to(device)
@@ -190,10 +190,9 @@ def train(config, device, auto_aug_policy=None):
                 )
 
                 # save model weights
-                if experiment_helper.is_progress():
-                    experiment_helper.save_checkpoint(
-                        model.state_dict()
-                    )
+                experiment_helper.save_checkpoint(
+                    model.state_dict()
+                )
 
     # publish final
     config['publish'] and experiment_helper.publish_final(config)

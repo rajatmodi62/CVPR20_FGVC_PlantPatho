@@ -66,9 +66,6 @@ class ExperimentHelper:
             return (i + 1) % self.freq == 0
         return True
 
-    def is_progress(self):
-        return (self.progress_loss or self.progress_kaggle_metric)
-
     def save_checkpoint(self, state_dict):
         if self.progress_loss:
             torch.save(
@@ -78,8 +75,13 @@ class ExperimentHelper:
         if self.progress_kaggle_metric:
             torch.save(
                 state_dict,
-                path.join('results', self.experiment_name, 'weights_kaggle_metric.pth')
+                path.join('results', self.experiment_name,
+                          'weights_kaggle_metric.pth')
             )
+        torch.save(
+            state_dict,
+            path.join('results', self.experiment_name, 'weights.pth')
+        )
 
     def validate(self, pred_type, num_classes, loss_fn, val_output_list, val_target_list, train_output_list, train_target_list, epoch):
         with torch.no_grad():
@@ -103,7 +105,8 @@ class ExperimentHelper:
             train_acc = accuracy_generator(
                 train_output_list, train_target_list)
 
-            val_kaggle_metric = kaggle_metric_generator(val_output_list, val_target_list)
+            val_kaggle_metric = kaggle_metric_generator(
+                val_output_list, val_target_list)
             train_kaggle_metric = kaggle_metric_generator(
                 train_output_list, train_target_list)
 
@@ -131,8 +134,10 @@ class ExperimentHelper:
                 self.tb_writer.add_scalar('Accuracy/Train', train_acc, epoch)
                 self.tb_writer.add_scalar(
                     'Accuracy/Validation', val_acc, epoch)
-                self.tb_writer.add_scalar('Kaggle Metric/Train', train_kaggle_metric, epoch)
-                self.tb_writer.add_scalar('Kaggle Metric/Validation', val_kaggle_metric, epoch)
+                self.tb_writer.add_scalar(
+                    'Kaggle Metric/Train', train_kaggle_metric, epoch)
+                self.tb_writer.add_scalar(
+                    'Kaggle Metric/Validation', val_kaggle_metric, epoch)
 
             # storing loss for check
             if self.best_val_loss >= val_loss:
@@ -177,4 +182,5 @@ class ExperimentHelper:
 
     def publish_intermediate(self, results):
         # wandb
-        publish_intermediate(results, self.best_val_loss, self.best_val_kaggle_metric)
+        publish_intermediate(results, self.best_val_loss,
+                             self.best_val_kaggle_metric)

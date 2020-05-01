@@ -66,7 +66,7 @@ class DefaultTransformer:
         return image
 
     def __str__(self):
-        string = str(self.height) + "x" + str(self.width) + " | " + "RGB-Norm"
+        string = str(self.height) + "x" + str(self.width) + " | " + "default"
         return string
 
 
@@ -78,6 +78,7 @@ class ImageTransformer:
     def __call__(self, original_image):
         self.augmentation_pipeline = Compose(
             [
+                Resize(600, 600, always_apply=True),
                 HorizontalFlip(p=0.5),
                 VerticalFlip(p=0.5),
                 ShiftScaleRotate(rotate_limit=25.0, p=0.7),
@@ -103,7 +104,7 @@ class ImageTransformer:
 
     def __str__(self):
         string = str(self.height) + "x" + str(self.width) + \
-            " | " + "RGB-Norm" + " | " + "Rand-Rotate90"
+            " | " + "image"
         return string
 
 

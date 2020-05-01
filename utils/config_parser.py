@@ -76,7 +76,7 @@ def hydrate_config(config):
                 config['model']['weight_type'] = None
             else:
                 if 'weight_type' not in config['model'].keys():
-                    config['model']['weight_type'] = "best_val_loss"
+                    config['model']['weight_type'] = None
                 elif config['model']['weight_type'] not in ['best_val_loss', 'best_val_kaggle_metric']:
                     print("[ Weight type can be one of best_val_loss/best_val_kaggle_metric ]")
                     exit()
@@ -144,7 +144,7 @@ def hydrate_config(config):
                         print('[ Experiment output path not mentioned ]')
                         exit()
                     if 'weight_type' not in experiment['experiment'].keys():
-                        experiment['experiment']['weight_type'] = "best_val_loss"
+                        experiment['experiment']['weight_type'] = None
                     elif experiment['experiment']['weight_type'] not in ['best_val_loss', 'best_val_kaggle_metric']:
                         print(
                             "[ Weight type can be one of best_val_loss/best_val_kaggle_metric ]")

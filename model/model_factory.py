@@ -98,10 +98,11 @@ class ModelFactory():
 
         # if model needs to resume from pretrained weights
         if pre_trained_path:
-            print("[ Weight type : ", weight_type, " ]")
-            weight_path = 'weights_loss.pth'
+            weight_path = 'weights.pth'
             if weight_type == 'best_val_kaggle_metric':
                 weight_path = 'weights_kaggle_metric.pth'
+            elif weight_type == 'best_val_loss':
+                weight_path = 'weights_loss.pth'
             weight_path = path.join(
                 'results', pre_trained_path, weight_path)
 
@@ -115,5 +116,7 @@ class ModelFactory():
             else:
                 print("[ Provided pretrained weight path is invalid ]")
                 exit()
+
+            print("[ Weight type : ", weight_type if weight_type else "Last Epoch", " ]")
 
         return model

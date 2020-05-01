@@ -57,7 +57,7 @@ def eval(config, device):
         model.eval()
 
         test_output_list = []
-        for batch_ndx, sample in enumerate(tqdm(DataLoader(test_dataset, batch_size=1), desc="Samples : ")):
+        for batch_ndx, sample in enumerate(tqdm(DataLoader(test_dataset, batch_size=8, num_workers=2), desc="Samples : ")):
             with torch.no_grad():
                 input = sample
                 input = input.to(device)
