@@ -25,8 +25,8 @@ class SchedulerFactory:
             print("[ Scheduler : Cosine Annealing LR with Warmup ]")
             scheduler = get_cosine_schedule_with_warmup(
                 optimiser,
-                num_warmup_steps=iter_per_epoch*5,
-                num_training_steps=epochs*iter_per_epoch
+                num_warmup_steps=iter_per_epoch * 5,
+                num_training_steps=iter_per_epoch * epochs
             )
 
         return scheduler

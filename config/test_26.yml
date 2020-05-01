@@ -14,3 +14,5 @@ experiment_list:
   #     weight_type: best_val_kaggle_metric
   - experiment:
       path: exp_26_d
+  - experiment:
+      path: exp_26_e

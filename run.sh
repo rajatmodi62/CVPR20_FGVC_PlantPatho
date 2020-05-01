@@ -115,5 +115,6 @@
 
 # python ./main.py -p 'exp_26_a.yml'
 # python ./main.py -p 'exp_26_b.yml'
-python ./main.py 'exp_26_c.yml'
+python ./main.py -p 'exp_26_d.yml'
+python ./main.py -p 'exp_26_e.yml'
 python ./main.py 'test_26.yml'
