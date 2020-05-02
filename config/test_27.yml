@@ -1,0 +1,18 @@
+mode: test
+seed: 512
+test_dataset: 
+  name: fgvc7
+  resize_dims: 545
+ensemble: True
+num_classes: 4
+experiment_list:
+  - experiment:
+      path: exp_27_a
+  - experiment:
+      path: exp_27_b
+  - experiment:
+      path: exp_27_c
+  - experiment:
+      path: exp_27_d
+  - experiment:
+      path: exp_27_e
