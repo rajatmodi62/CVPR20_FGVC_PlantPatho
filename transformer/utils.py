@@ -115,9 +115,10 @@ class PolicyTransformer:
         self.auto_aug_policy = auto_aug_policy
 
         self.base_augmentation_pipeline = Compose([
-            Resize(self.height, self.width, p=1.0),
+            Resize(self.height, self.width, always_apply=True),
             Normalize(mean=[0.485, 0.456, 0.406],
-                      std=[0.229, 0.224, 0.225]),
+                      std=[0.229, 0.224, 0.225],
+                      always_apply=True),
             ToTensor()
         ])
 
@@ -127,7 +128,7 @@ class PolicyTransformer:
                 op_1, params_1 = sub_policy[0]
                 op_2, params_2 = sub_policy[1]
                 aug = Compose([
-                    Resize(512, 512, p=1.0),
+                    Resize(512, 512, always_apply=True),
                     op_obj[op_1](**params_1),
                     op_obj[op_2](**params_2),
                 ])
@@ -142,7 +143,7 @@ class PolicyTransformer:
                         op_1, params_1 = sub_policy[0]
                         op_2, params_2 = sub_policy[1]
                         aug = Compose([
-                            # Resize(512, 512, p=1.0),
+                            Resize(700, 700, always_apply=True),
                             op_obj[op_1](**params_1),
                             op_obj[op_2](**params_2),
                         ])
@@ -168,11 +169,11 @@ class PolicyTransformer:
         if isinstance(self.auto_aug_policy, list):
             if len(self.aug_list) > 0:
                 string = str(self.height) + "x" + str(self.width) + \
-                    " | " + "Policy (Search Mode)"
+                    " | " + "policy (Search Mode)"
             else:
                 string = str(self.height) + "x" + \
-                    str(self.width) + " | " + "RGB-Norm"
+                    str(self.width) + " | " + "default"
         else:
             string = str(self.height) + "x" + \
-                str(self.width) + " | " + "Policy"
+                str(self.width) + " | " + "policy"
         return string

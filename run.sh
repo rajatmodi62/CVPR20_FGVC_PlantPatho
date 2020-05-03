@@ -119,9 +119,15 @@
 # python ./main.py -p 'exp_26_e.yml'
 # python ./main.py 'test_26.yml'
 
-python ./main.py -p 'exp_27_a.yml'
-python ./main.py -p 'exp_27_b.yml'
-python ./main.py -p 'exp_27_c.yml'
-python ./main.py -p 'exp_27_d.yml'
-python ./main.py -p 'exp_27_e.yml'
-python ./main.py 'test_27.yml'
+# python ./main.py -p 'exp_27_a.yml'
+# python ./main.py -p 'exp_27_b.yml'
+# python ./main.py -p 'exp_27_c.yml'
+# python ./main.py -p 'exp_27_d.yml'
+# python ./main.py -p 'exp_27_e.yml'
+# python ./main.py 'test_27.yml'
+
+python ./main.py -p 'exp_28_c.yml'
+python ./main.py 'test_28.yml'
+
+python ./main.py -p 'exp_29_a.yml'
+python ./main.py 'test_29.yml'
