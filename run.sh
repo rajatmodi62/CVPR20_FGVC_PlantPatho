@@ -126,8 +126,11 @@
 # python ./main.py -p 'exp_27_e.yml'
 # python ./main.py 'test_27.yml'
 
-python ./main.py -p 'exp_28_c.yml'
-python ./main.py 'test_28.yml'
+# python ./main.py -p 'exp_28_c.yml'
+# python ./main.py 'test_28.yml'
 
-python ./main.py -p 'exp_29_a.yml'
-python ./main.py 'test_29.yml'
+# python ./main.py -p 'exp_29_a.yml'
+# python ./main.py 'test_29.yml'
+
+python ./main.py -p 'exp_30.yml'
+python ./main.py 'test_30.yml'

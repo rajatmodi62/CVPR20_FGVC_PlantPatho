@@ -22,15 +22,21 @@ class ModelFactory():
 
         if model_name == 'efficientnet-b7':
             print("[ Model : Efficientnet B7 ]")
-            model = EfficientNet.from_pretrained(model_name='efficientnet-b7')
+            model = EfficientNet.from_pretrained(model_name='efficientnet-b7', advprop=True)
             if tuning_type == 'feature-extraction':
                 for param in model.parameters():
                     param.requires_grad = False
             num_ftrs = model._fc.in_features
+            # model._fc = nn.Sequential(
+            #     # nn.Linear(num_ftrs, num_classes),
+            #     # nn.Sigmoid(),
+            #     nn.Linear(num_ftrs, adjusted_num_classes)
+            # )
             model._fc = nn.Sequential(
-                # nn.Linear(num_ftrs, num_classes),
-                # nn.Sigmoid(),
-                nn.Linear(num_ftrs, adjusted_num_classes)
+                nn.Linear(num_ftrs, 1000, bias=True),
+                nn.ReLU(),
+                nn.Dropout(p=hyper_params['fc_drop_out']),
+                nn.Linear(1000, adjusted_num_classes, bias=True)
             )
 
             if hyper_params is not None:
