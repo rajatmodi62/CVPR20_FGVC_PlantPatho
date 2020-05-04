@@ -2,7 +2,7 @@ mode: test
 seed: 512
 test_dataset: 
   name: fgvc7
-  resize_dims: 600
+  resize_dims: 550
 ensemble: True
 num_classes: 4
 experiment_list:

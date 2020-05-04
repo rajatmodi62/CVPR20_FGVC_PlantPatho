@@ -2,23 +2,24 @@ mode: train
 seed: 1024
 validation_frequency: 2
 epochs: 50
-batch_size: 8
+batch_size: 4
 num_classes: 4
 train_dataset: 
   name: fgvc7
   fold: 2
-  resize_dims: 600
+  resize_dims: 550
   transform: policy
 val_dataset: 
   name: fgvc7
   fold: 2
-  resize_dims: 600
+  resize_dims: 550
 model: 
   name: efficientnet-b7
   pred_type: classification
   tuning_type: fine-tuning
   hyper_params:
     fc_drop_out: 0.4
+    batch_norm_momentum: 0.99
 optimiser: 
   name: AdamW
   hyper_params:
