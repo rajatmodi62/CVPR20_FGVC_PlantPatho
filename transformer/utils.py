@@ -78,7 +78,7 @@ class ImageTransformer:
     def __call__(self, original_image):
         self.augmentation_pipeline = Compose(
             [
-                Resize(700, 700, always_apply=True),
+                Resize(650, 650, always_apply=True),
                 HorizontalFlip(p=0.5),
                 VerticalFlip(p=0.5),
                 ShiftScaleRotate(rotate_limit=25.0, p=0.7),

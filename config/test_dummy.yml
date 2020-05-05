@@ -3,11 +3,13 @@ seed: 1024
 test_dataset: 
   name: fgvc7
   resize_dims: 224
+  # transform: image
+  tta: True
 ensemble: True
 num_classes: 4
 experiment_list:
   - experiment:
       path: train_dummy_1
-  - experiment:
-      path: train_dummy_2
-      weight_type: best_val_kaggle_metric
+  # - experiment:
+  #     path: train_dummy_2
+  #     weight_type: best_val_kaggle_metric

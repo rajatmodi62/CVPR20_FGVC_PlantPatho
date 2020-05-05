@@ -129,6 +129,10 @@ def hydrate_config(config):
             if 'name' not in config['test_dataset'].keys():
                 print('[ Test dataset name not mentioned ]')
                 exit()
+            if 'tta' not in config['test_dataset'].keys():
+                config['test_dataset']['tta'] = False
+            if 'transform' not in config['test_dataset'].keys():
+                config['test_dataset']['transform'] = None
 
         # model list
         if 'experiment_list' not in config.keys():
@@ -151,6 +155,10 @@ def hydrate_config(config):
                         exit()
                     if 'resize_dims' not in experiment['experiment'].keys():
                         experiment['experiment']['resize_dims'] = config['test_dataset']['resize_dims']
+                    if 'transform' not in experiment['experiment'].keys():
+                        experiment['experiment']['transform'] = config['test_dataset']['transform']
+                    if 'tta' not in experiment['experiment'].keys():
+                        experiment['experiment']['tta'] = config['test_dataset']['tta']
 
                     hydrate_secondary_config(
                         experiment['experiment']['path'],

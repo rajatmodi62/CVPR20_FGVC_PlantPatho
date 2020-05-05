@@ -29,7 +29,9 @@ class EvaluationHelper:
         self.is_ensemble = ensemble
         self.ensemble_list = []
 
-    def evaluate(self, pred_type, num_classes, experiment_path, test_csv_path, test_output):
+    def evaluate(self, pred_type, num_classes, experiment_path, test_csv_path, test_output, tta=False):
+        test_output = torch.mean(test_output, dim=2)
+        
         if pred_type == 'classification':
             test_output = post_process_output(test_output)
         elif pred_type == 'regression' or pred_type == 'mixed':

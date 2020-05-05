@@ -36,7 +36,8 @@ def eval(config, device):
             config['test_dataset']['name'],
             transformer_factory.get_transformer(
                 height=experiment_item['experiment']['resize_dims'],
-                width=experiment_item['experiment']['resize_dims']
+                width=experiment_item['experiment']['resize_dims'],
+                pipe_type=experiment_item['experiment']['transform']
             )
         )
 
@@ -57,16 +58,26 @@ def eval(config, device):
         model.eval()
 
         test_output_list = []
-        for batch_ndx, sample in enumerate(tqdm(DataLoader(test_dataset, batch_size=8, num_workers=2), desc="Samples : ")):
-            with torch.no_grad():
-                input = sample
-                input = input.to(device)
 
-                output = model.forward(input)
+        print("[ TTA : ", experiment_item['experiment']["tta"], " ]")
 
-                test_output_list.append(output)
+        for tta_idx in range( 5 if experiment_item['experiment']["tta"] else 1 ):
+            
+            intermediate_output_list = []
+            
+            for batch_ndx, sample in enumerate(tqdm(DataLoader(test_dataset, batch_size=8, num_workers=2), desc="Samples : ")):
+                with torch.no_grad():
+                    input = sample
+                    input = input.to(device)
 
-        test_output_list = torch.cat(test_output_list, dim=0)
+                    output = model.forward(input)
+
+                    intermediate_output_list.append(output)
+
+            intermediate_output_list = torch.cat(intermediate_output_list, dim=0)
+            test_output_list.append( intermediate_output_list )
+
+        test_output_list = torch.stack(test_output_list, dim=2)
 
         # use this list to write using a helper
         evaluation_helper.evaluate(
@@ -74,7 +85,8 @@ def eval(config, device):
             config['num_classes'],
             experiment_item['experiment']['path'],
             test_dataset.get_csv_path(),
-            test_output_list
+            test_output_list,
+            tta =  experiment_item['experiment']["tta"]
         )
 
         # ===============================================================================
