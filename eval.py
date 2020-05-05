@@ -59,12 +59,16 @@ def eval(config, device):
 
         test_output_list = []
 
-        print("[ TTA : ", experiment_item['experiment']["tta"], " ]")
+        experiment_item['experiment']["tta"] and cprint(
+            "[ TTA : ", str(experiment_item['experiment']["tta"]), " ]", type="success")
 
-        for tta_idx in range( 5 if experiment_item['experiment']["tta"] else 1 ):
-            
+        for tta_idx in range(5 if experiment_item['experiment']["tta"] else 1):
+
+            experiment_item['experiment']["tta"] and cprint(
+                "[ TTA index: ", str(tta_idx), " ]", type="info1")
+
             intermediate_output_list = []
-            
+
             for batch_ndx, sample in enumerate(tqdm(DataLoader(test_dataset, batch_size=8, num_workers=2), desc="Samples : ")):
                 with torch.no_grad():
                     input = sample
@@ -74,8 +78,9 @@ def eval(config, device):
 
                     intermediate_output_list.append(output)
 
-            intermediate_output_list = torch.cat(intermediate_output_list, dim=0)
-            test_output_list.append( intermediate_output_list )
+            intermediate_output_list = torch.cat(
+                intermediate_output_list, dim=0)
+            test_output_list.append(intermediate_output_list)
 
         test_output_list = torch.stack(test_output_list, dim=2)
 
@@ -86,7 +91,6 @@ def eval(config, device):
             experiment_item['experiment']['path'],
             test_dataset.get_csv_path(),
             test_output_list,
-            tta =  experiment_item['experiment']["tta"]
         )
 
         # ===============================================================================
