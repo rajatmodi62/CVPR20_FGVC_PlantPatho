@@ -1,5 +1,5 @@
 mode: train
-seed: 13
+seed: 1024
 validation_frequency: 2
 epochs: 30
 batch_size: 8
