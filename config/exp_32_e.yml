@@ -6,12 +6,12 @@ batch_size: 8
 num_classes: 4
 train_dataset: 
   name: fgvc7
-  fold: 4
+  fold: 2
   resize_dims: 545
   transform: image
 val_dataset: 
   name: fgvc7
-  fold: 4
+  fold: 2
   resize_dims: 545
 model: 
   name: efficientnet-b5

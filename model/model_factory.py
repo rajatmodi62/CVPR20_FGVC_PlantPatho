@@ -4,6 +4,7 @@ from os import path
 import pretrainedmodels
 import torchvision.models as models
 from model.efficientnet import EfficientNet
+from model.layer_utils import GeM
 
 
 class ModelFactory():
@@ -62,11 +63,15 @@ class ModelFactory():
         if model_name == 'efficientnet-b5':
             print("[ Model : Efficientnet B5 ]")
             model = EfficientNet.from_pretrained(
-                model_name='efficientnet-b5', advprop=False)
+                model_name='efficientnet-b5', advprop=True)
             if tuning_type == 'feature-extraction':
                 for param in model.parameters():
                     param.requires_grad = False
             num_ftrs = model._fc.in_features
+
+            # changing avg pooling to Generalized Mean Avg
+            model._avg_pooling = GeM()
+
             model._fc = nn.Sequential(
                 nn.Linear(num_ftrs, 1000, bias=True),
                 nn.ReLU(),
@@ -88,15 +93,32 @@ class ModelFactory():
                 nn.Linear(num_ftrs, adjusted_num_classes)
             )
 
-        if model_name == 'resnet34':
+        if model_name == 'resnet-34':
             print("[ Model : Resnet 34 ]")
             model = pretrainedmodels.__dict__[
                 'resnet34'](pretrained='imagenet')
-
+            if tuning_type == 'feature-extraction':
+                for param in model.parameters():
+                    param.requires_grad = False
             model.avgpool = nn.AdaptiveAvgPool2d(1)
-            in_features = model.last_linear.in_features
+            num_ftrs = model.last_linear.in_features
             model.last_linear = nn.Sequential(
-                nn.Linear(in_features, adjusted_num_classes)
+                nn.Linear(num_ftrs, adjusted_num_classes)
+            )
+
+        if model_name == 'se-resnet-152':
+            print("[ Model : SeResnet 152 ]")
+            model = pretrainedmodels.__dict__[
+                'se_resnet152'](pretrained='imagenet')
+            if tuning_type == 'feature-extraction':
+                for param in model.parameters():
+                    param.requires_grad = False
+            num_ftrs = model.last_linear.in_features
+            model._fc = nn.Sequential(
+                nn.Linear(num_ftrs, 1000, bias=True),
+                nn.ReLU(),
+                nn.Dropout(p=hyper_params['fc_drop_out']),
+                nn.Linear(1000, adjusted_num_classes, bias=True)
             )
 
         tuning_type and print("[ Tuning type : ", tuning_type, " ]")

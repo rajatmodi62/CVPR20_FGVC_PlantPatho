@@ -6,15 +6,15 @@ batch_size: 8
 num_classes: 4
 train_dataset: 
   name: fgvc7
-  fold: 3
+  fold: 2
   resize_dims: 545
   transform: image
 val_dataset: 
   name: fgvc7
-  fold: 3
+  fold: 2
   resize_dims: 545
 model: 
-  name: efficientnet-b5
+  name: se-resnet-152
   pred_type: classification
   tuning_type: fine-tuning
   hyper_params:
