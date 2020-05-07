@@ -1,0 +1,2 @@
+epoch,Loss ( Val ),Loss ( Train ),Accuracy ( Val ),Accuracy ( Train ),Kaggle Metric ( Val ),Kaggle Metric ( Train )
+1,1.0817172527313232,1.31192946434021,0.5796703296703297,0.3383665065202471,0.8241297324610826,0.5294218957138654

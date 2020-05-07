@@ -7,6 +7,7 @@ from transformer.transformer_factory import TransformerFactory
 from model.model_factory import ModelFactory
 from utils.evaluation_utils import EvaluationHelper
 from utils.print_util import cprint
+from utils.seed_backend import seed_all
 
 
 def eval(config, device):
@@ -28,6 +29,9 @@ def eval(config, device):
     for experiment_item in config['experiment_list']:
         cprint("[ Experiment : ", experiment_item['experiment']
                ['path'], " ]", type="info2")
+
+        # seed backend
+        seed_all(config['seed'])
 
         # ==================== Model testing / evaluation setup ========================
 

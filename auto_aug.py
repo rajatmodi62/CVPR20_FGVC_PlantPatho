@@ -2,6 +2,7 @@ from auto_aug_utils.utils import (sample_policy)
 from auto_aug_utils.writer import (Writer)
 from train import train
 from utils.print_util import cprint
+from utils.seed_backend import seed_all
 
 TOP_POLICY_CNT = 5
 SUB_POLICY_CNT = 5
@@ -10,6 +11,9 @@ AUG_SEARCH_LOOP = 10
 
 
 def search(config, device):
+    # seed backend
+    seed_all(config['seed'])
+
     writer = Writer()
 
     cprint("[ Getting baseline policy ]", type="info2")

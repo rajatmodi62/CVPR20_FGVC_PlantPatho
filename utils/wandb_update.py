@@ -16,6 +16,8 @@ def wandb_init(config):
     wandb.config.epochs = config["epochs"]
     wandb.config.batch_size = config["batch_size"]
 
+    wandb.save('./config/' + config['experiment_name'] + '.yml')
+
     cprint("[ Setting up project on W&B ]", type="info3")
     return True
 

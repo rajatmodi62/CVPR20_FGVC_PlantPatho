@@ -11,7 +11,6 @@ from eval import eval
 from auto_aug import search
 from utils.config_parser import get_config_data
 from utils.check_gpu import get_training_device
-from utils.seed_backend import seed_all
 
 # Parse arguments
 parser = argparse.ArgumentParser()
@@ -30,9 +29,6 @@ config = get_config_data(args.experiment_file, args.publish)
 
 # Get GPU / CPU device instance
 device = get_training_device()
-
-# seed backend
-seed_all(config['seed'])
 
 if config['mode'] == 'test':
     eval( config, device )

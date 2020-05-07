@@ -14,6 +14,9 @@ from utils.seed_backend import seed_all
 
 
 def train(config, device, auto_aug_policy=None):
+    # seed backend if not in augmentation search
+    (auto_aug_policy is None) and seed_all(config['seed'])
+
     # Create pipeline objects
     dataset_factory = DatasetFactory(org_data_dir='./data')
 
@@ -116,7 +119,7 @@ def train(config, device, auto_aug_policy=None):
 
             train_output_list = []
             train_target_list = []
-            for batch_ndx, sample in enumerate(DataLoader(training_dataset, batch_size=batch_size, num_workers=2, shuffle=True)):
+            for batch_ndx, sample in enumerate(DataLoader(training_dataset, batch_size=batch_size, num_workers=4, shuffle=True)):
                 # progress bar update
                 progress_bar.update_batch_info(batch_ndx)
 
@@ -161,7 +164,7 @@ def train(config, device, auto_aug_policy=None):
             if experiment_helper.should_trigger(i):
                 val_output_list = []
                 val_target_list = []
-                for batch_ndx, sample in enumerate(DataLoader(validation_dataset, batch_size=batch_size, num_workers=2)):
+                for batch_ndx, sample in enumerate(DataLoader(validation_dataset, batch_size=batch_size, num_workers=4)):
                     with torch.no_grad():
                         input, target = sample
                         input = input.to(device)

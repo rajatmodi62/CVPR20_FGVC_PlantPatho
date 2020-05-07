@@ -14,9 +14,9 @@ val_dataset:
   fold: 2
   resize_dims: 545
 model: 
-  name: se-resnet-152
+  name: efficientnet-b5
   pred_type: classification
-  tuning_type: feature-extraction
+  tuning_type: fine-tuning
   hyper_params:
     fc_drop_out: 0.5
 optimiser: 

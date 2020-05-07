@@ -14,7 +14,9 @@ experiment_list:
   #     path: exp_32_b
   # - experiment:
   #     path: exp_32_c
+  # - experiment:
+  #     path: exp_32_d
+  # - experiment:
+  #     path: exp_32_e
   - experiment:
-      path: exp_32_d
-  - experiment:
-      path: exp_32_e
+      path: exp_32_f
