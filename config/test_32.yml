@@ -5,7 +5,7 @@ test_dataset:
   resize_dims: 545
   transform: image
   tta: True
-ensemble: True
+ensemble: False
 num_classes: 4
 experiment_list:
   # - experiment:
@@ -16,7 +16,7 @@ experiment_list:
   #     path: exp_32_c
   # - experiment:
   #     path: exp_32_d
-  # - experiment:
-  #     path: exp_32_e
   - experiment:
-      path: exp_32_f
+      path: exp_32_e
+  # - experiment:
+  #     path: exp_32_f

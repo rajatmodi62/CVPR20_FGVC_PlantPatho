@@ -140,10 +140,10 @@
 # python ./main.py -p 'exp_32_c.yml'
 # python ./main.py -p 'exp_32_d.yml'
 # python ./main.py -p 'exp_32_e.yml'
-
-python ./main.py -p 'exp_33_a.yml'
-python ./main.py -p 'exp_33_b.yml'
-
-python ./main.py -p 'exp_32_f.yml'
+# python ./main.py -p 'exp_32_f.yml'
 python ./main.py 'test_32.yml'
+
+# python ./main.py -p 'exp_33_a.yml'
+# python ./main.py -p 'exp_33_b.yml'
+# python ./main.py -p 'test_33.yml'
 

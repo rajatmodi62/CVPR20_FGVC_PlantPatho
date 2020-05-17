@@ -7,7 +7,7 @@ from transformer.transformer_factory import TransformerFactory
 from model.model_factory import ModelFactory
 from utils.evaluation_utils import EvaluationHelper
 from utils.print_util import cprint
-from utils.seed_backend import seed_all
+from utils.seed_backend import (seed_all, seed_worker)
 
 
 def eval(config, device):
@@ -73,7 +73,14 @@ def eval(config, device):
 
             intermediate_output_list = []
 
-            for batch_ndx, sample in enumerate(tqdm(DataLoader(test_dataset, batch_size=8, num_workers=2), desc="Samples : ")):
+            for batch_ndx, sample in enumerate(tqdm(DataLoader(
+                test_dataset, 
+                batch_size=8, 
+                num_workers=4, 
+                worker_init_fn=seed_worker,
+                shuffle=False), 
+                desc="Samples : ")
+            ):
                 with torch.no_grad():
                     input = sample
                     input = input.to(device)

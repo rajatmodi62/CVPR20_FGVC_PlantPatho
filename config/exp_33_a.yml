@@ -1,7 +1,7 @@
 mode: train
 seed: 1024
-validation_frequency: 1
-epochs: 5
+validation_frequency: 2
+epochs: 20
 batch_size: 8
 num_classes: 4
 train_dataset: 
@@ -16,9 +16,10 @@ val_dataset:
 model: 
   name: efficientnet-b5
   pred_type: classification
-  tuning_type: fine-tuning
+  tuning_type: feature-extraction
   hyper_params:
     fc_drop_out: 0.5
+  pre_trained_path: exp_32_e
 optimiser: 
   name: AdamW
   hyper_params:

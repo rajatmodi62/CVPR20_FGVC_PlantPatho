@@ -10,7 +10,7 @@ from model.model_factory import ModelFactory
 from transformer.transformer_factory import TransformerFactory
 from utils.experiment_utils import ExperimentHelper
 from utils.custom_bar import CustomBar
-from utils.seed_backend import seed_all
+from utils.seed_backend import (seed_all, seed_worker)
 
 
 def train(config, device, auto_aug_policy=None):
@@ -119,7 +119,15 @@ def train(config, device, auto_aug_policy=None):
 
             train_output_list = []
             train_target_list = []
-            for batch_ndx, sample in enumerate(DataLoader(training_dataset, batch_size=batch_size, num_workers=4, shuffle=True)):
+            for batch_ndx, sample in enumerate(DataLoader(
+                training_dataset, 
+                batch_size=batch_size, 
+                worker_init_fn=seed_worker, 
+                num_workers=4, 
+                pin_memory=True, 
+                shuffle=True
+            )):
+                
                 # progress bar update
                 progress_bar.update_batch_info(batch_ndx)
 
@@ -164,7 +172,15 @@ def train(config, device, auto_aug_policy=None):
             if experiment_helper.should_trigger(i):
                 val_output_list = []
                 val_target_list = []
-                for batch_ndx, sample in enumerate(DataLoader(validation_dataset, batch_size=batch_size, num_workers=4)):
+                for batch_ndx, sample in enumerate(DataLoader(
+                    validation_dataset, 
+                    batch_size=batch_size, 
+                    num_workers=4, 
+                    worker_init_fn=seed_worker, 
+                    pin_memory=True,
+                    shuffle=False
+                )):
+                    
                     with torch.no_grad():
                         input, target = sample
                         input = input.to(device)
