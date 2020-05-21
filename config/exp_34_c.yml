@@ -1,0 +1,31 @@
+mode: train
+seed: 1024
+validation_frequency: 3
+epochs: 30
+batch_size: 8
+num_classes: 4
+train_dataset: 
+  name: fgvc7
+  fold: 2
+  resize_dims: 545
+  transform: image
+val_dataset: 
+  name: fgvc7
+  fold: 2
+  resize_dims: 545
+model: 
+  name: efficientnet-b7
+  pred_type: classification
+  tuning_type: fine-tuning
+  # tuning_type: feature-extraction
+  hyper_params:
+    fc_drop_out: 0.5
+optimiser: 
+  name: AdamW
+  hyper_params:
+    learning_rate: 0.0008
+    weight_decay: 0.001
+scheduler:
+  name: cosineAnnealing-warmup-lr
+loss_function: 
+  name: cross-entropy-loss

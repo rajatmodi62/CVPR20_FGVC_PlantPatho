@@ -1,0 +1,16 @@
+mode: test
+seed: 1024
+test_dataset: 
+  name: fgvc7
+  resize_dims: 545
+  transform: image
+  tta: True
+ensemble: True
+num_classes: 4
+experiment_list:
+  - experiment:
+      path: exp_34_a
+  - experiment:
+      path: exp_34_b
+  - experiment:
+      path: exp_34_c
