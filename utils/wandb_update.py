@@ -29,10 +29,10 @@ def publish_intermediate(results, best_val_loss, best_kaggle_metric, output_list
     wandb.run.summary["best_kaggle_metric"] = best_kaggle_metric
 
     # saving confusion matrix (image)
-    wandb.sklearn.plot_confusion_matrix(
-        torch.argmax(target_list, dim=1).numpy(),
-        torch.argmax(output_list, dim=1).numpy(),
-        ['H', 'MD', 'R', 'S']
-    )
+    # wandb.sklearn.plot_confusion_matrix(
+    #     torch.argmax(target_list, dim=1).numpy(),
+    #     torch.argmax(output_list, dim=1).numpy(),
+    #     ['H', 'MD', 'R', 'S']
+    # )
 
     return wandb.log(results)

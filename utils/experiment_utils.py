@@ -153,12 +153,12 @@ class ExperimentHelper:
         # publish_msg(self.result)
         pass
 
-    def publish_intermediate(self, results, val_output_list, val_target_list):
+    def publish_intermediate(self, results, output_list, target_list):
         # wandb
         publish_intermediate(
             results, 
             self.best_val_loss,
             self.best_val_kaggle_metric, 
-            val_output_list, 
-            val_target_list
+            output_list, 
+            target_list
         )
