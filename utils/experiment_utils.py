@@ -4,16 +4,11 @@ from shutil import rmtree
 import pandas as pd
 import math
 from utils.regression_utils import covert_to_classification
-from utils.kaggle_metric import (kaggle_metric_generator)
+from utils.kaggle_metric import (
+    kaggle_metric_generator, accuracy_generator, confusion_matrix_generator)
 from utils.print_util import cprint
 from utils.telegram_update import publish_msg
 from utils.wandb_update import (wandb_init, publish_intermediate)
-
-
-def accuracy_generator(output_list, target_list):
-    acc = torch.argmax(target_list, dim=1).eq(
-        torch.argmax(output_list, dim=1))
-    return 1.0 * torch.sum(acc.int()).item() / output_list.size()[0]
 
 
 class ExperimentHelper:
@@ -37,25 +32,6 @@ class ExperimentHelper:
         self.experiment_name = experiment_name
         self.best_val_loss = float('inf')
         self.best_val_kaggle_metric = 0
-        self.result = {
-            "config": experiment_name,
-            "best_val_loss": self.best_val_loss,
-            "val_acc": None,
-            "train_loss": None,
-            "train_acc": None,
-            "val_kaggle_metric": None,
-            "train_kaggle_metric": None,
-            "epoch": None
-        }
-        self.intermediate_result = {
-            "val_loss": self.best_val_loss,
-            "val_acc": None,
-            "train_loss": None,
-            "train_acc": None,
-            "val_kaggle_metric": None,
-            "train_kaggle_metric": None,
-            "epoch": None
-        }
         self.tb_writer = tb_writer
         self.freq = freq
         self.progress_loss = False
@@ -83,104 +59,106 @@ class ExperimentHelper:
             path.join('results', self.experiment_name, 'weights.pth')
         )
 
-    def validate(self, pred_type, num_classes, loss_fn, val_output_list, val_target_list, train_output_list, train_target_list, epoch):
-        with torch.no_grad():
-            # loss calculation
-            val_loss = loss_fn(
-                val_output_list, val_target_list).item()
-            train_loss = loss_fn(
-                train_output_list, train_target_list).item()
+    def validate(self, pred_type, num_classes, val_loss, train_loss, val_output_list, val_target_list, train_output_list, train_target_list, epoch):
+        if pred_type == 'regression' or pred_type == 'mixed':
+            train_output_list = covert_to_classification(
+                train_output_list,
+                num_classes,
+            )
+            val_output_list = covert_to_classification(
+                val_output_list,
+                num_classes,
+            )
 
-            if pred_type == 'regression' or pred_type == 'mixed':
-                train_output_list = covert_to_classification(
-                    train_output_list,
-                    num_classes,
-                )
-                val_output_list = covert_to_classification(
-                    val_output_list,
-                    num_classes,
-                )
+        # generating accuracy measures
+        val_acc = accuracy_generator(val_output_list, val_target_list)
+        train_acc = accuracy_generator(
+            train_output_list, train_target_list)
 
-            val_acc = accuracy_generator(val_output_list, val_target_list)
-            train_acc = accuracy_generator(
-                train_output_list, train_target_list)
+        # generating kaggle metric measures
+        val_kaggle_metric = kaggle_metric_generator(
+            val_output_list, val_target_list)
+        train_kaggle_metric = kaggle_metric_generator(
+            train_output_list, train_target_list)
 
-            val_kaggle_metric = kaggle_metric_generator(
-                val_output_list, val_target_list)
-            train_kaggle_metric = kaggle_metric_generator(
-                train_output_list, train_target_list)
+        # generate confusion matrix (validation only)
+        confusion_matrix_generator(
+            val_output_list, val_target_list, self.experiment_name)
 
-            # saving results to csv
-            df = pd.DataFrame(
-                [[epoch + 1, val_loss, train_loss, val_acc, train_acc, val_kaggle_metric, train_kaggle_metric]])
-            result_path = path.join(
-                'results', self.experiment_name, 'result.csv')
+        # saving results to csv
+        df = pd.DataFrame(
+            [[epoch + 1, val_loss, train_loss, val_acc, train_acc, val_kaggle_metric, train_kaggle_metric]])
+        result_path = path.join(
+            'results', self.experiment_name, 'result.csv')
 
-            if not path.isfile(result_path):
-                df.to_csv(
-                    result_path,
-                    header=[
-                        "epoch", "Loss ( Val )", "Loss ( Train )", "Accuracy ( Val )", "Accuracy ( Train )", "Kaggle Metric ( Val )", "Kaggle Metric ( Train )"
-                    ],
-                    index=False
-                )
-            else:
-                df.to_csv(result_path, mode='a', header=False, index=False)
+        if not path.isfile(result_path):
+            df.to_csv(
+                result_path,
+                header=[
+                    "epoch",
+                    "Loss ( Val )",
+                    "Loss ( Train )",
+                    "Accuracy ( Val )",
+                    "Accuracy ( Train )",
+                    "Kaggle Metric ( Val )",
+                    "Kaggle Metric ( Train )"
+                ],
+                index=False
+            )
+        else:
+            df.to_csv(result_path, mode='a', header=False, index=False)
 
-            # creating tensorboard events
-            if self.tb_writer is not None:
-                self.tb_writer.add_scalar('Loss/Train', train_loss, epoch)
-                self.tb_writer.add_scalar('Loss/Validation', val_loss, epoch)
-                self.tb_writer.add_scalar('Accuracy/Train', train_acc, epoch)
-                self.tb_writer.add_scalar(
-                    'Accuracy/Validation', val_acc, epoch)
-                self.tb_writer.add_scalar(
-                    'Kaggle Metric/Train', train_kaggle_metric, epoch)
-                self.tb_writer.add_scalar(
-                    'Kaggle Metric/Validation', val_kaggle_metric, epoch)
+        # creating tensorboard events
+        if self.tb_writer is not None:
+            self.tb_writer.add_scalar('Loss/Train', train_loss, epoch)
+            self.tb_writer.add_scalar('Loss/Validation', val_loss, epoch)
+            self.tb_writer.add_scalar('Accuracy/Train', train_acc, epoch)
+            self.tb_writer.add_scalar(
+                'Accuracy/Validation', val_acc, epoch)
+            self.tb_writer.add_scalar(
+                'Kaggle Metric/Train', train_kaggle_metric, epoch)
+            self.tb_writer.add_scalar(
+                'Kaggle Metric/Validation', val_kaggle_metric, epoch)
 
-            # storing loss for check
-            if self.best_val_loss >= val_loss:
-                self.best_val_loss = val_loss
-                self.progress_loss = True
+        # storing loss for check
+        if self.best_val_loss >= val_loss:
+            self.best_val_loss = val_loss
+            self.progress_loss = True
+        else:
+            self.progress_loss = False
 
-                # update dict for publishing
-                self.result["best_val_loss"] = val_loss
-                self.result["val_acc"] = val_acc
-                self.result["train_loss"] = train_loss
-                self.result["train_acc"] = train_acc
-                self.result["val_kaggle_metric"] = val_kaggle_metric
-                self.result["train_kaggle_metric"] = train_kaggle_metric
-                self.result["epoch"] = epoch
-            else:
-                self.progress_loss = False
+        # storing Kaggle Metric for check
+        if self.best_val_kaggle_metric <= val_kaggle_metric:
+            self.best_val_kaggle_metric = val_kaggle_metric
+            self.progress_kaggle_metric = True
+        else:
+            self.progress_kaggle_metric = False
 
-            # storing Kaggle Metric for check
-            if self.best_val_kaggle_metric <= val_kaggle_metric:
-                self.best_val_kaggle_metric = val_kaggle_metric
-                self.progress_kaggle_metric = True
-            else:
-                self.progress_kaggle_metric = False
-
-            # publish intermediate
-            self.publish and self.publish_intermediate({
-                "val_loss": val_loss,
-                "val_acc": val_acc,
-                "train_loss": train_loss,
-                "train_acc": train_acc,
-                "val_kaggle_metric": val_kaggle_metric,
-                "train_kaggle_metric": train_kaggle_metric,
-                "epoch": epoch + 1
-            })
-
-            return (val_loss, train_loss, val_acc, train_acc, val_kaggle_metric, train_kaggle_metric)
+        # publish intermediate results
+        self.publish and self.publish_intermediate({
+            "val_loss": val_loss,
+            "val_acc": val_acc,
+            "train_loss": train_loss,
+            "train_acc": train_acc,
+            "val_kaggle_metric": val_kaggle_metric,
+            "train_kaggle_metric": train_kaggle_metric,
+            "epoch": epoch + 1
+        },
+            val_output_list,
+            val_target_list
+        )
 
     def publish_final(self, config):
         # telegram
         # publish_msg(self.result)
         pass
 
-    def publish_intermediate(self, results):
+    def publish_intermediate(self, results, val_output_list, val_target_list):
         # wandb
-        publish_intermediate(results, self.best_val_loss,
-                             self.best_val_kaggle_metric)
+        publish_intermediate(
+            results, 
+            self.best_val_loss,
+            self.best_val_kaggle_metric, 
+            val_output_list, 
+            val_target_list
+        )

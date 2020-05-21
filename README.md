@@ -217,7 +217,7 @@ python main.py -p 'train_dummy_1.yml'
 
 ## Lib dependency
 ```bash
-pip install --user torch wandb torchvision catalyst albumentations pandas scikit-image tqdm scikit-learn pyyaml blessed pyzmq pretrainedmodels tensorboard transformers
+pip install --user torch seaborn wandb torchvision catalyst albumentations pandas scikit-image tqdm scikit-learn pyyaml blessed pyzmq pretrainedmodels tensorboard transformers
 ```
 
 ## Utility commands

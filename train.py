@@ -117,24 +117,24 @@ def train(config, device, auto_aug_policy=None):
             # set model to training mode
             model.train()
 
+            training_loss = 0
             train_output_list = []
             train_target_list = []
             for batch_ndx, sample in enumerate(DataLoader(
-                training_dataset, 
-                batch_size=batch_size, 
-                worker_init_fn=seed_worker, 
-                num_workers=4, 
-                pin_memory=True, 
+                training_dataset,
+                batch_size=batch_size,
+                worker_init_fn=seed_worker,
+                num_workers=4,
+                pin_memory=True,
                 shuffle=True
             )):
-                
+
                 # progress bar update
                 progress_bar.update_batch_info(batch_ndx)
 
                 input, target = sample
                 input = input.to(device)
                 target = target.to(device)
-                input.requires_grad = False
 
                 # flush accumulators
                 optimiser.zero_grad()
@@ -159,48 +159,61 @@ def train(config, device, auto_aug_policy=None):
                     scheduler.step()
 
                 if experiment_helper.should_trigger(i):
-                    train_output_list.append(output)
-                    train_target_list.append(target)
+                    train_output_list.append(output.detach().cpu())
+                    train_target_list.append(target.cpu())
+                    training_loss += (loss.item() * input.shape[0])
 
                 # progress bar update
                 progress_bar.step()
 
-            # set model to evaluation mode
-            model.eval()
-
             # Do a loss check on val set per epoch
             if experiment_helper.should_trigger(i):
+                # set model to evaluation mode
+                model.eval()
+
+                validation_loss = 0
                 val_output_list = []
                 val_target_list = []
                 for batch_ndx, sample in enumerate(DataLoader(
-                    validation_dataset, 
-                    batch_size=batch_size, 
-                    num_workers=4, 
-                    worker_init_fn=seed_worker, 
+                    validation_dataset,
+                    batch_size=batch_size,
+                    num_workers=4,
+                    worker_init_fn=seed_worker,
                     pin_memory=True,
                     shuffle=False
                 )):
-                    
+
                     with torch.no_grad():
                         input, target = sample
                         input = input.to(device)
                         target = target.to(device)
 
+                        # forward
                         output = model.forward(input)
 
-                        val_output_list.append(output)
-                        val_target_list.append(target)
+                        # loss calculation
+                        loss = loss_function(
+                            output,
+                            target
+                        )
 
-                val_output_list = torch.cat(val_output_list, dim=0)
-                val_target_list = torch.cat(val_target_list, dim=0)
+                        val_output_list.append(output.detach().cpu())
+                        val_target_list.append(target.cpu())
+                        validation_loss += (loss.item() * input.shape[0])
+
                 train_output_list = torch.cat(train_output_list, dim=0)
                 train_target_list = torch.cat(train_target_list, dim=0)
+                training_loss /= len(training_dataset)
+                val_output_list = torch.cat(val_output_list, dim=0)
+                val_target_list = torch.cat(val_target_list, dim=0)
+                validation_loss /= len(validation_dataset)
 
                 # validate model
                 experiment_helper.validate(
                     config['model']['pred_type'],
                     config['num_classes'],
-                    loss_function,
+                    validation_loss,
+                    training_loss,
                     val_output_list,
                     val_target_list,
                     train_output_list,
