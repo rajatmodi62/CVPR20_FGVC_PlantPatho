@@ -22,29 +22,6 @@ class ModelFactory():
 
         model = None
 
-        if model_name == 'efficientnet-b7':
-            print("[ Model : Efficientnet B7 ]")
-            model = EfficientNet.from_pretrained(
-                'efficientnet-b7'
-            )
-            if tuning_type == 'feature-extraction':
-                for param in model.parameters():
-                    param.requires_grad = False
-            
-            # changing avg pooling to Generalized Mean Avg
-            model._avg_pooling = GeM()
-            
-            num_ftrs = model._fc.in_features
-            model._fc = nn.Sequential(
-                nn.Linear(num_ftrs, 1000, bias=True),
-                nn.ReLU(),
-                nn.Dropout(p=hyper_params['fc_drop_out']),
-                nn.Linear(1000, adjusted_num_classes, bias=True)
-            )
-
-            # if hyper_params is not None:
-            #     model._bn_mom = hyper_params['batch_norm_momentum']
-
         if model_name == 'efficientnet-b4':
             print("[ Model : Efficientnet B4 ]")
             model = EfficientNet.from_pretrained(
@@ -53,10 +30,10 @@ class ModelFactory():
             if tuning_type == 'feature-extraction':
                 for param in model.parameters():
                     param.requires_grad = False
-            
+
             # changing avg pooling to Generalized Mean Avg
             model._avg_pooling = GeM()
-            
+
             num_ftrs = model._fc.in_features
             model._fc = nn.Sequential(
                 nn.Linear(num_ftrs, 1000, bias=True),
@@ -77,10 +54,33 @@ class ModelFactory():
             if tuning_type == 'feature-extraction':
                 for param in model.parameters():
                     param.requires_grad = False
-            
+
+            # changing avg pooling to Generalized Mean Avg
+            # model._avg_pooling = GeM()
+
+            num_ftrs = model._fc.in_features
+            model._fc = nn.Sequential(
+                nn.Linear(num_ftrs, 1000, bias=True),
+                nn.ReLU(),
+                nn.Dropout(p=hyper_params['fc_drop_out']),
+                nn.Linear(1000, adjusted_num_classes, bias=True)
+            )
+
+            # if hyper_params is not None:
+            #     model._bn_mom = hyper_params['batch_norm_momentum']
+
+        if model_name == 'efficientnet-b7':
+            print("[ Model : Efficientnet B7 ]")
+            model = EfficientNet.from_pretrained(
+                'efficientnet-b7'
+            )
+            if tuning_type == 'feature-extraction':
+                for param in model.parameters():
+                    param.requires_grad = False
+
             # changing avg pooling to Generalized Mean Avg
             model._avg_pooling = GeM()
-            
+
             num_ftrs = model._fc.in_features
             model._fc = nn.Sequential(
                 nn.Linear(num_ftrs, 1000, bias=True),
@@ -155,6 +155,7 @@ class ModelFactory():
                 print("[ Provided pretrained weight path is invalid ]")
                 exit()
 
-            print("[ Weight type : ", weight_type if weight_type else "Last Epoch", " ]")
+            print(
+                "[ Weight type : ", weight_type if weight_type else "Last Epoch", " ]")
 
         return model
