@@ -147,10 +147,12 @@
 # python ./main.py -p 'exp_33_b.yml'
 # python ./main.py -p 'test_33.yml'
 
-python ./main.py -p 'exp_34_a.yml'
-python ./main.py -p 'exp_34_b.yml'
-python ./main.py -p 'exp_34_c.yml'
-python ./main.py -p 'exp_34_d.yml'
-python ./main.py -p 'exp_34_e.yml'
-python ./main.py 'test_34.yml'
+# python ./main.py -p 'exp_34_a.yml'
+# python ./main.py -p 'exp_34_b.yml'
+# python ./main.py -p 'exp_34_c.yml'
+# python ./main.py -p 'exp_34_d.yml'
+# python ./main.py -p 'exp_34_e.yml'
+# python ./main.py 'test_34.yml'
+
+python ./main.py -p 'exp_35_a.yml'
 
