@@ -108,6 +108,40 @@ class ImageTransformer:
         return string
 
 
+class ImageTTATransformer:
+    def __init__(self, height, width):
+        self.height = height
+        self.width = width
+
+    def __call__(self, original_image):
+        self.augmentation_pipeline = Compose(
+            [
+                Resize(650, 650, always_apply=True),
+                HorizontalFlip(p=0.5),
+                VerticalFlip(p=0.5),
+                ShiftScaleRotate(rotate_limit=25.0, p=0.7),
+                Resize(self.height, self.width, always_apply=True),
+                Normalize(
+                    mean=[0.485, 0.456, 0.406],
+                    std=[0.229, 0.224, 0.225],
+                    always_apply=True
+                ),
+                ToTensor()
+            ]
+        )
+
+        augmented = self.augmentation_pipeline(
+            image=original_image
+        )
+        image = augmented["image"]
+        return image
+
+    def __str__(self):
+        string = str(self.height) + "x" + str(self.width) + \
+            " | " + "image_tta"
+        return string
+
+
 class PolicyTransformer:
     def __init__(self, height, width, auto_aug_policy=None):
         self.height = height

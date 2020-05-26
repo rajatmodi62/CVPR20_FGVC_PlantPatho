@@ -1,5 +1,5 @@
 from transformer.utils import (
-    DefaultTransformer, ImageTransformer, PolicyTransformer)
+    DefaultTransformer, ImageTransformer, ImageTTATransformer, PolicyTransformer)
 
 
 class TransformerFactory:
@@ -16,6 +16,8 @@ class TransformerFactory:
 
         if pipe_type == "image":
             return ImageTransformer(height, width)
+        if pipe_type == "image_tta":
+            return ImageTTATransformer(height, width)
         elif pipe_type == "policy":
             return PolicyTransformer(height, width)
         else:

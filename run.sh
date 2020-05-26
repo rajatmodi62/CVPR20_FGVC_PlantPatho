@@ -154,5 +154,6 @@
 # python ./main.py -p 'exp_34_e.yml'
 # python ./main.py 'test_34.yml'
 
-python ./main.py -p 'exp_35_a.yml'
+# python ./main.py -p 'exp_35_a.yml'
+python ./main.py 'test_35.yml'
 
