@@ -11,7 +11,29 @@ The objective of this [challenge](https://www.kaggle.com/c/plant-pathology-2020-
 | --- | --- | --- | --- |
 | ![](./docs/healthy.gif)  |  ![](./docs/multiple_disease.gif) | ![](./docs/rust.gif) | ![](./docs/scab.gif) |
 
-## Performance
+---
+
+# License
+This project has been released under the [MIT license](https://github.com/AakashMallik/CVPR2020-FGVC7/blob/master/LICENCE).
+
+# Citing the Pipeline
+If you use this project in your research or wish to refer to the baseline results published on W&B, please use the following BibTeX entry.
+
+@misc{cvpr2020-fgvc7,  
+  author = {Mallik et al},  
+  title = {Pytorch Pipeline v 1.0},  
+  howpublished = 
+  {  
+    \url{https://www.linkedin.com/in/rajat-modi-54377877/}   
+    &   
+    \url{https://www.linkedin.com/in/aakash-mallik-5b8198132/}  
+  },  
+  year = {2020}
+}
+
+---
+
+# Performance
 
 The [experiments](https://app.wandb.ai/humble_d/plantpatho-2020/table?workspace=user-humble_d) conducted on this dataset have been well catalogued on W&B.
 Few [reports](https://app.wandb.ai/humble_d/plantpatho-2020/reports/Plant-Pathology-2020-CVPR--Vmlldzo5OTQ1Mw) that we prepared bases on the best results are also available.
@@ -46,26 +68,6 @@ A few key points:
 ```
 
 ![pipe strucutre](./docs/structure.png)
-
----
-
-## License
-This project has been released under the [MIT license](https://github.com/AakashMallik/CVPR2020-FGVC7/blob/master/LICENCE).
-
-## Citing the Pipeline
-If you use this project in your research or wish to refer to the baseline results published on W&B, please use the following BibTeX entry.
-
-@misc{cvpr2020-fgvc7,  
-  author = {Rajat Modi & Aakash S. Mallik},  
-  title = {Pytorch Pipeline v 1.0},  
-  howpublished = 
-  {  
-    \url{https://www.linkedin.com/in/rajat-modi-54377877/}   
-    &   
-    \url{https://www.linkedin.com/in/aakash-mallik-5b8198132/}  
-  },  
-  year = {2020}
-}
 
 ---
 
